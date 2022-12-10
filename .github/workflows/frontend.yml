@@ -37,7 +37,6 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Create and populate .env file
-        working-directory: ./
         env:
           REACT_APP_NYM_CLIENT_SERVER: ${{ secrets.REACT_APP_NYM_CLIENT_SERVER }}
           SERVER_NAME: ${{ secrets.SERVER_NAME }}
