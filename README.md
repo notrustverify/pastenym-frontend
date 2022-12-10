@@ -44,12 +44,14 @@ If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CL
 If you want to host it publicly here's the additionnal steps that can help you
 
 To run it:
-1. copy paste the content below to in `docker-compose.yml` file
-2. set your hostname on this line (keep the ` `` `)
+
+1. Create a `.env` file with the same keys are in `.env.example` with your values. The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend. If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CLIENT_SERVER=` to this value: `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w`
+2. copy paste the content below to in `docker-compose.yml` file
+3. set your hostname on this line (keep the ` `` `)
 ```
 traefik.http.routers.pastenym-frontend.rule=Host(`YOUR HOSTNAME`)
 ```
-4. start it `docker compose up --build -d`
+5. start it `docker compose up --build -d`
 
 ```yaml
 version: "3"
