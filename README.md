@@ -70,6 +70,12 @@ services:
   pastenym-frontend:
     build: .
     restart: unless-stopped
+    labels:
+      - traefik.http.routers.pastenym-frontend.entrypoints=websecure
+      - traefik.http.routers.pastenym-frontend.rule=Host(`<YOUR HOSTNAME>`)
+      - traefik.http.routers.pastenym-frontend.tls=true
+      - traefik.http.routers.pastenym-frontend.tls.certresolver=letsEncrypt
+      - traefik.enable=true
     ports:
       - 8001:80
     volumes:
