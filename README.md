@@ -36,6 +36,45 @@ NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 2. Run `npm install` and grab a cup of coffee
 3. Run `npm run start` and go to [http://localhost:8080](http://localhost:8080) in your favorite browser.
 
+If you want to host it publicly here's a docker-compose file you can use
+
+To run it: `docker compose up --build -d`
+
+```yaml
+version: "3"
+
+services:
+
+  traefik:
+    image: "traefik:v2.9"
+    container_name: "traefik"
+    restart: unless-stopped
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsEncrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - ./letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  pastenym-frontend:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8001:80
+    volumes:
+        ./dist:/app/dist
+        
+```
+
+
 ## Structure
 
 * `backend/` manage the websockets connections and DB
