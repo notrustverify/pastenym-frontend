@@ -50,7 +50,7 @@
     "eslint": "^8.26.0",
     "eslint-plugin-react": "^7.31.10",
     "favicons": "^7.0.2",
-    "favicons-webpack-plugin": "6.0.0-alpha.2",
+    "favicons-webpack-plugin": "6.0.0",
     "file-loader": "^6.2.0",
     "hello-wasm-pack": "^0.1.0",
     "html-webpack-plugin": "^5.5.0",
