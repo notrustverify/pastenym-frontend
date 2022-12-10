@@ -14,10 +14,6 @@ Share a text: [http://pastenym.ch/](http://pastenym.ch/)
 ## What Nym is developping ?
 > Nym is developing the infrastructure to prevent this data leakage by protecting every packet’s metadata at the network and application layers.
 
-### Architecture
-
-<img src="./resources/img/nym-platform.png" alt="drawing" width="50%"/>
-
 ## How pastenym service will use Nym product
 Your text is sent to a client which is connected to the Nym network and which stores it in a database (eventually a more distributed solution will be considered),
 
