@@ -47,7 +47,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
-    "eslint": "^8.26.0",
+    "eslint": "^8.29.0",
     "eslint-plugin-react": "^7.31.10",
     "favicons": "^7.0.2",
     "favicons-webpack-plugin": "6.0.0-alpha.2",
