@@ -41,10 +41,10 @@ If you don't have a backend you can use this one, just set the REACT_APP_NYM_CLI
 
 #### Host it publicly
 
-If you want to host it publicly here's a docker-compose file you can use
+If you want to host it publicly here's the additionnal steps that can help you
 
 To run it:
-1. copy paste the content below
+1. copy paste the content below to in `docker-compose.yml` file
 2. set your hostname on this line (keep the ` `` `)
 ```
 traefik.http.routers.pastenym-frontend.rule=Host(`YOUR HOSTNAME`)
