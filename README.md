@@ -41,7 +41,10 @@ NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 
 If you want to host it publicly here's a docker-compose file you can use
 
-To run it: `docker compose up --build -d`
+To run it:
+1. copy paste the content below
+2. set your hostname `- traefik.http.routers.pastenym-frontend.rule=Host(`YOUR HOSTNAME`)` on this line
+3. start it `docker compose up --build -d`
 
 ```yaml
 version: "3"
@@ -72,7 +75,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.http.routers.pastenym-frontend.entrypoints=websecure
-      - traefik.http.routers.pastenym-frontend.rule=Host(`<YOUR HOSTNAME>`)
+      - traefik.http.routers.pastenym-frontend.rule=Host(`YOUR HOSTNAME`)
       - traefik.http.routers.pastenym-frontend.tls=true
       - traefik.http.routers.pastenym-frontend.tls.certresolver=letsEncrypt
       - traefik.enable=true
