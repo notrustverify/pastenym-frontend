@@ -37,6 +37,7 @@ NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 2. Run `npm install` and grab a cup of coffee
 3. Run `npm run start` and go to [http://localhost:8080](http://localhost:8080) in your favorite browser.
 
+If you don't have a backend you can use this one, just set the REACT_APP_NYM_CLIENT_SERVER=` to this value: `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w` 
 
 #### Host it publicly
 
@@ -83,10 +84,9 @@ services:
       - traefik.http.routers.pastenym-frontend.tls=true
       - traefik.http.routers.pastenym-frontend.tls.certresolver=letsEncrypt
       - traefik.enable=true
+    env_file: .env
     ports:
-      - 8001:80
-    volumes:
-      - ./dist:/app/dist  
+      - 8001:80 
 ```
 
 
