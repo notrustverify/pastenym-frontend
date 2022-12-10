@@ -70,8 +70,7 @@ services:
     ports:
       - 8001:80
     volumes:
-        ./dist:/app/dist
-        
+      - ./dist:/app/dist  
 ```
 
 
