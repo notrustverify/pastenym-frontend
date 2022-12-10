@@ -43,8 +43,11 @@ If you want to host it publicly here's a docker-compose file you can use
 
 To run it:
 1. copy paste the content below
-2. set your hostname `traefik.http.routers.pastenym-frontend.rule= on this line
-3. start it `docker compose up --build -d`
+2. set your hostname on this line (keep the ` `` `)
+```
+traefik.http.routers.pastenym-frontend.rule=Host(`YOUR HOSTNAME`)
+```
+4. start it `docker compose up --build -d`
 
 ```yaml
 version: "3"
