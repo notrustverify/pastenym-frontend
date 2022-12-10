@@ -36,6 +36,9 @@ NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 2. Run `npm install` and grab a cup of coffee
 3. Run `npm run start` and go to [http://localhost:8080](http://localhost:8080) in your favorite browser.
 
+
+#### Host it publicly
+
 If you want to host it publicly here's a docker-compose file you can use
 
 To run it: `docker compose up --build -d`
