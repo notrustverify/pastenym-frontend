@@ -1,6 +1,6 @@
 [![Node.js CI](https://github.com/notrustverify/pastenym/actions/workflows/frontend.yml/badge.svg)](https://github.com/notrustverify/pastenym-frontend/actions/workflows/frontend.yml)
 
-# pastenym
+# Frontend - Pastenym
 
 This project is inspired from [pastebin](https://pastebin.com/) service.
 The main goal is to offer a solution for sharing text with [Nym](https://nymtech.net/) products
