@@ -78,7 +78,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   pastenym-frontend:
-    build: .
+    image: notrustverify/pastenym-frontend:latest
     restart: unless-stopped
     labels:
       - traefik.http.routers.pastenym-frontend.entrypoints=websecure
