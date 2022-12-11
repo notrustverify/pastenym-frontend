@@ -41,7 +41,7 @@ If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CL
 
 #### Host it publicly
 
-If you want to host it publicly here's the additionnal steps that can help you
+If you want to host it publicly here's some steps that can help you
 
 To run it:
 
@@ -95,6 +95,6 @@ services:
 ## Structure
 
 * `backend/` manage the websockets connections and DB
-* `frontend/` web application
+* [https://github.com/notrustverify/pastenym-frontend](https://github.com/notrustverify/pastenym-frontend) web application
 * `nym-client/` store the configuration,keys for the nym-client
 * `resources/` store img or files for documentation
