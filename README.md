@@ -50,13 +50,17 @@ To run it:
 REACT_APP_NYM_CLIENT_SERVER=6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w
 SERVER_NAME="https://<FQDN>"
 ```
-The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend. You can use the one displayed up, it a working backend
-2. copy paste the content below to in `docker-compose.yml` file
+The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend. You can use the one displayed up, it's a working backend
+
+2. Copy and paste the content displayed [here](https://github.com/notrustverify/pastenym-frontend/main/README.md#docker-composeyml) in a `docker-compose.yml` file
+
 3. set your hostname on this line (keep the ` `` `)
 ```
 traefik.http.routers.pastenym-frontend.rule=Host(`YOUR HOSTNAME`)
 ```
 5. start it `docker compose up --build -d`
+
+##### Docker-compose.yml
 
 ```yaml
 version: "3"
