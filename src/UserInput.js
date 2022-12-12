@@ -41,6 +41,7 @@ class UserInput extends React.Component {
             buttonGetClick: false,
             files: null,
             isFileAttached: false,
+            isPrivate: true
         }
 
         this.files = null
@@ -285,29 +286,37 @@ class UserInput extends React.Component {
             }
 
             // Encrypt text
-            const encrypted = this.encryptor.encrypt(
-                JSON.stringify(clearObjectUser)
-            )
-            if (!encrypted) {
-                console.error('Failed to encrypt message.')
-                return
+            let encrypted = undefined
+            let nonencrypted = undefined
+            if (this.state.isPrivate){
+                encrypted = this.encryptor.encrypt(
+                    JSON.stringify(clearObjectUser)
+                )
+                if (!encrypted) {
+                    console.error('Failed to encrypt message.')
+                    return
+                }
+            } else {
+                nonencrypted = btoa(JSON.stringify(clearObjectUser))
             }
+
+            
 
             // As soon SURB will be implemented in wasm client, we will use it
             const data = {
                 event: 'newText',
                 sender: this.state.self_address,
                 data: {
-                    text: encrypted[0],
-                    private: true,
+                    text: this.state.isPrivate ? encrypted[0] : nonencrypted,
+                    private: this.state.isPrivate,
                     burn: this.state.burnChecked,
-                    encParams: encrypted[1],
+                    encParams: this.state.isPrivate ? encrypted[1] : '',
                 },
             }
 
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
-            if (encrypted) await this.sendMessageTo(JSON.stringify(data))
+            if (encrypted || nonencrypted ) await this.sendMessageTo(JSON.stringify(data))
         } else {
             this.setState({
                 open: true,
@@ -497,6 +506,22 @@ class UserInput extends React.Component {
                                     }
                                     size="sm"
                                     label="Burn after reading"
+                                />
+                            </Tooltip>
+
+                            <Tooltip
+                                title="message will not be encrypted"
+                                size="sm"
+                                placement="bottom"
+                            >
+                                <Checkbox
+                                    onChange={(event) =>
+                                        this.setState({
+                                            isPrivate: !event.target.checked,
+                                        })
+                                    }
+                                    size="sm"
+                                    label="Public paste"
                                 />
                             </Tooltip>
                         </Box>

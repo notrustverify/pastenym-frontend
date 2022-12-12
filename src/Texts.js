@@ -29,7 +29,6 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import Button from '@mui/joy/Button'
 import FileRender from './components/FileRender'
 
-
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
     cssVarPrefix: 'joy',
@@ -137,6 +136,7 @@ class Texts extends React.Component {
             isFileRetrieved: false,
             isText: true,
             isDataRetrieved: false,
+            isPrivate: true,
         }
 
         this.userFile = {}
@@ -193,14 +193,14 @@ class Texts extends React.Component {
 
         if (!data.hasOwnProperty('error')) {
             let userData = he.decode(data['text'])
-
+            console.log(userData)
             // Decrypt if text is encrypted
             if (
                 data.hasOwnProperty('encParams') &&
-                undefined != data['encParams']
+                undefined !== data['encParams']
             ) {
                 if (!this.state.isKeyProvided) {
-                    console.error(
+                    console.log(
                         'Text seems to be encrypted but no key is provided. Displaying encrypted text'
                     )
                 } else {
@@ -209,6 +209,9 @@ class Texts extends React.Component {
                         this.encryptor.decrypt(userData, encParams)
                     )
                 }
+            } else {
+                //text is not encrypted
+                userData = JSON.parse(atob(userData))
             }
 
             //stats
@@ -231,7 +234,7 @@ class Texts extends React.Component {
                     isText: false,
                 })
             }
- 
+
             if (userData.file) {
                 // js object to array, remove the keys
                 const fileData = Object.keys(userData.file['data']).map(
@@ -249,7 +252,6 @@ class Texts extends React.Component {
                     mimeType: userData.file['mimeType'],
                 }
                 this.setState({ isFileRetrieved: true })
-
             }
 
             //global state to stop sending message when text or file is fetched
@@ -412,7 +414,8 @@ class Texts extends React.Component {
                         )}
                         <b>Paste</b>
 
-                        {this.state.isFileRetrieved && !this.userFile.mimeType.includes('image/') ? (
+                        {this.state.isFileRetrieved &&
+                        !this.userFile.mimeType.includes('image/') ? (
                             <Button
                                 component="a"
                                 href={this.userFile.fileData}
@@ -432,7 +435,8 @@ class Texts extends React.Component {
                             ''
                         )}
 
-                            {this.state.isFileRetrieved && this.userFile.mimeType.includes('image/') ? (
+                        {this.state.isFileRetrieved &&
+                        this.userFile.mimeType.includes('image/') ? (
                             <FileRender fileData={this.userFile.fileData} />
                         ) : (
                             ''
