@@ -211,7 +211,7 @@ class Texts extends React.Component {
                 }
             } else {
                 //text is not encrypted
-                userData = JSON.parse(atob(userData))
+                userData = JSON.parse(userData)
             }
 
             //stats

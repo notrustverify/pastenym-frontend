@@ -51,10 +51,11 @@ class E2EEncryptor {
     }
 
     // Re-encode some values
+    /*
     ciphertext["adata"] = sjcl.codec.base64.fromBits(ciphertext["adata"])
     ciphertext["salt"] = sjcl.codec.base64.fromBits(ciphertext["salt"])
     ciphertext["iv"] = sjcl.codec.base64.fromBits(ciphertext["iv"])
-    
+    */
     const encryptedMessage = sjcl.codec.base64.fromBits(ciphertext["ct"])
     delete ciphertext.ct
     const encParams = ciphertext

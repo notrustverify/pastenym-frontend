@@ -297,7 +297,7 @@ class UserInput extends React.Component {
                     return
                 }
             } else {
-                nonencrypted = btoa(JSON.stringify(clearObjectUser))
+                nonencrypted = JSON.stringify(clearObjectUser)
             }
 
             
@@ -603,7 +603,7 @@ class UserInput extends React.Component {
                         </Button>
                         <Button
                             disabled={this.state.self_address ? false : true}
-                            loading={this.state.buttonSendClick}
+                            //loading={this.state.buttonSendClick}
                             onClick={this.sendText}
                             endDecorator={<SendIcon />}
                             sx={{ mt: 1 /* margin top */ }}
