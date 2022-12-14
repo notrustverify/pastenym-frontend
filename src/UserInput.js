@@ -41,7 +41,7 @@ class UserInput extends React.Component {
             buttonGetClick: false,
             files: null,
             isFileAttached: false,
-            isPrivate: true
+            isPrivate: true,
         }
 
         this.files = null
@@ -86,11 +86,11 @@ class UserInput extends React.Component {
         //reset the state for the modal, workaround, would have to change
         // handle validations
         const fileSize = files.target.files[0].size
-        const limitSize = 320_000
+        const limitSize = 120_0000
         if (fileSize > limitSize) {
             this.setState({
                 open: true,
-                textError: 'Files are limited to 300 KB',
+                textError: 'Files are limited to 1 MB',
                 isFileAttached: false,
             })
 
@@ -100,7 +100,7 @@ class UserInput extends React.Component {
         this.setState({
             files: [...files.target.files],
             isFileAttached: true,
-            estimatedTime: Math.floor(fileSize / 3000), //totally random, but it can help user to not break the app
+            estimatedTime: Math.floor(fileSize / 8000), //totally random, but it can help user to not break the app
         })
     }
 
@@ -111,6 +111,8 @@ class UserInput extends React.Component {
             if (content.toLowerCase().includes('error')) {
                 this.setState({
                     open: false,
+                    files: null,
+                    isFileAttached: false,
                 })
 
                 let textError = content
@@ -208,11 +210,6 @@ class UserInput extends React.Component {
         }
 
         await this.nym.client.sendMessage({ payload, recipient })
-
-        this.setState({
-            files: null,
-            isFileAttached: false,
-        })
     }
 
     // Should remove this method and switch to Texts instead...
@@ -272,7 +269,7 @@ class UserInput extends React.Component {
                         const buffer = await f.arrayBuffer()
                         const fileArray = new Uint8Array(buffer)
                         this.files = {
-                            data: fileArray,
+                            data: Array.from(fileArray),
                             filename: f.name,
                             mimeType: f.type,
                         }
@@ -288,7 +285,7 @@ class UserInput extends React.Component {
             // Encrypt text
             let encrypted = undefined
             let nonencrypted = undefined
-            if (this.state.isPrivate){
+            if (this.state.isPrivate) {
                 encrypted = this.encryptor.encrypt(
                     JSON.stringify(clearObjectUser)
                 )
@@ -299,8 +296,6 @@ class UserInput extends React.Component {
             } else {
                 nonencrypted = JSON.stringify(clearObjectUser)
             }
-
-            
 
             // As soon SURB will be implemented in wasm client, we will use it
             const data = {
@@ -316,7 +311,8 @@ class UserInput extends React.Component {
 
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
-            if (encrypted || nonencrypted ) await this.sendMessageTo(JSON.stringify(data))
+            if (encrypted || nonencrypted)
+                await this.sendMessageTo(JSON.stringify(data))
         } else {
             this.setState({
                 open: true,
@@ -590,7 +586,7 @@ class UserInput extends React.Component {
                                         textOverflow: 'ellipsis',
                                     }}
                                 >
-                                    Attach file (Limit: 300KB)
+                                    Attach file (Limit: 1MB)
                                 </Typography>
                             )}
                             <input
@@ -603,7 +599,7 @@ class UserInput extends React.Component {
                         </Button>
                         <Button
                             disabled={this.state.self_address ? false : true}
-                            //loading={this.state.buttonSendClick}
+                            loading={this.state.buttonSendClick}
                             onClick={this.sendText}
                             endDecorator={<SendIcon />}
                             sx={{ mt: 1 /* margin top */ }}
