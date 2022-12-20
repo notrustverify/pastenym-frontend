@@ -180,6 +180,13 @@ class About extends React.Component {
                             , your metadata are completely protected which means
                             that your ISP cannot know what you do on the
                             website.
+                            <br />
+                            <br />
+                            How pastenym works in detail is explained <Link 
+                            href="https://medium.com/notrustverify/pastenym-a-privacy-friendly-sharing-service-ac3d5f337bde"
+                            target="_blank"
+                            rel="noreferrer"
+                            >here</Link>
                         </Typography>
 
                         <Typography
