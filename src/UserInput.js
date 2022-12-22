@@ -36,12 +36,14 @@ class UserInput extends React.Component {
             urlId: null,
             buttonSendClick: false,
             burnChecked: false,
+            burnCheckedEnable: true,
             textReceived: null,
             //urlIdGet: null,
             buttonGetClick: false,
             files: null,
             isFileAttached: false,
             isPrivate: true,
+            isIpfs: false
         }
 
         this.files = null
@@ -106,7 +108,7 @@ class UserInput extends React.Component {
 
     displayReceived(message) {
         const content = message
-
+        
         if (content.length > 0) {
             if (content.toLowerCase().includes('error')) {
                 this.setState({
@@ -126,9 +128,9 @@ class UserInput extends React.Component {
                     buttonGetClick: false,
                 })
             } else {
-                if (!this.isJson(content)) {
+
                     this.setState({
-                        urlId: content,
+                        urlId: JSON.parse(content),
                         buttonSendClick: false,
                     })
 
@@ -136,12 +138,8 @@ class UserInput extends React.Component {
                         top: 0,
                         behavior: 'smooth',
                     })
-                } else {
-                    this.setState({
-                        textReceived: JSON.parse(content),
-                        buttonGetClick: false,
-                    })
-                }
+
+                
             }
         }
     }
@@ -306,6 +304,7 @@ class UserInput extends React.Component {
                     private: this.state.isPrivate,
                     burn: this.state.burnChecked,
                     encParams: this.state.isPrivate ? encrypted[1] : '',
+                    ipfs: this.state.isIpfs
                 },
             }
 
@@ -490,7 +489,7 @@ class UserInput extends React.Component {
                             }}
                         >
                             <Tooltip
-                                title="message will be deleted when read"
+                                title="message will be deleted when read. Not compatible with IPFS upload"
                                 size="sm"
                                 placement="bottom"
                             >
@@ -500,8 +499,10 @@ class UserInput extends React.Component {
                                             burnChecked: event.target.checked,
                                         })
                                     }
+                                    disabled={!this.state.burnCheckedEnable}
                                     size="sm"
                                     label="Burn after reading"
+                                    checked={this.state.burnChecked}
                                 />
                             </Tooltip>
 
@@ -518,6 +519,26 @@ class UserInput extends React.Component {
                                     }
                                     size="sm"
                                     label="Public paste"
+                                />
+                            </Tooltip>
+
+                            <Tooltip
+                                title="Warning it's an experimental ferature. Paste will be uploaded on IPFS"
+                                size="sm"
+                                placement="bottom"
+                            >
+                                <Checkbox
+                                    onChange={(event) => {
+                                        this.setState({
+                                            isIpfs: event.target.checked,
+                                            burnCheckedEnable: !event.target.checked,
+                                            burnChecked: false
+                                        })
+                                        
+            
+                                    }}
+                                    size="sm"
+                                    label="Store on IPFS (experimental)"
                                 />
                             </Tooltip>
                         </Box>

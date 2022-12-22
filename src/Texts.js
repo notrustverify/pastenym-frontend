@@ -191,7 +191,7 @@ class Texts extends React.Component {
 
         const data = JSON.parse(message)
         const replySurb = message.replySurb
-
+        
         if (!data.hasOwnProperty('error')) {
             let userData = he.decode(data['text'])
             // Decrypt if text is encrypted
@@ -256,6 +256,8 @@ class Texts extends React.Component {
         } else {
             this.setState({
                 text: he.decode(data['error']),
+                isDataRetrieved: true,
+                isPasteRetrieved: true
             })
         }
     }

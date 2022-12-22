@@ -26,10 +26,12 @@ class SuccessUrlId extends React.Component {
             url:
                 SERVER_NAME +
                 '/#/' +
-                this.props.urlId +
+                this.props.urlId.url_id +
                 (this.props.encKey ? '&key=' + this.props.encKey : ''),
-            urlId: this.props.urlId,
+            urlId: this.props.urlId.url_id,
             open: false,
+            ipfs: this.props.urlId.ipfs,
+            hash: this.props.urlId.hash,
             textButton: 'Copy to clipboard',
         }
 
@@ -134,6 +136,14 @@ class SuccessUrlId extends React.Component {
                                 </Tooltip>
                             </Tooltip>
                         </ClickAwayListener>
+                        {this.state.ipfs ? (
+                            <>
+                                {' '}
+                                <br /> IPFS CID: {this.state.hash}
+                            </>
+                        ) : (
+                            ''
+                        )}
                     </Typography>
                 </div>
             </Alert>

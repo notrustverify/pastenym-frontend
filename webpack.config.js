@@ -99,7 +99,7 @@ module.exports = {
     },
     open: false,
     compress: false,
-    port: 8080,
+    port: 8081,
   },
   experiments: {
     syncWebAssembly: true,
