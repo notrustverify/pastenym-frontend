@@ -15,6 +15,7 @@ import Button from '@mui/joy/Button'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import Tooltip from '@mui/joy/Tooltip'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const SERVER_NAME = process.env.SERVER_NAME || 'https://pastenym.ch'
 
@@ -139,7 +140,7 @@ class SuccessUrlId extends React.Component {
                         {this.state.ipfs ? (
                             <>
                                 {' '}
-                                <br /> IPFS CID: {this.state.hash}
+                                <br /> <ErrorOutlineIcon style={{position: 'relative', top: '3px'}} />IPFS CID: ipfs://{this.state.hash}
                             </>
                         ) : (
                             ''
