@@ -188,7 +188,7 @@ class Texts extends React.Component {
     componentDidUpdate() {}
 
     displayReceived(message) {
-
+        console.log(message)
         const data = JSON.parse(message)
         const replySurb = message.replySurb
         
@@ -216,6 +216,7 @@ class Texts extends React.Component {
                 num_view: data['num_view'],
                 created_on: data['created_on'],
                 is_burn: data['is_burn'],
+                is_ipfs: data['is_ipfs']
             })
 
             if (userData['text'] !== '') {
@@ -405,6 +406,7 @@ class Texts extends React.Component {
                                     <TextStats
                                         num_view={this.state.num_view}
                                         created_on={this.state.created_on}
+                                        is_ipfs={this.state.is_ipfs}
                                     />
                                 ) : (
                                     ''

@@ -140,7 +140,7 @@ class SuccessUrlId extends React.Component {
                         {this.state.ipfs ? (
                             <>
                                 {' '}
-                                <br /> <ErrorOutlineIcon style={{position: 'relative', top: '3px'}} />IPFS CID: ipfs://{this.state.hash}
+                                <br /> <ErrorOutlineIcon style={{position: 'relative', top: '3px'}} />  IPFS CID: ipfs://{this.state.hash}
                             </>
                         ) : (
                             ''

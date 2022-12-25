@@ -43,7 +43,8 @@ class UserInput extends React.Component {
             files: null,
             isFileAttached: false,
             isPrivate: true,
-            isIpfs: false
+            isIpfs: false,
+            limitSize: 120_0000
         }
 
         this.files = null
@@ -88,11 +89,11 @@ class UserInput extends React.Component {
         //reset the state for the modal, workaround, would have to change
         // handle validations
         const fileSize = files.target.files[0].size
-        const limitSize = 120_0000
-        if (fileSize > limitSize) {
+        
+        if (fileSize > this.state.limitSize) {
             this.setState({
                 open: true,
-                textError: 'Files are limited to 1 MB',
+                textError: 'Files are limited to '+this.state.limitSize/1000000+' MB',
                 isFileAttached: false,
             })
 
@@ -108,7 +109,7 @@ class UserInput extends React.Component {
 
     displayReceived(message) {
         const content = message
-        
+
         if (content.length > 0) {
             if (content.toLowerCase().includes('error')) {
                 this.setState({
@@ -128,18 +129,15 @@ class UserInput extends React.Component {
                     buttonGetClick: false,
                 })
             } else {
+                this.setState({
+                    urlId: JSON.parse(content),
+                    buttonSendClick: false,
+                })
 
-                    this.setState({
-                        urlId: JSON.parse(content),
-                        buttonSendClick: false,
-                    })
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth',
-                    })
-
-                
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                })
             }
         }
     }
@@ -304,7 +302,7 @@ class UserInput extends React.Component {
                     private: this.state.isPrivate,
                     burn: this.state.burnChecked,
                     encParams: this.state.isPrivate ? encrypted[1] : '',
-                    ipfs: this.state.isIpfs
+                    ipfs: this.state.isIpfs,
                 },
             }
 
@@ -515,6 +513,7 @@ class UserInput extends React.Component {
                                     onChange={(event) =>
                                         this.setState({
                                             isPrivate: !event.target.checked,
+                                            limitSize: !event.target.checked ? 120_0000 : 150_0000
                                         })
                                     }
                                     size="sm"
@@ -531,11 +530,10 @@ class UserInput extends React.Component {
                                     onChange={(event) => {
                                         this.setState({
                                             isIpfs: event.target.checked,
-                                            burnCheckedEnable: !event.target.checked,
-                                            burnChecked: false
+                                            burnCheckedEnable:
+                                                !event.target.checked,
+                                            burnChecked: false,
                                         })
-                                        
-            
                                     }}
                                     size="sm"
                                     label="Store on IPFS (experimental)"
@@ -607,7 +605,8 @@ class UserInput extends React.Component {
                                         textOverflow: 'ellipsis',
                                     }}
                                 >
-                                    Attach file (Limit: 1MB)
+                                    Attach file (Limit:{' '}
+                                    {this.state.limitSize/1000000} MB)
                                 </Typography>
                             )}
                             <input
