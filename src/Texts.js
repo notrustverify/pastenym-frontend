@@ -231,8 +231,8 @@ class Texts extends React.Component {
                     isText: false,
                 })
             }
-
-            if (userData.file.data !== null) {
+            console.log(userData)
+            if (userData['file'] !== null && userData.file.data !== null) {
                 // js object to array, remove the keys
                 const fileData = Object.keys(userData.file['data']).map(
                     function (key) {
