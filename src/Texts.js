@@ -188,14 +188,13 @@ class Texts extends React.Component {
     componentDidUpdate() {}
 
     displayReceived(message) {
-        console.log(message)
         const data = JSON.parse(message)
         const replySurb = message.replySurb
         
         if (!data.hasOwnProperty('error')) {
             let userData = he.decode(data['text'])
             // Decrypt if text is encrypted
-            if (data.hasOwnProperty('encParams')) {
+            if (data.hasOwnProperty('encParams') && data['encParams'].salt !== "" && data['encParams'].iv !== "") {
                 if (!this.state.isKeyProvided) {
                     console.log(
                         'Text seems to be encrypted but no key is provided. Displaying encrypted text'
@@ -233,7 +232,7 @@ class Texts extends React.Component {
                 })
             }
 
-            if (userData.file) {
+            if (userData.file.data !== null) {
                 // js object to array, remove the keys
                 const fileData = Object.keys(userData.file['data']).map(
                     function (key) {

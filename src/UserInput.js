@@ -162,6 +162,8 @@ class UserInput extends React.Component {
         return mergedArray
     }
 
+
+
     // do not use this
     async sendBinaryMessageTo(data, payload) {
         if (!this.nym) {
