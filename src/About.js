@@ -119,7 +119,7 @@ class About extends React.Component {
                         sx={{
                             width: 'auto',
                             height: '100%',
-                            borderRadius: 'sm',
+                            borderRadius: '2%',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
@@ -140,7 +140,7 @@ class About extends React.Component {
                                     variant="outlined"
                                     aria-labelledby="pastenym"
                                     to="#pastenym"
-                                    fontSize="md"
+                                    fontSize="sm"
                                     borderRadius="sm"
                                 >
                                     <LinkIcon />
@@ -151,7 +151,11 @@ class About extends React.Component {
                             What is this website?
                         </Typography>
 
-                        <Typography level="body1" width={this.width} maxWidth={this.maxWidth}>
+                        <Typography
+                            level="body1"
+                            width={this.width}
+                            maxWidth={this.maxWidth}
+                        >
                             Pastenym is a site inspired by{' '}
                             <Link
                                 href="https://github.com/sebsauvage/ZeroBin"
@@ -182,11 +186,34 @@ class About extends React.Component {
                             website.
                             <br />
                             <br />
-                            How pastenym works in detail is explained <Link 
-                            href="https://medium.com/notrustverify/pastenym-a-privacy-friendly-sharing-service-ac3d5f337bde"
-                            target="_blank"
-                            rel="noreferrer"
-                            >here</Link>
+                            How pastenym works in detail is explained{' '}
+                            <Link
+                                href="https://medium.com/notrustverify/pastenym-a-privacy-friendly-sharing-service-ac3d5f337bde"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                here
+                            </Link>
+                            <br />
+                            <br />
+                            There's a{' '}
+                            <Link
+                                href="https://github.com/notrustverify/pastenym-cli"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                {' '}
+                                CLI application
+                            </Link> to interact with pastenym in the most anonymous
+                            way (A nym client up and running is needed,
+                            instructions are{' '}
+                            <Link
+                                href="https://nymtech.net/docs/stable/integrations/websocket-client"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                here{' '}
+                            </Link>)
                         </Typography>
 
                         <Typography
@@ -206,7 +233,7 @@ class About extends React.Component {
                             }
                             sx={{ scrollMarginTop: 100, mt: 1 }}
                         >
-                            How it works?
+                            How mixnet works?
                         </Typography>
 
                         <Typography
