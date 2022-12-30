@@ -292,7 +292,7 @@ class Texts extends React.Component {
                         sx={{
                             width: 'auto',
                             height: '100%',
-                            borderRadius: 'sm',
+                            borderRadius: '2%',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
