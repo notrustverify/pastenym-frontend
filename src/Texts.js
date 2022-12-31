@@ -209,7 +209,7 @@ class Texts extends React.Component {
                 //text is not encrypted
                 userData = JSON.parse(userData)
             }
-            console.log(data)
+
             //stats
             this.setState({
                 num_view: data['num_view'],
