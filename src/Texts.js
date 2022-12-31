@@ -209,7 +209,7 @@ class Texts extends React.Component {
                 //text is not encrypted
                 userData = JSON.parse(userData)
             }
-
+            console.log(data)
             //stats
             this.setState({
                 num_view: data['num_view'],
@@ -231,7 +231,7 @@ class Texts extends React.Component {
                     isText: false,
                 })
             }
-            console.log(userData)
+            
             if (userData['file'] !== null && userData.file.data !== null) {
                 // js object to array, remove the keys
                 const fileData = Object.keys(userData.file['data']).map(
@@ -401,7 +401,7 @@ class Texts extends React.Component {
                             </Alert>
                         ) : (
                             <div>
-                                {this.state.num_view ? (
+                                {this.state.num_view || this.state.is_ipfs ? (
                                     <TextStats
                                         num_view={this.state.num_view}
                                         created_on={this.state.created_on}

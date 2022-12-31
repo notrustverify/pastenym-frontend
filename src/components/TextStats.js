@@ -38,10 +38,8 @@ class TextStats extends React.Component {
                     wordBreak: 'break-all',
                 }}
             >
-                {'Views: ' +
-                    this.props.num_view +
-                    ' - ' +
-                    'Created on: ' +
+                 {this.props.num_view ? `Views: ` +this.props.num_view+` - ` : ''}
+                 {'Created on: ' +
                     new Date(this.props.created_on).toLocaleString() +
                     ' - '}
             </Typography>

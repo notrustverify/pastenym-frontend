@@ -499,7 +499,7 @@ class UserInput extends React.Component {
                                             burnChecked: event.target.checked,
                                         })
                                     }
-                                    disabled={!this.state.burnCheckedEnable}
+                                    disabled={this.state.isIpfs}
                                     size="sm"
                                     label="Burn after reading"
                                     checked={this.state.burnChecked}
@@ -520,6 +520,8 @@ class UserInput extends React.Component {
                                     }
                                     size="sm"
                                     label="Public paste"
+                                    checked={!this.state.isPrivate}
+                                    disabled={this.state.isIpfs}
                                 />
                             </Tooltip>
 
@@ -535,6 +537,7 @@ class UserInput extends React.Component {
                                             burnCheckedEnable:
                                                 !event.target.checked,
                                             burnChecked: false,
+                                            isPrivate: true
                                         })
                                     }}
                                     size="sm"
