@@ -228,29 +228,56 @@ class Texts extends React.Component {
     componentDidUpdate() {}
 
     displayReceived(message) {
+        
         const data = JSON.parse(message)
         //const replySurb = message.replySurb
         
         if (!data.hasOwnProperty('error')) {
+            
             let userData = he.decode(data['text'])
-            // Decrypt if text is encrypted
-            if (data.hasOwnProperty('encParams') && data['encParams'].salt !== "" && data['encParams'].iv !== "") {
+            let textToDisplay = ""
+            const isPasteEncrypted = data.hasOwnProperty('encParams') && data['encParams'].salt !== "" && data['encParams'].iv !== ""
+
+            // Decrypt if message is encrypted
+            if (isPasteEncrypted) {
+
+                // If key is not provided, ask for it.
                 if (!this.state.isKeyProvided) {
-                    console.log(
-                        'Text seems to be encrypted but no key is provided. Displaying encrypted text'
-                    )
-                } else {
+                    console.warn('Text seems to be encrypted but no key is provided. Asking for key')
+                    const userProvidedKey = prompt("Paste seems to be encrypted and no key is provided. Please provide it here if you want to decrypt the paste:")
+
+                    if (null !== userProvidedKey && "" !== userProvidedKey && userProvidedKey.length > 0) {
+                        this.setState({
+                            isKeyProvided: true,
+                        })
+                        this.encryptor = new E2EEncryptor(userProvidedKey)
+                    }
+                    else {
+                        console.warn("Still no key provided, displaying encrypted text")
+                    }
+                }
+
+                // If now have a key, display
+                if (undefined !== this.encryptor && null !== this.encryptor) {
+                    console.log("Decrypting")
                     const encParams = data['encParams']
                     userData = JSON.parse(
                         this.encryptor.decrypt(userData, encParams)
                     )
+                    textToDisplay = he.decode(userData['text'])
                 }
+                // We do not decrypt, only display message as is.
+                else {
+                    textToDisplay = `Unable to decrypt the following paste:\n${userData}`
+                }
+
+            // Message is not encrypted
             } else {
-                //text is not encrypted
                 userData = JSON.parse(userData)
+                textToDisplay = he.decode(userData['text'])
             }
 
-            //stats
+            // Stats
             this.setState({
                 num_view: data['num_view'],
                 created_on: data['created_on'],
@@ -258,27 +285,23 @@ class Texts extends React.Component {
                 is_ipfs: data['is_ipfs']
             })
 
-            if (userData['text'] !== '') {
+            // Display text if any
+            if (userData['text'] !== '' || textToDisplay.length > 1) {
                 this.setState({
-                    text: he.decode(userData['text']),
-                })
-                this.setState({
+                    text: textToDisplay,
                     isPasteRetrieved: true,
                 })
             } else {
-                //no text share remove the textarea
+                // No text shared, remove the textarea
                 this.setState({
                     isText: false,
                 })
             }
             
-            if (userData['file'] !== null && userData.file.data !== null) {
+            // Display document if any
+            if (userData.hasOwnProperty('file') && undefined !== userData['file'] && userData['file'] !== null && userData.file.data !== null) {
                 // js object to array, remove the keys
-                const fileData = Object.keys(userData.file['data']).map(
-                    function (key) {
-                        return userData.file['data'][key]
-                    }
-                )
+                const fileData = Object.keys(userData.file['data']).map(key => userData.file['data'][key])
                 this.userFile = {
                     fileData: URL.createObjectURL(
                         new Blob([Uint8Array.from(fileData)], {
@@ -291,7 +314,7 @@ class Texts extends React.Component {
                 this.setState({ isFileRetrieved: true })
             }
 
-            //global state to stop sending message when text or file is fetched
+            // Global state to stop sending message when text or file is fetched
             this.setState({ isDataRetrieved: true })
         } else {
             this.setState({
