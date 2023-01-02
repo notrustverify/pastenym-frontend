@@ -1,6 +1,6 @@
 {
   "name": "pastenym",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "http://pastenym.ch/",
   "private": true,
   "main": "index.js",
@@ -26,6 +26,8 @@
     "he": "^1.2.0",
     "i": "^0.3.7",
     "import-scripts": "^1.0.0",
+    "linkify-react": "^4.0.2",
+    "linkifyjs": "^4.0.2",
     "mui-image": "^1.0.7",
     "npm": "^9.2.0",
     "ntv-sdk": "^1.1.5",

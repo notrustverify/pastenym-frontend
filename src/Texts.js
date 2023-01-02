@@ -1,12 +1,15 @@
 import * as React from 'react'
 import { useParams } from 'react-router-dom'
+
+import he from 'he'
+import Linkify from "linkify-react";
+
 import {
     extendTheme as extendJoyTheme,
     CssVarsProvider,
 } from '@mui/joy/styles'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
-import he from 'he'
 import CircularProgress from '@mui/joy/CircularProgress'
 import Divider from '@mui/joy/Divider'
 import { deepmerge } from '@mui/utils'
@@ -17,17 +20,18 @@ import Skeleton from '@mui/material/Skeleton'
 import WarningIcon from '@mui/icons-material/Warning'
 import Alert from '@mui/joy/Alert'
 import IconButton from '@mui/joy/IconButton'
-import Header from './Header'
-import Footer from './Footer'
-import E2EEncryptor from './e2e'
-import TextStats from './components/TextStats'
-import { connectMixnet } from './context/createConnection'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import Button from '@mui/joy/Button'
 import FileRender from './components/FileRender'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import Tooltip from '@mui/joy/Tooltip'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
+
+import Header from './Header'
+import Footer from './Footer'
+import E2EEncryptor from './e2e'
+import TextStats from './components/TextStats'
+import { connectMixnet } from './context/createConnection'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -105,8 +109,6 @@ function withParams(Component) {
 }
 
 let recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
-
-//const re = new RegExp('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?');
 
 class Texts extends React.Component {
     constructor(props) {
@@ -314,26 +316,6 @@ class Texts extends React.Component {
             payload,
             recipient,
         })
-    }
-
-    formatText = (t) => {
-        return t
-        /* Work In Progress
-        let elements = []
-        const lines = t.split("\n")
-
-        for (let l = 0; l < lines.length; l++) {
-            let words = lines[l].split(" ")
-
-            for (let w = 0; w < words.length; w++) {
-                elements.push(re.test(words[w]) ? (<><Link href={words[w]}>{words[w]}</Link> </>) : `${words[w]} `)
-            }
-
-            elements.push(<br />)
-        }
-
-        return elements
-        */
     }
 
     render() {
@@ -554,7 +536,9 @@ class Texts extends React.Component {
                                 >
                                     {
                                     this.state.text ? (
-                                        this.formatText(this.state.text)
+                                        <Linkify as="div">
+                                        {this.state.text}
+                                        </Linkify>
                                     ) : (
                                         <Skeleton
                                             variant="rounded"

@@ -1,8 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const webpack = require('webpack')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
@@ -42,7 +40,6 @@ module.exports = {
       inject: true,
     }}),
     new CleanWebpackPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new Dotenv(),
     
     new WorkboxPlugin.GenerateSW({
