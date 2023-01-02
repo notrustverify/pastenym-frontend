@@ -23,14 +23,12 @@ import IconButton from '@mui/joy/IconButton'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import Button from '@mui/joy/Button'
 import FileRender from './components/FileRender'
-import ContentCopy from '@mui/icons-material/ContentCopy'
-import Tooltip from '@mui/joy/Tooltip'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
 
 import Header from './Header'
 import Footer from './Footer'
 import E2EEncryptor from './e2e'
 import TextStats from './components/TextStats'
+import CopyToClipBoard from './components/CopyToClipboard'
 import { connectMixnet } from './context/createConnection'
 
 const muiTheme = extendMuiTheme({
@@ -153,39 +151,6 @@ class Texts extends React.Component {
         }
 
         this.getPaste = this.getPaste.bind(this)
-        this.copyToClipboard = this.copyToClipboard.bind(this)
-    }
-
-    copyToClipboard() {
-        try {
-            this.setState({
-                copyToClipboardTooltipOpen: true,
-                copyToClipboardButton: 'Copied',
-            })
-            const textToCopy = this.state.text
-            //from  https://stackoverflow.com/a/65996386
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(textToCopy)
-            } else {
-                // text area method
-                let textArea = document.createElement('textarea')
-                textArea.value = textToCopy
-                // make the textarea out of viewport
-                textArea.style.position = 'fixed'
-                textArea.style.left = '-999999px'
-                textArea.style.top = '-999999px'
-                document.body.appendChild(textArea)
-                textArea.focus()
-                textArea.select()
-                return new Promise((res, rej) => {
-                    // here the magic happens
-                    document.execCommand('copy') ? res() : rej()
-                    textArea.remove()
-                })
-            }
-        } catch (err) {
-            console.log(err)
-        }
     }
 
     getPaste() {
@@ -475,46 +440,7 @@ class Texts extends React.Component {
                                 )}
                             </div>
                         )}
-                        <b>Paste
-                        <ClickAwayListener
-                            onClickAway={() => {
-                                this.setState({
-                                    copyToClipboardTooltipOpen: false,
-                                    copyToClipboardButton: 'Copy to clipboard',
-                                })
-                            }}
-                        >
-                            {
-                                //To handle hover and on click tooltip are used
-                            }
-                            <Tooltip title={this.state.copyToClipboardButton}>
-                                <Tooltip
-                                    popperprops={{
-                                        disablePortal: true,
-                                    }}
-                                    onClose={() => {
-                                        this.setState({
-                                            copyToClipboardTooltipOpen: false,
-                                            copyToClipboardButton: 'Copy to clipboard',
-                                        })
-                                    }}
-                                    open={this.state.copyToClipboardTooltipOpen}
-                                    disableFocusListener
-                                    disableTouchListener
-                                    title={this.state.copyToClipboardButton}
-                                >
-                                    <IconButton
-                                        variant="plain"
-                                        color="neutral"
-                                        onClick={this.copyToClipboard}
-                                        size="sm"
-                                    >
-                                        <ContentCopy />
-                                    </IconButton>
-                                </Tooltip>
-                            </Tooltip>
-                        </ClickAwayListener>
-                        </b>
+                        <b>Paste {this.state.isText && this.state.text ? <CopyToClipBoard textToCopy={this.state.text} /> : ''}</b>
                         
 
                         {this.state.isFileRetrieved &&
@@ -560,7 +486,7 @@ class Texts extends React.Component {
                                     {
                                     this.state.text ? (
                                         <Linkify as="div">
-                                        {this.state.text}
+                                            {this.state.text}
                                         </Linkify>
                                     ) : (
                                         <Skeleton
