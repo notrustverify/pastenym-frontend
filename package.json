@@ -56,7 +56,7 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.7.2",
     "node-sass": "^7.0.3",
-    "postcss": "^8.4.18",
+    "postcss": "^8.4.20",
     "postcss-loader": "^7.0.2",
     "postcss-preset-env": "^7.8.3",
     "react-router-dom": "^6.4.5",
