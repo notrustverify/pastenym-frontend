@@ -489,7 +489,7 @@ class UserInput extends React.Component {
                             }}
                         >
                             <Tooltip
-                                title="message will be deleted when read. Not compatible with IPFS upload"
+                                title="Your message will be deleted when read. Not compatible with IPFS upload."
                                 size="sm"
                                 placement="bottom"
                             >
@@ -507,7 +507,7 @@ class UserInput extends React.Component {
                             </Tooltip>
 
                             <Tooltip
-                                title="message will not be encrypted"
+                                title="Your message will not be encrypted"
                                 size="sm"
                                 placement="bottom"
                             >
@@ -526,7 +526,7 @@ class UserInput extends React.Component {
                             </Tooltip>
 
                             <Tooltip
-                                title="Warning it's an experimental ferature. Paste will be uploaded on IPFS"
+                                title="Warning it's an experimental feature. Paste will be uploaded on IPFS"
                                 size="sm"
                                 placement="bottom"
                             >

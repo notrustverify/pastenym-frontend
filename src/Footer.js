@@ -9,7 +9,7 @@ import Matrix from '@iconify/icons-simple-icons/matrix'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import GitHubIcon from '@mui/icons-material/GitHub';
 
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles'
+import { CssVarsProvider } from '@mui/joy/styles'
 
 function Copyright() {
     return (

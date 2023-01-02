@@ -1,4 +1,3 @@
-import { ThemeContext } from '@emotion/react'
 import { createNymMixnetClient } from 'ntv-sdk'
 
 export async function connectMixnet() {

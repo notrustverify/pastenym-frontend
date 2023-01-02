@@ -1,17 +1,10 @@
 import * as React from 'react'
 
-import InfoIcon from '@mui/icons-material/Info'
-import WarningIcon from '@mui/icons-material/Warning'
-import ReportIcon from '@mui/icons-material/Report'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
-import Box from '@mui/joy/Box'
 import Alert from '@mui/joy/Alert'
 import IconButton from '@mui/joy/IconButton'
 import Typography from '@mui/joy/Typography'
-import { ColorPaletteProp } from '@mui/joy/styles'
 import Link from '@mui/joy/Link'
-import Button from '@mui/joy/Button'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import Tooltip from '@mui/joy/Tooltip'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
@@ -30,20 +23,20 @@ class SuccessUrlId extends React.Component {
                 this.props.urlId.url_id +
                 (this.props.encKey ? '&key=' + this.props.encKey : ''),
             urlId: this.props.urlId.url_id,
-            open: false,
+            copyToClipboardButton: 'Copy to clipboard',
+            copyToClipboardTooltipOpen: false,
             ipfs: this.props.urlId.ipfs,
             hash: this.props.urlId.hash,
-            textButton: 'Copy to clipboard',
         }
 
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.copyToClipboard = this.copyToClipboard.bind(this)
     }
 
-    handleSubmit() {
+    copyToClipboard() {
         try {
             this.setState({
-                open: true,
-                textButton: 'Copied',
+                copyToClipboardTooltipOpen: true,
+                copyToClipboardButton: 'Copied',
             })
             const textToCopy = this.state.url
             //from  https://stackoverflow.com/a/65996386
@@ -97,39 +90,39 @@ class SuccessUrlId extends React.Component {
                         fontSize="sm"
                         sx={{ opacity: 0.8, wordBreak: 'break-word' }}
                     >
-                        Your text is accessible at {this.state.url}
+                        Your text is accessible at <Link href={this.state.url} title="Go to your newly created paste!">{this.state.url}</Link>
                         {'   '}
                         <ClickAwayListener
                             onClickAway={() => {
                                 this.setState({
-                                    open: false,
-                                    textButton: 'Copy to clipboard',
+                                    copyToClipboardTooltipOpen: false,
+                                    copyToClipboardButton: 'Copy to clipboard',
                                 })
                             }}
                         >
                             {
                                 //To handle hover and on click tooltip are used
                             }
-                            <Tooltip title={this.state.textButton}>
+                            <Tooltip title={this.state.copyToClipboardButton}>
                                 <Tooltip
                                     popperprops={{
                                         disablePortal: true,
                                     }}
                                     onClose={() => {
                                         this.setState({
-                                            open: false,
-                                            textButton: 'Copy to clipboard',
+                                            copyToClipboardTooltipOpen: false,
+                                            copyToClipboardButton: 'Copy to clipboard',
                                         })
                                     }}
-                                    open={this.state.open}
+                                    open={this.state.copyToClipboardTooltipOpen}
                                     disableFocusListener
                                     disableTouchListener
-                                    title={this.state.textButton}
+                                    title={this.state.copyToClipboardButton}
                                 >
                                     <IconButton
                                         variant="plain"
                                         color="neutral"
-                                        onClick={this.handleSubmit}
+                                        onClick={this.copyToClipboard}
                                         size="sm"
                                     >
                                         <ContentCopy />

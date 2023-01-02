@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import {
     extendTheme as extendJoyTheme,
     CssVarsProvider,
-    useColorScheme,
 } from '@mui/joy/styles'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
@@ -16,7 +15,6 @@ import Footer from './Footer'
 import Link from '@mui/joy/Link'
 import { Link as RouterLink } from 'react-router-dom'
 
-import Launch from '@mui/icons-material/Launch'
 import LinkIcon from '@mui/icons-material/Link'
 
 const muiTheme = extendMuiTheme({

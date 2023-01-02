@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import {
     extendTheme as extendJoyTheme,
     CssVarsProvider,
-    useColorScheme,
 } from '@mui/joy/styles'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
@@ -15,11 +14,9 @@ import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles
 import Box from '@mui/material/Box'
 import colors from '@mui/joy/colors'
 import Skeleton from '@mui/material/Skeleton'
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import WarningIcon from '@mui/icons-material/Warning'
 import Alert from '@mui/joy/Alert'
 import IconButton from '@mui/joy/IconButton'
-import Link from '@mui/joy/Link'
 import Header from './Header'
 import Footer from './Footer'
 import E2EEncryptor from './e2e'
@@ -28,6 +25,9 @@ import { connectMixnet } from './context/createConnection'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import Button from '@mui/joy/Button'
 import FileRender from './components/FileRender'
+import ContentCopy from '@mui/icons-material/ContentCopy'
+import Tooltip from '@mui/joy/Tooltip'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -106,6 +106,8 @@ function withParams(Component) {
 
 let recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 
+//const re = new RegExp('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?');
+
 class Texts extends React.Component {
     constructor(props) {
         super(props)
@@ -137,6 +139,9 @@ class Texts extends React.Component {
             isText: true,
             isDataRetrieved: false,
             isPrivate: true,
+            // For copying to clipboard
+            copyToClipboardButton: 'Copy to clipboard',
+            copyToClipboardTooltipOpen: false,
         }
 
         this.userFile = {}
@@ -146,6 +151,39 @@ class Texts extends React.Component {
         }
 
         this.getPaste = this.getPaste.bind(this)
+        this.copyToClipboard = this.copyToClipboard.bind(this)
+    }
+
+    copyToClipboard() {
+        try {
+            this.setState({
+                copyToClipboardTooltipOpen: true,
+                copyToClipboardButton: 'Copied',
+            })
+            const textToCopy = this.state.text
+            //from  https://stackoverflow.com/a/65996386
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+            } else {
+                // text area method
+                let textArea = document.createElement('textarea')
+                textArea.value = textToCopy
+                // make the textarea out of viewport
+                textArea.style.position = 'fixed'
+                textArea.style.left = '-999999px'
+                textArea.style.top = '-999999px'
+                document.body.appendChild(textArea)
+                textArea.focus()
+                textArea.select()
+                return new Promise((res, rej) => {
+                    // here the magic happens
+                    document.execCommand('copy') ? res() : rej()
+                    textArea.remove()
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     getPaste() {
@@ -189,7 +227,7 @@ class Texts extends React.Component {
 
     displayReceived(message) {
         const data = JSON.parse(message)
-        const replySurb = message.replySurb
+        //const replySurb = message.replySurb
         
         if (!data.hasOwnProperty('error')) {
             let userData = he.decode(data['text'])
@@ -276,6 +314,26 @@ class Texts extends React.Component {
             payload,
             recipient,
         })
+    }
+
+    formatText = (t) => {
+        return t
+        /* Work In Progress
+        let elements = []
+        const lines = t.split("\n")
+
+        for (let l = 0; l < lines.length; l++) {
+            let words = lines[l].split(" ")
+
+            for (let w = 0; w < words.length; w++) {
+                elements.push(re.test(words[w]) ? (<><Link href={words[w]}>{words[w]}</Link> </>) : `${words[w]} `)
+            }
+
+            elements.push(<br />)
+        }
+
+        return elements
+        */
     }
 
     render() {
@@ -412,7 +470,47 @@ class Texts extends React.Component {
                                 )}
                             </div>
                         )}
-                        <b>Paste</b>
+                        <b>Paste
+                        <ClickAwayListener
+                            onClickAway={() => {
+                                this.setState({
+                                    copyToClipboardTooltipOpen: false,
+                                    copyToClipboardButton: 'Copy to clipboard',
+                                })
+                            }}
+                        >
+                            {
+                                //To handle hover and on click tooltip are used
+                            }
+                            <Tooltip title={this.state.copyToClipboardButton}>
+                                <Tooltip
+                                    popperprops={{
+                                        disablePortal: true,
+                                    }}
+                                    onClose={() => {
+                                        this.setState({
+                                            copyToClipboardTooltipOpen: false,
+                                            copyToClipboardButton: 'Copy to clipboard',
+                                        })
+                                    }}
+                                    open={this.state.copyToClipboardTooltipOpen}
+                                    disableFocusListener
+                                    disableTouchListener
+                                    title={this.state.copyToClipboardButton}
+                                >
+                                    <IconButton
+                                        variant="plain"
+                                        color="neutral"
+                                        onClick={this.copyToClipboard}
+                                        size="sm"
+                                    >
+                                        <ContentCopy />
+                                    </IconButton>
+                                </Tooltip>
+                            </Tooltip>
+                        </ClickAwayListener>
+                        </b>
+                        
 
                         {this.state.isFileRetrieved &&
                         !this.userFile.mimeType.includes('image/') ? (
@@ -442,7 +540,7 @@ class Texts extends React.Component {
                             ''
                         )}
                         {
-                            // if not text share don't render text area
+                            // if no text shared don't render text area
                             this.state.isText ? (
                                 <Box
                                     sx={{
@@ -454,8 +552,9 @@ class Texts extends React.Component {
                                         p: 1,
                                     }}
                                 >
-                                    {this.state.text ? (
-                                        this.state.text
+                                    {
+                                    this.state.text ? (
+                                        this.formatText(this.state.text)
                                     ) : (
                                         <Skeleton
                                             variant="rounded"
