@@ -2,12 +2,9 @@ import * as React from 'react'
 import { useParams } from 'react-router-dom'
 
 import he from 'he'
-import Linkify from "linkify-react";
+import Linkify from 'linkify-react'
 
-import {
-    extendTheme as extendJoyTheme,
-    CssVarsProvider,
-} from '@mui/joy/styles'
+import { extendTheme as extendJoyTheme, CssVarsProvider } from '@mui/joy/styles'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import CircularProgress from '@mui/joy/CircularProgress'
@@ -30,6 +27,7 @@ import E2EEncryptor from './e2e'
 import TextStats from './components/TextStats'
 import CopyToClipBoard from './components/CopyToClipboard'
 import { connectMixnet } from './context/createConnection'
+import MixnetInfo from './components/MixnetInfo'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -193,38 +191,47 @@ class Texts extends React.Component {
     componentDidUpdate() {}
 
     displayReceived(message) {
-        
         const data = JSON.parse(message)
         //const replySurb = message.replySurb
-        
+
         if (!data.hasOwnProperty('error')) {
-            
             let userData = he.decode(data['text'])
-            let textToDisplay = ""
-            const isPasteEncrypted = data.hasOwnProperty('encParams') && data['encParams'].salt !== "" && data['encParams'].iv !== ""
+            let textToDisplay = ''
+            const isPasteEncrypted =
+                data.hasOwnProperty('encParams') &&
+                data['encParams'].salt !== '' &&
+                data['encParams'].iv !== ''
 
             // Decrypt if message is encrypted
             if (isPasteEncrypted) {
-
                 // If key is not provided, ask for it.
                 if (!this.state.isKeyProvided) {
-                    console.warn('Text seems to be encrypted but no key is provided. Asking for key')
-                    const userProvidedKey = prompt("Paste seems to be encrypted and no key is provided. Please provide it here if you want to decrypt the paste:")
+                    console.warn(
+                        'Text seems to be encrypted but no key is provided. Asking for key'
+                    )
+                    const userProvidedKey = prompt(
+                        'Paste seems to be encrypted and no key is provided. Please provide it here if you want to decrypt the paste:'
+                    )
 
-                    if (null !== userProvidedKey && "" !== userProvidedKey && userProvidedKey.length > 0) {
+                    if (
+                        null !== userProvidedKey &&
+                        '' !== userProvidedKey &&
+                        userProvidedKey.length > 0
+                    ) {
                         this.setState({
                             isKeyProvided: true,
                         })
                         this.encryptor = new E2EEncryptor(userProvidedKey)
-                    }
-                    else {
-                        console.warn("Still no key provided, displaying encrypted text")
+                    } else {
+                        console.warn(
+                            'Still no key provided, displaying encrypted text'
+                        )
                     }
                 }
 
                 // If now have a key, display
                 if (undefined !== this.encryptor && null !== this.encryptor) {
-                    console.log("Decrypting")
+                    console.log('Decrypting')
                     const encParams = data['encParams']
                     userData = JSON.parse(
                         this.encryptor.decrypt(userData, encParams)
@@ -236,7 +243,7 @@ class Texts extends React.Component {
                     textToDisplay = `Unable to decrypt the following paste:\n${userData}`
                 }
 
-            // Message is not encrypted
+                // Message is not encrypted
             } else {
                 userData = JSON.parse(userData)
                 textToDisplay = he.decode(userData['text'])
@@ -247,7 +254,7 @@ class Texts extends React.Component {
                 num_view: data['num_view'],
                 created_on: data['created_on'],
                 is_burn: data['is_burn'],
-                is_ipfs: data['is_ipfs']
+                is_ipfs: data['is_ipfs'],
             })
 
             // Display text if any
@@ -262,11 +269,18 @@ class Texts extends React.Component {
                     isText: false,
                 })
             }
-            
+
             // Display document if any
-            if (userData.hasOwnProperty('file') && undefined !== userData['file'] && userData['file'] !== null && userData.file.data !== null) {
+            if (
+                userData.hasOwnProperty('file') &&
+                undefined !== userData['file'] &&
+                userData['file'] !== null &&
+                userData.file.data !== null
+            ) {
                 // js object to array, remove the keys
-                const fileData = Object.keys(userData.file['data']).map(key => userData.file['data'][key])
+                const fileData = Object.keys(userData.file['data']).map(
+                    (key) => userData.file['data'][key]
+                )
                 this.userFile = {
                     fileData: URL.createObjectURL(
                         new Blob([Uint8Array.from(fileData)], {
@@ -285,7 +299,7 @@ class Texts extends React.Component {
             this.setState({
                 text: he.decode(data['error']),
                 isDataRetrieved: true,
-                isPasteRetrieved: true
+                isPasteRetrieved: true,
             })
         }
     }
@@ -320,7 +334,7 @@ class Texts extends React.Component {
                         sx={{
                             width: 'auto',
                             height: '100%',
-                            borderRadius: '2%',
+                            borderRadius: '10px',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
@@ -332,67 +346,7 @@ class Texts extends React.Component {
                         }}
                         variant="outlined"
                     >
-                        <div>
-                            <Typography
-                                level="h4"
-                                component="h1"
-                                sx={{
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                <b>Anon text sharing service</b>
-                            </Typography>
-                            <Typography
-                                fontSize="sm"
-                                sx={{
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                <b>Client id</b>{' '}
-                                {this.state.self_address ? (
-                                    this.state.self_address
-                                        .split('@')[0]
-                                        .slice(0, 60) + '...'
-                                ) : (
-                                    <CircularProgress
-                                        sx={{
-                                            '--CircularProgress-size': '20px',
-                                            '--CircularProgress-track-thickness':
-                                                '3px',
-                                            '--CircularProgress-progress-thickness':
-                                                '3px',
-                                        }}
-                                    />
-                                )}
-                            </Typography>
-                            <Typography
-                                fontSize="sm"
-                                sx={{
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                <b>Connected Gateway</b>{' '}
-                                {this.state.self_address ? (
-                                    this.state.self_address.split('@')[1]
-                                ) : (
-                                    <CircularProgress
-                                        sx={{
-                                            '--CircularProgress-size': '20px',
-                                            '--CircularProgress-track-thickness':
-                                                '3px',
-                                            '--CircularProgress-progress-thickness':
-                                                '3px',
-                                        }}
-                                    />
-                                )}
-                            </Typography>
-                        </div>
+                        <MixnetInfo self_address={this.state.self_address} />
 
                         <Divider />
                         {this.state.is_burn ? (
@@ -440,8 +394,14 @@ class Texts extends React.Component {
                                 )}
                             </div>
                         )}
-                        <b>Paste {this.state.isText && this.state.text ? <CopyToClipBoard textToCopy={this.state.text} /> : ''}</b>
-                        
+                        <b>
+                            Paste{' '}
+                            {this.state.isText && this.state.text ? (
+                                <CopyToClipBoard textToCopy={this.state.text} />
+                            ) : (
+                                ''
+                            )}
+                        </b>
 
                         {this.state.isFileRetrieved &&
                         !this.userFile.mimeType.includes('image/') ? (
@@ -463,7 +423,6 @@ class Texts extends React.Component {
                         ) : (
                             ''
                         )}
-
                         {this.state.isFileRetrieved &&
                         this.userFile.mimeType.includes('image/') ? (
                             <FileRender fileData={this.userFile.fileData} />
@@ -483,8 +442,7 @@ class Texts extends React.Component {
                                         p: 1,
                                     }}
                                 >
-                                    {
-                                    this.state.text ? (
+                                    {this.state.text ? (
                                         <Linkify as="div">
                                             {this.state.text}
                                         </Linkify>

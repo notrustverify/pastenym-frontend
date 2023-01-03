@@ -117,7 +117,7 @@ class About extends React.Component {
                         sx={{
                             width: 'auto',
                             height: '100%',
-                            borderRadius: '2%',
+                            borderRadius: '10px',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,

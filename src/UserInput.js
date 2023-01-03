@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
-import { CssVarsProvider, useColorScheme, extendTheme } from '@mui/joy/styles'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import Button from '@mui/joy/Button'
@@ -19,6 +18,94 @@ import { withRouter } from './components/withRouter'
 import ErrorModal from './components/ErrorModal'
 import SuccessUrlId from './components/SuccessUrlId'
 import { connectMixnet } from './context/createConnection'
+import MixnetInfo from './components/MixnetInfo'
+import {
+    extendTheme as extendJoyTheme,
+    CssVarsProvider,
+    useColorScheme,
+} from '@mui/joy/styles'
+import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles'
+import colors from '@mui/joy/colors'
+import { deepmerge } from '@mui/utils'
+import { useParams } from 'react-router-dom'
+
+
+
+
+const muiTheme = extendMuiTheme({
+    // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
+    cssVarPrefix: 'joy',
+    colorSchemes: {
+        light: {
+            palette: {
+                primary: {
+                    main: colors.blue[500],
+                },
+                grey: colors.grey,
+                error: {
+                    main: colors.red[500],
+                },
+                info: {
+                    main: colors.purple[500],
+                },
+                success: {
+                    main: colors.green[500],
+                },
+                warning: {
+                    main: colors.yellow[200],
+                },
+                common: {
+                    white: '#FFF',
+                    black: '#09090D',
+                },
+                divider: colors.grey[200],
+                text: {
+                    primary: colors.grey[800],
+                    secondary: colors.grey[600],
+                },
+            },
+        },
+        dark: {
+            palette: {
+                primary: {
+                    main: colors.blue[600],
+                },
+                grey: colors.grey,
+                error: {
+                    main: colors.red[600],
+                },
+                info: {
+                    main: colors.purple[600],
+                },
+                success: {
+                    main: colors.green[600],
+                },
+                warning: {
+                    main: colors.yellow[300],
+                },
+                common: {
+                    white: '#FFF',
+                    black: '#09090D',
+                },
+                divider: colors.grey[800],
+                text: {
+                    primary: colors.grey[100],
+                    secondary: colors.grey[300],
+                },
+            },
+        },
+    },
+})
+
+const joyTheme = extendJoyTheme()
+
+// You can use your own `deepmerge` function.
+// joyTheme will deeply merge to muiTheme.
+const theme = deepmerge(muiTheme, joyTheme)
+
+function withParams(Component) {
+    return (props) => <Component {...props} params={useParams()} />
+}
 
 const recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 
@@ -44,7 +131,7 @@ class UserInput extends React.Component {
             isFileAttached: false,
             isPrivate: true,
             isIpfs: false,
-            limitSize: 120_0000
+            limitSize: 120_0000,
         }
 
         this.files = null
@@ -89,11 +176,14 @@ class UserInput extends React.Component {
         //reset the state for the modal, workaround, would have to change
         // handle validations
         const fileSize = files.target.files[0].size
-        
+
         if (fileSize > this.state.limitSize) {
             this.setState({
                 open: true,
-                textError: 'Files are limited to '+this.state.limitSize/1000000+' MB',
+                textError:
+                    'Files are limited to ' +
+                    this.state.limitSize / 1000000 +
+                    ' MB',
                 isFileAttached: false,
             })
 
@@ -161,8 +251,6 @@ class UserInput extends React.Component {
         mergedArray.set(a2, a1.length)
         return mergedArray
     }
-
-
 
     // do not use this
     async sendBinaryMessageTo(data, payload) {
@@ -322,8 +410,8 @@ class UserInput extends React.Component {
 
     render() {
         return (
-            //<CssVarsProvider theme={theme}>
-            <CssVarsProvider>
+        <CssVarsProvider theme={theme}>
+            
                 <header>
                     <Header state={this.state.self_address} />
                 </header>
@@ -332,11 +420,11 @@ class UserInput extends React.Component {
                         sx={{
                             width: 'auto',
                             height: '100%',
-                            borderRadius: '2%',
+                            borderRadius: '10px',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
-                            boxShadow: 'md',
+                            boxShadow: 3,
                             mx: 4,
                             px: 3,
                             my: 4, // margin top & botom
@@ -344,68 +432,7 @@ class UserInput extends React.Component {
                         }}
                         variant="outlined"
                     >
-                        <div>
-                            <Typography
-                                level="h4"
-                                component="h1"
-                                sx={{
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                <b>Anon text sharing service</b>
-                            </Typography>
-
-                            <Typography
-                                fontSize="sm"
-                                sx={{
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                <b>Client id</b>{' '}
-                                {this.state.self_address ? (
-                                    this.state.self_address
-                                        .split('@')[0]
-                                        .slice(0, 60) + '...'
-                                ) : (
-                                    <CircularProgress
-                                        sx={{
-                                            '--CircularProgress-size': '20px',
-                                            '--CircularProgress-track-thickness':
-                                                '3px',
-                                            '--CircularProgress-progress-thickness':
-                                                '3px',
-                                        }}
-                                    />
-                                )}
-                            </Typography>
-                            <Typography
-                                fontSize="sm"
-                                sx={{
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                <b>Connected Gateway</b>{' '}
-                                {this.state.self_address ? (
-                                    this.state.self_address.split('@')[1]
-                                ) : (
-                                    <CircularProgress
-                                        sx={{
-                                            '--CircularProgress-size': '20px',
-                                            '--CircularProgress-track-thickness':
-                                                '3px',
-                                            '--CircularProgress-progress-thickness':
-                                                '3px',
-                                        }}
-                                    />
-                                )}
-                            </Typography>
-                        </div>
+                        <MixnetInfo self_address={this.state.self_address} />
 
                         {
                             // use buttonClick to reload the message
@@ -483,9 +510,12 @@ class UserInput extends React.Component {
                         <Box
                             sx={{
                                 display: 'flex',
+                                flexWrap: 'wrap',
                                 gap: 4,
                                 width: '100%',
                                 justifyContent: 'left',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'normal',
                             }}
                         >
                             <Tooltip
@@ -515,7 +545,9 @@ class UserInput extends React.Component {
                                     onChange={(event) =>
                                         this.setState({
                                             isPrivate: !event.target.checked,
-                                            limitSize: !event.target.checked ? 120_0000 : 150_0000
+                                            limitSize: !event.target.checked
+                                                ? 120_0000
+                                                : 150_0000,
                                         })
                                     }
                                     size="sm"
@@ -537,7 +569,7 @@ class UserInput extends React.Component {
                                             burnCheckedEnable:
                                                 !event.target.checked,
                                             burnChecked: false,
-                                            isPrivate: true
+                                            isPrivate: true,
                                         })
                                     }}
                                     size="sm"
@@ -611,7 +643,7 @@ class UserInput extends React.Component {
                                     }}
                                 >
                                     Attach file (Limit:{' '}
-                                    {this.state.limitSize/1000000} MB)
+                                    {this.state.limitSize / 1000000} MB)
                                 </Typography>
                             )}
                             <input

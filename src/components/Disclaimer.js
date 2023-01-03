@@ -37,10 +37,10 @@ class Disclaimer extends React.Component {
           }
         >
           <div>
-            <Typography fontWeight="lg" mt={0.25}>
+            <Typography fontWeight="lg" fontSize="13px" mt={0.25}>
               Disclaimer
             </Typography>
-            <Typography fontSize="sm" sx={{ opacity: 0.8 }}>
+            <Typography fontSize="13px" sx={{ opacity: 0.8 }}>
             Pastenym is in alpha stage and shouldn't be used to share sensitive information.
             <b>The authors decline any responsibility for the information transmitted using this service.</b>
             </Typography>
