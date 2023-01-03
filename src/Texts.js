@@ -28,6 +28,7 @@ import TextStats from './components/TextStats'
 import CopyToClipBoard from './components/CopyToClipboard'
 import { connectMixnet } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
+import {Buffer} from 'buffer'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -278,12 +279,22 @@ class Texts extends React.Component {
                 userData.file.data !== null
             ) {
                 // js object to array, remove the keys
-                const fileData = Object.keys(userData.file['data']).map(
-                    (key) => userData.file['data'][key]
+                let fileData
+                if (
+                    typeof userData.file['data'] === 'string' ||
+                    userData.file['data'] instanceof String
                 )
+                    fileData = Buffer.from(userData.file['data'], 'base64')
+                else
+                    fileData = Uint8Array.from(
+                        Object.keys(userData.file['data']).map(
+                            (key) => userData.file['data'][key]
+                        )
+                    )
+
                 this.userFile = {
                     fileData: URL.createObjectURL(
-                        new Blob([Uint8Array.from(fileData)], {
+                        new Blob([fileData], {
                             type: userData.file['mimeType'],
                         })
                     ),
@@ -341,7 +352,7 @@ class Texts extends React.Component {
                             boxShadow: 3,
                             mx: 4,
                             px: 3,
-                            my: 4, // margin top & botom
+                            my: 1, // margin top & botom
                             py: 3, // padding top & bottom
                         }}
                         variant="outlined"
