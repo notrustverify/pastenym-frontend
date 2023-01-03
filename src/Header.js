@@ -18,9 +18,7 @@ import {
     useColorScheme,
 } from '@mui/joy/styles'
 
-import HttpDetection from './components/HttpDetection'
 import Disclaimer from './components/Disclaimer'
-import UserInput from './UserInput'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -98,7 +96,14 @@ class Header extends React.Component {
     render() {
         return (
             <CssVarsProvider theme={theme}>
-                <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Toolbar
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                    }}
+                >
                     <Link component={RouterLink} to="/">
                         <Button size="small">New paste</Button>
                     </Link>
@@ -129,8 +134,20 @@ class Header extends React.Component {
                             Pastenym
                         </Link>
                     </Typography>
-                    <Button variant="outlined" size="small" disabled>
-                        Connect with Nym
+
+                    <Button
+                        variant="outlined"
+                        size="sm"
+                        disabled
+                        sx={{
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            align: 'right',
+                            wordBreak: 'break-word',
+                        }}
+                    >
+                        Connect
                     </Button>
                 </Toolbar>
                 <Toolbar
