@@ -9,17 +9,14 @@ import Link from '@mui/joy/Link'
 import Box from '@mui/joy/Box'
 
 class Disclaimer extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+
 
     render() {
         return (
           <main>
           <Box sx={{ display: 'flex', gap: 1, width: 'auto', flexDirection: 'column',
-          mx: 3,
-          py: 2
-           // padding top & bottom
+          mx: 4,
+          py: 2 // padding top & bottom
         }}>
             <Alert
             size="sm"

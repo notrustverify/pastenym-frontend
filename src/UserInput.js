@@ -413,7 +413,7 @@ class UserInput extends React.Component {
         <CssVarsProvider theme={theme}>
             
                 <header>
-                    <Header state={this.state.self_address} />
+                    <Header  />
                 </header>
                 <main>
                     <Sheet
@@ -427,7 +427,7 @@ class UserInput extends React.Component {
                             boxShadow: 3,
                             mx: 4,
                             px: 3,
-                            my: 4, // margin top & botom
+                            my: 1, // margin top & botom
                             py: 3, // padding top & bottom
                         }}
                         variant="outlined"
