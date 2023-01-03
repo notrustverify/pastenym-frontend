@@ -338,7 +338,7 @@ class Texts extends React.Component {
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
-                            boxShadow: 'md',
+                            boxShadow: 3,
                             mx: 4,
                             px: 3,
                             my: 4, // margin top & botom

@@ -89,9 +89,7 @@ const joyTheme = extendJoyTheme()
 const theme = deepmerge(muiTheme, joyTheme)
 
 class Header extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+  
 
     render() {
         return (
@@ -150,11 +148,6 @@ class Header extends React.Component {
                         Connect
                     </Button>
                 </Toolbar>
-                <Toolbar
-                    component="nav"
-                    variant="dense"
-                    sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
-                ></Toolbar>
 
                 <Disclaimer />
             </CssVarsProvider>
