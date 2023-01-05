@@ -6,7 +6,7 @@ This project is inspired from [pastebin](https://pastebin.com/) service.
 The main goal is to offer a solution for sharing text with [Nym](https://nymtech.net/) products
 to offer full anonymity, even on metadata level
 
-#### Demo
+### Demo
 Get shared text: Get shared text: [https://pastenym.ch/#/jD6Vhmrz&key=b2d6ae002a1674daa43a07be7fc4f01c](https://pastenym.ch/#/jD6Vhmrz&key=b2d6ae002a1674daa43a07be7fc4f01c)
 
 
@@ -28,9 +28,20 @@ On the side of No Trust Verify we only see an anonymous id when sending the text
 
 <img src="./resources/img/paste.jpg" alt="drawing" width="60%"/>
 
-## Init the project
+## Donate
 
-### Frontend
+If you enjoy pastenym, please consider buying us a cup of coffee. We worked hard to make it free and plan to spend alot of time supporting it. Donations are greatly appreciated.
+
+BTC: `bc1q5j4tq0yr75j90xwegwtfpaccdx3xdaxxzjtzt8`
+
+
+*The best way to support us is by delegated NYM to our nodes*
+* No Trust Verify 2 `4yRfauFzZnejJhG2FACTVQ7UnYEcFUYw3HzXrmuwLMaR`
+* No Trust Verify 1 `APxUbCmGp4K9qDzvwVADJFNu8S3JV1AJBw7q6bS5KN9E`
+
+### Init the project
+
+## Frontend
 NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 
 1. Create a `.env` file with the same keys are in `.env.example` with your values. The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend.
@@ -44,7 +55,7 @@ Run `npm run build` to build the project, everything will be in the `dist` folde
 
 If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CLIENT_SERVER=` to this value: `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w` 
 
-#### Host it publicly
+### Host it publicly
 
 If you want to host it publicly here's some steps that can help you
 
