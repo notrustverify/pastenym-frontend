@@ -116,5 +116,5 @@ services:
 ## .env details
 
 | Variable | Default value | Explanation |
-------------------------------------------
+|----------|---------------|--------------|
 | DISABLE_ABOUT | empty | Disable the `About` page
