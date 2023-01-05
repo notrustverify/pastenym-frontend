@@ -7,54 +7,128 @@ import TelegramIcon from '@mui/icons-material/Telegram'
 import Medium from '@iconify-icons/bi/medium'
 import Matrix from '@iconify/icons-simple-icons/matrix'
 import TwitterIcon from '@mui/icons-material/Twitter'
-import GitHubIcon from '@mui/icons-material/GitHub';
+import GitHubIcon from '@mui/icons-material/GitHub'
 
 import { CssVarsProvider } from '@mui/joy/styles'
 
 function Copyright() {
     return (
         <CssVarsProvider>
-            <Typography variant="body2" color="text.secondary" align="center">
+            <br />
+            <Typography
+                variant="body2"
+                color="text.secondary"
+                align="center"
+                rel="noreferrer"
+                target="_blank"
+            >
                 Powered by{' '}
                 <Link href="https://nymtech.net" underline="none">
                     Nym
                 </Link>
                 <br />
-                Developed by{' '}
-                <Link href="https://notrustverify.ch" underline="none">
-                    No Trust Verify
-                </Link>
-                <br />
-                <Link
-                    href="mailto:hello@notrustverify.ch"
-                    underline="none"
-                    color="primary"
-                >
-                    <EmailIcon />{' '}
-                </Link>{' '}
-                <Link
-                    href="https://t.me/notrustverify"
-                    underline="none"
-                    color="primary"
-                >
-                    <TelegramIcon />{' '}
-                </Link>{' '}
-                <Link href="https://medium.com/notrustverify" color="primary">
-                    <Icon icon={Medium} />{' '}
-                </Link>{' '}
-                <Link
-                    href="https://matrix.to/#/#no-trust-verify:mandragot.org"
-                    color="primary"
-                >
-                    <Icon icon={Matrix} />{' '}
-                </Link>{' '}
-                <Link href="https://twitter.com/notrustverif" color="primary">
-                    <TwitterIcon />
-                </Link>
-                <Link href="https://github.com/notrustverify/pastenym/" color="primary">
-                    <GitHubIcon />{' '}
-                </Link>
-
+                {!process.env.DISABLE_DEVELOPPEDBY ? 'Developed by ' : ''}
+                {!process.env.DISABLE_DEVELOPPEDBY ? (
+                    <Link
+                        href="https://notrustverify.ch"
+                        underline="none"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        No Trust Verify
+                    </Link>
+                ) : (
+                    ''
+                )}
+                {!process.env.DISABLE_DEVELOPPEDBY ? <br /> : ''}
+                {process.env.HOSTED_BY ? 'Hosted by ' : ''}
+                {process.env.HOSTED_BY ? (
+                    <Link
+                        href={process.env.HOSTED_BY}
+                        underline="none"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        {process.env.HOSTED_BY_NAME}
+                    </Link>
+                ) : (
+                    ''
+                )}
+                {process.env.HOSTED_BY ? <br /> : ''}
+                {process.env.SOCIAL_EMAIL ? (
+                    <Link
+                        href={`mailto:` + process.env.SOCIAL_EMAIL}
+                        underline="none"
+                        color="primary"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        <EmailIcon />{' '}
+                    </Link>
+                ) : (
+                    ''
+                )}{' '}
+                {process.env.SOCIAL_TELEGRAM ? (
+                    <Link
+                        href={process.env.SOCIAL_TELEGRAM}
+                        underline="none"
+                        color="primary"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        <TelegramIcon />{' '}
+                    </Link>
+                ) : (
+                    ''
+                )}{' '}
+                {process.env.SOCIAL_MEDIUM ? (
+                    <Link
+                        href={process.env.SOCIAL_MEDIUM}
+                        color="primary"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        <Icon icon={Medium} />
+                    </Link>
+                ) : (
+                    ''
+                )}{' '}
+                {process.env.SOCIAL_MATRIX ? (
+                    <Link
+                        href={process.env.SOCIAL_MATRIX}
+                        color="primary"
+                        rel="noreferer"
+                        target="_blank"
+                    >
+                        <Icon icon={Matrix} />
+                    </Link>
+                ) : (
+                    ''
+                )}{' '}
+                {process.env.SOCIAL_TWITTER ? (
+                    <Link
+                        href={process.env.SOCIAL_TWITTER}
+                        color="primary"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        <TwitterIcon />
+                    </Link>
+                ) : (
+                    ''
+                )}{' '}
+                {process.env.SOCIAL_GITHUB ? (
+                    <Link
+                        href={process.env.SOCIAL_GITHUB}
+                        color="primary"
+                        rel="noreferrer"
+                        target="_blank"
+                    >
+                        <GitHubIcon />
+                    </Link>
+                ) : (
+                    ''
+                )}
             </Typography>
         </CssVarsProvider>
     )

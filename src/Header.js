@@ -89,8 +89,6 @@ const joyTheme = extendJoyTheme()
 const theme = deepmerge(muiTheme, joyTheme)
 
 class Header extends React.Component {
-  
-
     render() {
         return (
             <CssVarsProvider theme={theme}>
@@ -108,12 +106,20 @@ class Header extends React.Component {
                     <Typography color="inherit" size="small" level="body1">
                         /
                     </Typography>
-                    <Link component={RouterLink} to="/about">
-                        <Button size="small">About</Button>
-                    </Link>
-                    <Typography color="inherit" size="small" level="body1">
-                        /
-                    </Typography>
+                    {!process.env.DISABLE_ABOUT ? (
+                        <Link component={RouterLink} to="/about">
+                            <Button size="small">About</Button>
+                        </Link>
+                    ) : (
+                        ''
+                    )}
+                    {!process.env.DISABLE_ABOUT ? (
+                        <Typography color="inherit" size="small" level="body1">
+                            /
+                        </Typography>
+                    ) : (
+                        ''
+                    )}
                     <Typography
                         component="h2"
                         variant="h5"

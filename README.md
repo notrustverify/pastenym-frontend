@@ -39,7 +39,7 @@ BTC: `bc1q5j4tq0yr75j90xwegwtfpaccdx3xdaxxzjtzt8`
 ## Init the project
 
 ### Frontend
-NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
+NodeJS (`v18.2.0`) and NPM (`v9.20.0`) are used for the frontend.
 
 1. Create a `.env` file with the same keys are in `.env.example` with your values. The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend.
 2. Run `npm install` and grab a cup of coffee
@@ -47,12 +47,12 @@ NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 
 or
 
-Run `npm run build` to build the project, everything will be in the `dist` folder
+Run `npm run build` to build the project, everything will be in the `dist` folder. Just copy it to host it with a webserver
 
 
 If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CLIENT_SERVER=` to this value: `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w` 
 
-### Host it publicly
+### Host it publicly with Docker
 
 If you want to host it publicly here's some steps that can help you
 
@@ -113,10 +113,8 @@ services:
       - 8001:80 
 ```
 
+## .env details
 
-## Structure
-
-* `backend/` manage the websockets connections and DB
-* [https://github.com/notrustverify/pastenym-frontend](https://github.com/notrustverify/pastenym-frontend) web application
-* `nym-client/` store the configuration,keys for the nym-client
-* `resources/` store img or files for documentation
+| Variable | Default value | Explanation |
+------------------------------------------
+| DISABLE_ABOUT | empty | Disable the `About` page
