@@ -24,9 +24,6 @@ This system allows you to share information while respecting your privacy by pro
 
 On the side of No Trust Verify we only see an anonymous id when sending the text, and therefore impossible to know who is behind and from where the data was sent. Moreover, data is end-to-end encrypted: your browser generates a key used to encrypt the text, the key is placed in the URL you share with your friends and is used in their browser to decrypt the text received by the server.
 
-### Schema
-
-<img src="./resources/img/paste.jpg" alt="drawing" width="60%"/>
 
 ## Donate
 
@@ -39,9 +36,9 @@ BTC: `bc1q5j4tq0yr75j90xwegwtfpaccdx3xdaxxzjtzt8`
 * No Trust Verify 2 `4yRfauFzZnejJhG2FACTVQ7UnYEcFUYw3HzXrmuwLMaR`
 * No Trust Verify 1 `APxUbCmGp4K9qDzvwVADJFNu8S3JV1AJBw7q6bS5KN9E`
 
-### Init the project
+## Init the project
 
-## Frontend
+### Frontend
 NodeJS (`v16.13.1`) and NPM (`v8.19.2`) are used for the frontend.
 
 1. Create a `.env` file with the same keys are in `.env.example` with your values. The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend.
