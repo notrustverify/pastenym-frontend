@@ -41,7 +41,7 @@ BTC: `bc1q5j4tq0yr75j90xwegwtfpaccdx3xdaxxzjtzt8`
 ### Frontend
 NodeJS (`v18.2.0`) and NPM (`v9.20.0`) are used for the frontend.
 
-1. Create a `.env` file with the same keys are in `.env.example` with your values. The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend.
+1. Copy the `.env.example` to `.env`. Detailled values are explained in `.env details` section at the bottom
 2. Run `npm install` and grab a cup of coffee
 3. Run `npm run start` and go to [http://localhost:8080](http://localhost:8080) in your favorite browser.
 
@@ -115,6 +115,27 @@ services:
 
 ## .env details
 
+This section list the options for personnal branding and optionnal config
+
+### Backend connection
+
 | Variable | Default value | Explanation |
 |----------|---------------|--------------|
-| DISABLE_ABOUT | empty | Disable the `About` page
+| `REACT_APP_NYM_CLIENT_SERVER` | `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w` | Configure the backend server that the frontend will use to send and retrieve pastes |
+| `SERVER_NAME` | `https://pastenym.ch` | Links displayed when paste URL ID are generated |
+
+
+### Personnal branding
+
+| Variable | Default value | Explanation |
+|----------|---------------|--------------|
+| `DISABLE_ABOUT` | `false` | Disable the `About` page. Set `true` to disable it |
+| `SOCIAL_TWITTER` | Empty | Enable the twitter icon in the footer by giving the URL (eg. https://twitter.com/notrustverif) |
+| `SOCIAL_EMAIL` | Empty | Enable the email icon in the footer by giving the URL|
+| `SOCIAL_TELEGRAM` | Empty | Enable the email icon in the footer by giving the URL|
+| `SOCIAL_MATRIX` | Empty | Enable the matrix icon in the footer by giving the URL|
+| `SOCIAL_GITHUB` | Empty | Enable github icon in the footer by giving the URL|
+| `SOCIAL_MEDIUM` | Empty | Enable the medium icon in the footer by giving the URL|
+| `HOSTED_BY_URL` | Empty                            | Enable the `hosted by` text in the footer. Set a value to enable it |
+| `HOSTED_BY_NAME`| Empty                            | Set a name for the `hosted by` text |
+| `DISABLE_DEVELOPPEDBY`| `false`                     | Disable the `Developed by` text in the footer. Set to `true` to disable it |

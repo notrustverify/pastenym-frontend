@@ -17,7 +17,8 @@ import {
     CssVarsProvider,
     useColorScheme,
 } from '@mui/joy/styles'
-
+import Image from 'mui-image'
+import Logo from '../public/logo-header.png'
 import Disclaimer from './components/Disclaimer'
 
 const muiTheme = extendMuiTheme({
@@ -101,6 +102,14 @@ class Header extends React.Component {
                     }}
                 >
                     <Link component={RouterLink} to="/">
+                        <Image
+                            style={{ position: 'relative', left: '-12px', top: '-3px' }}
+                            src={Logo}
+                            width="auto"
+                            height="auto"
+                            duration={0}
+                            easing="linear"
+                        />
                         <Button size="small">New paste</Button>
                     </Link>
                     <Typography color="inherit" size="small" level="body1">

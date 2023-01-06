@@ -11,6 +11,7 @@ import GitHubIcon from '@mui/icons-material/GitHub'
 
 import { CssVarsProvider } from '@mui/joy/styles'
 
+
 function Copyright() {
     return (
         <CssVarsProvider>
@@ -41,10 +42,10 @@ function Copyright() {
                     ''
                 )}
                 {!process.env.DISABLE_DEVELOPPEDBY ? <br /> : ''}
-                {process.env.HOSTED_BY ? 'Hosted by ' : ''}
-                {process.env.HOSTED_BY ? (
+                {process.env.HOSTED_BY_URL ? 'Hosted by ' : ''}
+                {process.env.HOSTED_BY_URL ? (
                     <Link
-                        href={process.env.HOSTED_BY}
+                        href={process.env.HOSTED_BY_URL}
                         underline="none"
                         rel="noreferrer"
                         target="_blank"
@@ -54,7 +55,7 @@ function Copyright() {
                 ) : (
                     ''
                 )}
-                {process.env.HOSTED_BY ? <br /> : ''}
+                {process.env.HOSTED_BY_URL ? <br /> : ''}
                 {process.env.SOCIAL_EMAIL ? (
                     <Link
                         href={`mailto:` + process.env.SOCIAL_EMAIL}
@@ -68,7 +69,7 @@ function Copyright() {
                 ) : (
                     ''
                 )}{' '}
-                {process.env.SOCIAL_TELEGRAM ? (
+                {process.env.SOCIAL_TELEGRAM? (
                     <Link
                         href={process.env.SOCIAL_TELEGRAM}
                         underline="none"
