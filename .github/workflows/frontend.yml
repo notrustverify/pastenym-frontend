@@ -42,6 +42,12 @@ jobs:
         env:
           REACT_APP_NYM_CLIENT_SERVER: ${{ secrets.REACT_APP_NYM_CLIENT_SERVER }}
           SERVER_NAME: ${{ secrets.SERVER_NAME }}
+          SOCIAL_TWITTER: ${{ secrets.SOCIAL_TWITTER }}
+          SOCIAL_EMAIL: ${{ secrets.SOCIAL_EMAIL }}
+          SOCIAL_TELEGRAM: ${{ secrets.SOCIAL_TELEGRAM }}
+          SOCIAL_MATRIX: ${{ secrets.SOCIAL_MATRIX }}
+          SOCIAL_GITHUB: ${{ secrets.SOCIAL_GITHUB }}
+          SOCIAL_MEDIUM: ${{ secrets.SOCIAL_MEDIUM }}
         run: |
           cat <<EOF > .env
           REACT_APP_NYM_CLIENT_SERVER="$REACT_APP_NYM_CLIENT_SERVER"
