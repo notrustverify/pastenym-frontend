@@ -126,11 +126,13 @@ This section list the options for personnal branding and optionnal config
 
 
 ### Personnal branding
+To change logo, create a new `logo-header.png` in the `/public` folder. The size should be 25px
 
 #### Header
 | Variable | Default value | Explanation |
 |----------|---------------|--------------|
 | `DISABLE_ABOUT` | `false` | Disable the `About` page. Set `true` to disable it |
+
 
 #### Footer
 | Variable | Default value | Explanation |
