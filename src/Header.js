@@ -103,7 +103,7 @@ class Header extends React.Component {
                 >
                     <Link component={RouterLink} to="/">
                         <Image
-                            style={{ position: 'relative', left: '-12px', top: '-3px' }}
+                            style={{ position: 'relative', left: '-12px', top: '-2px' }}
                             src={Logo}
                             width="auto"
                             height="auto"

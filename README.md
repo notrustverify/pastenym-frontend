@@ -127,9 +127,14 @@ This section list the options for personnal branding and optionnal config
 
 ### Personnal branding
 
+#### Header
 | Variable | Default value | Explanation |
 |----------|---------------|--------------|
 | `DISABLE_ABOUT` | `false` | Disable the `About` page. Set `true` to disable it |
+
+#### Footer
+| Variable | Default value | Explanation |
+|----------|---------------|--------------|
 | `SOCIAL_TWITTER` | Empty | Enable the twitter icon in the footer by giving the URL (eg. https://twitter.com/notrustverif) |
 | `SOCIAL_EMAIL` | Empty | Enable the email icon in the footer by giving the URL|
 | `SOCIAL_TELEGRAM` | Empty | Enable the email icon in the footer by giving the URL|
