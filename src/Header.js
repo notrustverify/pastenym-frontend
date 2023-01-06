@@ -17,7 +17,8 @@ import {
     CssVarsProvider,
     useColorScheme,
 } from '@mui/joy/styles'
-
+import Image from 'mui-image'
+import Logo from '../public/logo-header.png'
 import Disclaimer from './components/Disclaimer'
 
 const muiTheme = extendMuiTheme({
@@ -89,8 +90,6 @@ const joyTheme = extendJoyTheme()
 const theme = deepmerge(muiTheme, joyTheme)
 
 class Header extends React.Component {
-  
-
     render() {
         return (
             <CssVarsProvider theme={theme}>
@@ -103,17 +102,33 @@ class Header extends React.Component {
                     }}
                 >
                     <Link component={RouterLink} to="/">
+                        <Image
+                            style={{ position: 'relative', left: '-12px', top: '-2px' }}
+                            src={Logo}
+                            width="auto"
+                            height="auto"
+                            duration={0}
+                            easing="linear"
+                        />
                         <Button size="small">New paste</Button>
                     </Link>
                     <Typography color="inherit" size="small" level="body1">
                         /
                     </Typography>
-                    <Link component={RouterLink} to="/about">
-                        <Button size="small">About</Button>
-                    </Link>
-                    <Typography color="inherit" size="small" level="body1">
-                        /
-                    </Typography>
+                    {!process.env.DISABLE_ABOUT ? (
+                        <Link component={RouterLink} to="/about">
+                            <Button size="small">About</Button>
+                        </Link>
+                    ) : (
+                        ''
+                    )}
+                    {!process.env.DISABLE_ABOUT ? (
+                        <Typography color="inherit" size="small" level="body1">
+                            /
+                        </Typography>
+                    ) : (
+                        ''
+                    )}
                     <Typography
                         component="h2"
                         variant="h5"
