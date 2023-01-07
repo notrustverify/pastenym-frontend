@@ -20,6 +20,7 @@ import {
 import Image from 'mui-image'
 import Logo from '../public/logo-header.png'
 import Disclaimer from './components/Disclaimer'
+import Avatar from '@mui/joy/Avatar'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -102,14 +103,17 @@ class Header extends React.Component {
                     }}
                 >
                     <Link component={RouterLink} to="/">
-                        <Image
-                            style={{ position: 'relative', left: '-12px', top: '-2px' }}
+                        <Avatar
+                            alt="PN"
                             src={Logo}
-                            width="auto"
-                            height="auto"
-                            duration={0}
-                            easing="linear"
+                            variant="outlined"
+                            style={{
+                                position: 'relative',
+                                left: '-10px',
+                                top: '-2px',
+                            }}
                         />
+
                         <Button size="small">New paste</Button>
                     </Link>
                     <Typography color="inherit" size="small" level="body1">
