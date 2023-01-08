@@ -10,6 +10,7 @@ class TextStats extends React.Component {
     render() {
         return (
             <Box sx={{ display: 'inline-block' }}>
+                {console.log(new Date(this.props.created_on).toLocaleString())}
                 <Typography
                     level="body2"
                     startDecorator={
@@ -28,8 +29,12 @@ class TextStats extends React.Component {
                         ? `Views: ` + this.props.num_view + ` - `
                         : ''}
                     {'Created on: ' +
-                        new Date(this.props.created_on).toLocaleString()
-                        }
+                        new Date(this.props.created_on).toLocaleString(navigator.language,{
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "2-digit",
+                        })
+                    }
                 </Typography>
                     
                 {this.props.is_ipfs ? ' -  ' : ''}    
