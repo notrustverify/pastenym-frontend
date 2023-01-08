@@ -1,14 +1,53 @@
 import * as React from 'react'
 
+/*
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+*/
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import Alert from '@mui/joy/Alert'
 import IconButton from '@mui/joy/IconButton'
 import Typography from '@mui/joy/Typography'
 import Link from '@mui/joy/Link'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+
 import CopyToClipBoard from './CopyToClipboard'
 
 const SERVER_NAME = process.env.SERVER_NAME || 'https://pastenym.ch'
+
+/*
+const Accordion = styled((props) => (
+    <MuiAccordion disableGutters elevation={0} sx={{ backgroundColor: "blue" }} {...props} />
+    ))(({ theme }) => ({
+        backgroundColor: "success",
+}));
+
+const AccordionSummary = styled((props) => (
+    <MuiAccordionSummary
+        expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+        sx={{ backgroundColor: "blue" }}
+        {...props}
+    />
+))(({ theme }) => ({
+    flexDirection: 'row-reverse',
+    '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+        transform: 'rotate(90deg)',
+    },
+    '& .MuiAccordionSummary-content': {
+        marginLeft: theme.spacing(1),
+    },
+}));
+
+const AccordionDetails = styled((props) => (
+    <MuiAccordionDetails sx={{ backgroundColor: 'blue' }} {...props} />
+))(({ theme }) => ({
+    padding: theme.spacing(2),
+}));
+*/
 
 class SuccessUrlId extends React.Component {
     constructor(props) {
@@ -18,6 +57,9 @@ class SuccessUrlId extends React.Component {
             url: SERVER_NAME + '/#/' + this.props.urlId.url_id,
             key: this.props.encKey,
             urlId: this.props.urlId.url_id,
+            urlWithKey: this.props.encKey && this.props.encKey.length > 0 ?
+                SERVER_NAME + '/#/' + this.props.urlId.url_id + '&key=' + this.props.encKey
+                : undefined,
             copyToClipboardButton: 'Copy to clipboard',
             copyToClipboardTooltipOpen: false,
             ipfs: this.props.urlId.ipfs,
@@ -50,40 +92,52 @@ class SuccessUrlId extends React.Component {
                     <Typography
                         fontSize="13px"
                         sx={{ opacity: 0.8, wordBreak: 'break-word' }}
-                    >
-                        Your text is accessible at{' '}
+                    >                       
+                        Your text is accessible using this link:{' '}
                         <Link
-                            href={this.state.url}
+                            href={this.state.urlWithKey ? this.state.urlWithKey : this.state.url}
                             title="Go to your newly created paste!"
                         >
-                            {this.state.url}
+                            {this.state.urlWithKey ? this.state.urlWithKey : this.state.url}
                         </Link>
-                        <CopyToClipBoard textToCopy={this.state.url} />
-                        {this.state.key ? (
-                            <>
-                                {' '}
-                                using key: <b>{this.state.key}</b>{' '}
-                                <CopyToClipBoard textToCopy={this.state.key} />.
-                                <br />
-                                Or using this link:{' '}
-                                <Link
-                                    href={
-                                        this.state.url +
-                                        '&key=' +
-                                        this.state.key
-                                    }
-                                    title="Go to your newly created paste!"
-                                >
-                                    {this.state.url + '&key=' + this.state.key}
-                                </Link>
-                                <CopyToClipBoard
-                                    textToCopy={
-                                        this.state.url +
-                                        '&key=' +
-                                        this.state.key
-                                    }
-                                />
-                            </>
+                        <CopyToClipBoard textToCopy={this.state.urlWithKey ? this.state.urlWithKey : this.state.url} />
+                        {this.state.urlWithKey ? (
+                           /* Accordion WIP
+                            <Accordion>
+                                <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+                                    <Typography>Or separately...</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography>
+                                        Using this link:{' '}
+                                        <Link
+                                            href={this.state.url}
+                                            title="Go to your newly created paste!"
+                                        >
+                                            {this.state.url}
+                                        </Link>
+                                        <CopyToClipBoard textToCopy={this.state.url} />
+                                        and this key: <b>{this.state.key}</b>{' '}
+                                        <CopyToClipBoard textToCopy={this.state.key} />.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            */
+                            <details>
+                                <summary>Or separately...</summary>
+                                <p>
+                                    Using this link:{' '}
+                                    <Link
+                                        href={this.state.url}
+                                        title="Go to your newly created paste!"
+                                    >
+                                        {this.state.url}
+                                    </Link>
+                                    <CopyToClipBoard textToCopy={this.state.url} />
+                                    and this key: <b>{this.state.key}</b>{' '}
+                                    <CopyToClipBoard textToCopy={this.state.key} />.
+                                </p>
+                            </details>
                         ) : (
                             ''
                         )}

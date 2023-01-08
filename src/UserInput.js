@@ -252,6 +252,7 @@ class UserInput extends React.Component {
         return mergedArray
     }
 
+    /*
     // do not use this
     async sendBinaryMessageTo(data, payload) {
         if (!this.nym) {
@@ -286,6 +287,7 @@ class UserInput extends React.Component {
         }
         return undefined
     }
+    */
 
     async sendMessageTo(payload) {
         if (!this.nym) {
@@ -372,6 +374,12 @@ class UserInput extends React.Component {
             let encrypted = undefined
             let nonencrypted = undefined
             if (this.state.isPrivate) {
+                // If a key was defined before (because previous paste sent), reset it
+                // This will cause a new key to be generated for encryption
+                if (null != this.encryptor.getKey()) {
+                    this.encryptor.resetKey()
+                }
+
                 encrypted = this.encryptor.encrypt(
                     JSON.stringify(clearObjectUser)
                 )
@@ -395,6 +403,11 @@ class UserInput extends React.Component {
                     ipfs: this.state.isIpfs,
                 },
             }
+
+            // Reset urlId to hide SuccessUrlId component
+            this.setState({
+                urlId: undefined,
+            })
 
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
@@ -439,7 +452,7 @@ class UserInput extends React.Component {
                             this.state.urlId && !this.state.buttonSendClick ? (
                                 <SuccessUrlId
                                     urlId={this.state.urlId}
-                                    encKey={this.encryptor.getKey()}
+                                    encKey={this.state.isPrivate ? this.encryptor.getKey() : undefined}
                                 />
                             ) : (
                                 ''

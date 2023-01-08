@@ -454,7 +454,7 @@ class Texts extends React.Component {
                                     }}
                                 >
                                     {this.state.text ? (
-                                        <Linkify as="div">
+                                        <Linkify as="div" options={{target: "_blank", rel: "noreferrer"}}>
                                             {this.state.text}
                                         </Linkify>
                                     ) : (
