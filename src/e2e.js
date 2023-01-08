@@ -15,11 +15,11 @@ class E2EEncryptor {
         this.#key = null
 
         if (!key) {
-            //console.log("No key provided, will be generated...")
+            console.log("No key provided, will be generated...")
             sjcl.random.startCollectors()
         } else {
             this.#key = key
-            //console.log(`Provided key: ${this.#key} (size: ${this.#key.length/8} bytes)`)
+            console.log(`Provided key: ${this.#key} (size: ${this.#key.length/8} bytes)`)
         }
     }
 
@@ -85,6 +85,10 @@ class E2EEncryptor {
 
     getKey() {
         return this.#key
+    }
+
+    resetKey() {
+        this.#key = null
     }
 }
 
