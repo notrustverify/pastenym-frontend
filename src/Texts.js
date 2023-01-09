@@ -31,6 +31,8 @@ import CopyToClipBoard from './components/CopyToClipboard'
 import { connectMixnet } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import { Buffer } from 'buffer'
+import MarkdownViewer from './components/MarkdownViewer'
+
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -322,7 +324,7 @@ class Texts extends React.Component {
         }
     }
 
-    componentWillUnmount() {}
+    componentWillUnmount() {window.location.reload()}
 
     async sendMessageTo(payload) {
         if (!this.nym) {
@@ -362,9 +364,9 @@ class Texts extends React.Component {
         if (regInlineCode.test(this.state.text)) likelihood += 1
         if (regCodeBlock.test(this.state.text)) likelihood += 1
         if (regImageFile.test(this.state.text)) likelihood += 1
-        if (regTable.test(this.state.text)) likelihood += 1
+        if (regTable.test(this.state.text)) likelihood += 3
 
-        return likelihood >= 1
+        return likelihood >= 3
     }
 
     render() {
@@ -492,14 +494,7 @@ class Texts extends React.Component {
                                     {this.state.text ? (
                                         this.isMarkdown() ? (
                                             <div>
-                                                <ReactMarkdown
-                                                    remarkPlugins={[
-                                                        gfm,
-                                                        remarkBreaks,
-                                                    ]}
-                                                >
-                                                    {this.state.text}
-                                                </ReactMarkdown>
+                                                <MarkdownViewer text={this.state.text} />
                                             </div>
                                         ) : (
                                             <Linkify
