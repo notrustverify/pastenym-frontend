@@ -6,7 +6,6 @@ import Button from '@mui/joy/Button'
 import Textarea from '@mui/joy/Textarea'
 import Box from '@mui/joy/Box'
 import SendIcon from '@mui/icons-material/Send'
-import CircularProgress from '@mui/joy/CircularProgress'
 import Checkbox from '@mui/joy/Checkbox'
 import Tooltip from '@mui/joy/Tooltip'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
@@ -34,7 +33,6 @@ import remarkBreaks from 'remark-breaks'
 import Tabs from '@mui/joy/Tabs'
 import TabList from '@mui/joy/TabList'
 import Tab from '@mui/joy/Tab'
-import { ThirtyFpsOutlined } from '@mui/icons-material'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -601,7 +599,7 @@ class UserInput extends React.Component {
                         <Box
                             sx={{
                                 display: 'flex',
-                                gap: 2,
+                                gap: 1,
                                 flexDirection: 'column',
                                 maxWidth: '15%',
                             }}
@@ -609,7 +607,7 @@ class UserInput extends React.Component {
                             <Tabs
                                 defaultValue={1}
                                 onChange={(event) => {
-                                    console.log(event.target)
+                                 
                                     this.setState({
                                         mdPreview: !this.state.mdPreview,
                                     })
