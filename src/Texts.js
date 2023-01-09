@@ -20,7 +20,9 @@ import IconButton from '@mui/joy/IconButton'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import Button from '@mui/joy/Button'
 import FileRender from './components/FileRender'
-
+import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 import Header from './Header'
 import Footer from './Footer'
 import E2EEncryptor from './e2e'
@@ -28,7 +30,7 @@ import TextStats from './components/TextStats'
 import CopyToClipBoard from './components/CopyToClipboard'
 import { connectMixnet } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
-import {Buffer} from 'buffer'
+import { Buffer } from 'buffer'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -105,6 +107,10 @@ function withParams(Component) {
     return (props) => <Component {...props} params={useParams()} />
 }
 
+
+
+  
+
 let recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 
 class Texts extends React.Component {
@@ -150,6 +156,7 @@ class Texts extends React.Component {
         }
 
         this.getPaste = this.getPaste.bind(this)
+        this.isMarkdown = this.isMarkdown.bind(this)
     }
 
     getPaste() {
@@ -331,6 +338,35 @@ class Texts extends React.Component {
         })
     }
 
+    isMarkdown() {
+        let likelihood = 0
+
+        const regHeaders = new RegExp('(#{1,6}s)(.*)')
+        const regLinks = new RegExp('([.*])(((http)(?:s)?(://).*))', 'g')
+        const regImageFile = new RegExp(
+            '(!)([(?:.*)?])((.*(.(jpg|png|gif|tiff|bmp))(?:(s"|\')(w|W|d)+("|\'))?))',
+            'g'
+        )
+        const regInlineCode = new RegExp('(\\`{1})(.*)(\\`{1})', 'g')
+        const regCodeBlock = new RegExp('(\\`{3}\\n+)(.*)(\\n+\\`{3})', 'g')
+        const regBlockQuote = new RegExp('((^(>{1})(s)(.*)(?:$)?)+)', 'g')
+        const regTable = new RegExp(
+            '^(|[^\\n]+|\\r?\\n)((?:|:?[-]+:?)+|)(\\n(?:|[^\\n]+|\\r?\\n?)*)?$',
+            'mg'
+        )
+
+        // little ashamed of this will have to work on it
+        if (regHeaders.test(this.state.text)) likelihood += 1
+        if (regLinks.test(this.state.text)) likelihood += 1
+        if (regBlockQuote.test(this.state.text)) likelihood += 1
+        if (regInlineCode.test(this.state.text)) likelihood += 1
+        if (regCodeBlock.test(this.state.text)) likelihood += 1
+        if (regImageFile.test(this.state.text)) likelihood += 1
+        if (regTable.test(this.state.text)) likelihood += 1
+
+        return likelihood >= 1
+    }
+
     render() {
         if (this.state.ready && this.state.isDataRetrieved !== true)
             this.getPaste()
@@ -454,9 +490,28 @@ class Texts extends React.Component {
                                     }}
                                 >
                                     {this.state.text ? (
-                                        <Linkify as="div" options={{target: "_blank", rel: "noreferrer"}}>
-                                            {this.state.text}
-                                        </Linkify>
+                                        this.isMarkdown() ? (
+                                            <div>
+                                                <ReactMarkdown
+                                                    remarkPlugins={[
+                                                        gfm,
+                                                        remarkBreaks,
+                                                    ]}
+                                                >
+                                                    {this.state.text}
+                                                </ReactMarkdown>
+                                            </div>
+                                        ) : (
+                                            <Linkify
+                                                as="div"
+                                                options={{
+                                                    target: '_blank',
+                                                    rel: 'noreferrer',
+                                                }}
+                                            >
+                                                {this.state.text}
+                                            </Linkify>
+                                        )
                                     ) : (
                                         <Skeleton
                                             variant="rounded"
