@@ -33,6 +33,8 @@ import remarkBreaks from 'remark-breaks'
 import Tabs from '@mui/joy/Tabs'
 import TabList from '@mui/joy/TabList'
 import Tab from '@mui/joy/Tab'
+import stringWidth from 'string-width'
+import MarkdownViewer from './components/MarkdownViewer'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -601,21 +603,20 @@ class UserInput extends React.Component {
                                 display: 'flex',
                                 gap: 1,
                                 flexDirection: 'column',
-                                maxWidth: '15%',
                             }}
                         >
                             <Tabs
+                                sx={{ maxWidth: 200 }}
                                 defaultValue={1}
-                                onChange={(event) => {
-                                 
+                                onChange={() => {
                                     this.setState({
                                         mdPreview: !this.state.mdPreview,
                                     })
                                 }}
                             >
-                                <TabList size="sm" sx={{}} variant="soft">
+                                <TabList size="sm" sx={{}} variant="outlined">
                                     <Tab
-                                    value={1}
+                                        value={1}
                                         variant={
                                             !this.state.mdPreview
                                                 ? 'solid'
@@ -630,7 +631,7 @@ class UserInput extends React.Component {
                                         Edit paste
                                     </Tab>
                                     <Tab
-                                    value={2}
+                                        value={2}
                                         variant={
                                             this.state.mdPreview
                                                 ? 'solid'
@@ -648,9 +649,10 @@ class UserInput extends React.Component {
                             </Tabs>
                         </Box>
                         {this.state.mdPreview ? (
-                            <ReactMarkdown remarkPlugins={[gfm, remarkBreaks]}>
-                                {this.state.text}
-                            </ReactMarkdown>
+                            <Box  sx={{ p:1 ,border: '1px solid #d3d3d3',borderRadius: '10px'}} >
+                                
+                                <MarkdownViewer text={this.state.text} />
+                            </Box>
                         ) : (
                             <>
                                 <Textarea
