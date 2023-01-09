@@ -10,7 +10,6 @@ class TextStats extends React.Component {
     render() {
         return (
             <Box sx={{ display: 'inline-block' }}>
-                {console.log(new Date(this.props.created_on).toLocaleString())}
                 <Typography
                     level="body2"
                     startDecorator={

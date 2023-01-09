@@ -28,9 +28,13 @@ import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles
 import colors from '@mui/joy/colors'
 import { deepmerge } from '@mui/utils'
 import { useParams } from 'react-router-dom'
-
-
-
+import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
+import Tabs from '@mui/joy/Tabs'
+import TabList from '@mui/joy/TabList'
+import Tab from '@mui/joy/Tab'
+import { ThirtyFpsOutlined } from '@mui/icons-material'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -132,6 +136,7 @@ class UserInput extends React.Component {
             isPrivate: true,
             isIpfs: false,
             limitSize: 120_0000,
+            mdPreview: false,
         }
 
         this.files = null
@@ -423,10 +428,9 @@ class UserInput extends React.Component {
 
     render() {
         return (
-        <CssVarsProvider theme={theme}>
-            
+            <CssVarsProvider theme={theme}>
                 <header>
-                    <Header  />
+                    <Header />
                 </header>
                 <main>
                     <Sheet
@@ -452,7 +456,11 @@ class UserInput extends React.Component {
                             this.state.urlId && !this.state.buttonSendClick ? (
                                 <SuccessUrlId
                                     urlId={this.state.urlId}
-                                    encKey={this.state.isPrivate ? this.encryptor.getKey() : undefined}
+                                    encKey={
+                                        this.state.isPrivate
+                                            ? this.encryptor.getKey()
+                                            : undefined
+                                    }
                                 />
                             ) : (
                                 ''
@@ -590,28 +598,94 @@ class UserInput extends React.Component {
                                 />
                             </Tooltip>
                         </Box>
-
-                        <Textarea
-                            sx={{}}
-                            label="New paste"
-                            placeholder="Type in here…"
-                            minRows={10}
-                            fullwidth="true"
-                            required
-                            autoFocus
-                            value={this.state.text}
-                            onChange={(event) =>
-                                this.setState({ text: event.target.value })
-                            }
-                            startDecorator={
-                                <Box sx={{ display: 'flex', gap: 0.5 }}></Box>
-                            }
-                            endDecorator={
-                                <Typography level="body3" sx={{ ml: 'auto' }}>
-                                    {this.state.text.length} character(s)
-                                </Typography>
-                            }
-                        />
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                gap: 2,
+                                flexDirection: 'column',
+                                maxWidth: '15%',
+                            }}
+                        >
+                            <Tabs
+                                defaultValue={1}
+                                onChange={(event) => {
+                                    console.log(event.target)
+                                    this.setState({
+                                        mdPreview: !this.state.mdPreview,
+                                    })
+                                }}
+                            >
+                                <TabList size="sm" sx={{}} variant="soft">
+                                    <Tab
+                                    value={1}
+                                        variant={
+                                            !this.state.mdPreview
+                                                ? 'solid'
+                                                : 'plain'
+                                        }
+                                        color={
+                                            !this.state.mdPreview
+                                                ? 'primary'
+                                                : 'neutral'
+                                        }
+                                    >
+                                        Edit paste
+                                    </Tab>
+                                    <Tab
+                                    value={2}
+                                        variant={
+                                            this.state.mdPreview
+                                                ? 'solid'
+                                                : 'plain'
+                                        }
+                                        color={
+                                            this.state.mdPreview
+                                                ? 'primary'
+                                                : 'neutral'
+                                        }
+                                    >
+                                        Preview
+                                    </Tab>
+                                </TabList>
+                            </Tabs>
+                        </Box>
+                        {this.state.mdPreview ? (
+                            <ReactMarkdown remarkPlugins={[gfm, remarkBreaks]}>
+                                {this.state.text}
+                            </ReactMarkdown>
+                        ) : (
+                            <>
+                                <Textarea
+                                    sx={{}}
+                                    label="New paste"
+                                    placeholder="Type in here…"
+                                    minRows={10}
+                                    fullwidth="true"
+                                    required
+                                    autoFocus
+                                    value={this.state.text}
+                                    onChange={(event) =>
+                                        this.setState({
+                                            text: event.target.value,
+                                        })
+                                    }
+                                    startDecorator={
+                                        <Box
+                                            sx={{ display: 'flex', gap: 0.5 }}
+                                        ></Box>
+                                    }
+                                    endDecorator={
+                                        <Typography
+                                            level="body3"
+                                            sx={{ ml: 'auto' }}
+                                        >
+                                            {this.state.text.length}{' '}
+                                            character(s)
+                                        </Typography>
+                                    }
+                                />
+                            </>
+                        )}
                         <Button
                             variant="outlined"
                             component="label"
@@ -667,6 +741,7 @@ class UserInput extends React.Component {
                                 }
                             />
                         </Button>
+
                         <Button
                             disabled={this.state.self_address ? false : true}
                             loading={this.state.buttonSendClick}

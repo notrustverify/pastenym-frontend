@@ -104,7 +104,7 @@ module.exports = {
   },
   performance: {
     maxEntrypointSize: 1012000,
-    maxAssetSize: 4212000,
+    maxAssetSize: 100212000,
   },
   optimization: {
     splitChunks: {
