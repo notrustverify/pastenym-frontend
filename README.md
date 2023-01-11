@@ -50,7 +50,7 @@ or
 Run `npm run build` to build the project, everything will be in the `dist` folder. Just copy it to host it with a webserver
 
 
-If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CLIENT_SERVER=` to this value: `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w` 
+If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CLIENT_SERVER=` to this value: `HWm3757chNdBq9FzKEY9j9VJ5siRxH8ukrNqYwFp9Unp.D34iYLRd5vzpCU4nZRcFVmoZpTQQMa6mws4Q65LdRosi@Fo4f4SQLdoyoGkFae5TpVhRVoXCF8UiypLVGtGjujVPf` 
 
 ### Host it publicly with Docker
 
@@ -60,7 +60,7 @@ To run it:
 
 1. Create a `.env` file with the following content
 ```
-REACT_APP_NYM_CLIENT_SERVER=6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w
+REACT_APP_NYM_CLIENT_SERVER=HWm3757chNdBq9FzKEY9j9VJ5siRxH8ukrNqYwFp9Unp.D34iYLRd5vzpCU4nZRcFVmoZpTQQMa6mws4Q65LdRosi@Fo4f4SQLdoyoGkFae5TpVhRVoXCF8UiypLVGtGjujVPf
 SERVER_NAME="https://<FQDN>"
 ```
 The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend. You can use the one displayed up, it's a working backend
@@ -121,7 +121,7 @@ This section list the options for personnal branding and optionnal config
 
 | Variable | Default value | Explanation |
 |----------|---------------|--------------|
-| `REACT_APP_NYM_CLIENT_SERVER` | `6y7sSj3dKp5AESnet1RQXEHmKkEx8Bv3RgwEJinGXv6J.FZfu6hNPi1hgQfu7crbXXUNLtr3qbKBWokjqSpBEeBMV@EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w` | Configure the backend server that the frontend will use to send and retrieve pastes |
+| `REACT_APP_NYM_CLIENT_SERVER` | `HWm3757chNdBq9FzKEY9j9VJ5siRxH8ukrNqYwFp9Unp.D34iYLRd5vzpCU4nZRcFVmoZpTQQMa6mws4Q65LdRosi@Fo4f4SQLdoyoGkFae5TpVhRVoXCF8UiypLVGtGjujVPf` | Configure the backend server that the frontend will use to send and retrieve pastes |
 | `SERVER_NAME` | `https://pastenym.ch` | Links displayed when paste URL ID are generated |
 
 
