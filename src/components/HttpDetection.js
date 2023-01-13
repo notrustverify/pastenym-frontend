@@ -1,17 +1,12 @@
 import * as React from 'react'
 import Alert from '@mui/joy/Alert'
-import IconButton from '@mui/joy/IconButton';
-import Typography from '@mui/joy/Typography';
-import { ColorPaletteProp,CssVarsProvider } from '@mui/joy/styles';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
-import ReportIcon from '@mui/icons-material/Report';
+import IconButton from '@mui/joy/IconButton'
+import Typography from '@mui/joy/Typography'
+import ReportIcon from '@mui/icons-material/Report'
 import Link from '@mui/joy/Link'
 import Box from '@mui/joy/Box'
 
 class HttpDetection extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (
