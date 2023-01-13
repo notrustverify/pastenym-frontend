@@ -7,7 +7,6 @@ import Linkify from 'linkify-react'
 import { extendTheme as extendJoyTheme, CssVarsProvider } from '@mui/joy/styles'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
-import CircularProgress from '@mui/joy/CircularProgress'
 import Divider from '@mui/joy/Divider'
 import { deepmerge } from '@mui/utils'
 import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles'
@@ -20,9 +19,6 @@ import IconButton from '@mui/joy/IconButton'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import Button from '@mui/joy/Button'
 import FileRender from './components/FileRender'
-import ReactMarkdown from 'react-markdown'
-import gfm from 'remark-gfm'
-import remarkBreaks from 'remark-breaks'
 import Header from './Header'
 import Footer from './Footer'
 import E2EEncryptor from './e2e'
@@ -32,7 +28,6 @@ import { connectMixnet } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import { Buffer } from 'buffer'
 import MarkdownViewer from './components/MarkdownViewer'
-
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -109,10 +104,6 @@ function withParams(Component) {
     return (props) => <Component {...props} params={useParams()} />
 }
 
-
-
-  
-
 let recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 
 class Texts extends React.Component {
@@ -136,6 +127,7 @@ class Texts extends React.Component {
             self_address: null,
             text: null,
             num_view: null,
+            burn_view: 0,
             urlId: urlId,
             isKeyProvided:
                 this.params.hasOwnProperty('key') && this.params.key.length > 1,
@@ -265,6 +257,7 @@ class Texts extends React.Component {
                 created_on: data['created_on'],
                 is_burn: data['is_burn'],
                 is_ipfs: data['is_ipfs'],
+                burn_view: data['burn_view'],
             })
 
             // Display text if any
@@ -426,7 +419,18 @@ class Texts extends React.Component {
                                         fontSize="sm"
                                         sx={{ opacity: 0.8 }}
                                     >
-                                        The paste is now deleted
+                                        <>
+                                            {this.state.num_view >=
+                                            this.state.burn_view
+                                                ? 'The paste is now deleted'
+                                                : `The paste will be deleted in  
+                                                ${
+                                                    this.state.burn_view -
+                                                    this.state.num_view
+                                                   
+                                                }
+                                                 views`}
+                                        </>
                                     </Typography>
                                 </div>
                             </Alert>
@@ -494,7 +498,9 @@ class Texts extends React.Component {
                                     {this.state.text ? (
                                         this.isMarkdown() ? (
                                             <div>
-                                                <MarkdownViewer text={this.state.text} />
+                                                <MarkdownViewer
+                                                    text={this.state.text}
+                                                />
                                             </div>
                                         ) : (
                                             <Linkify

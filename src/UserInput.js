@@ -27,14 +27,12 @@ import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles
 import colors from '@mui/joy/colors'
 import { deepmerge } from '@mui/utils'
 import { useParams } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
-import gfm from 'remark-gfm'
-import remarkBreaks from 'remark-breaks'
 import Tabs from '@mui/joy/Tabs'
 import TabList from '@mui/joy/TabList'
 import Tab from '@mui/joy/Tab'
-import stringWidth from 'string-width'
 import MarkdownViewer from './components/MarkdownViewer'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -137,9 +135,18 @@ class UserInput extends React.Component {
             isIpfs: false,
             limitSize: 120_0000,
             mdPreview: false,
+            burnView: 0,
         }
 
         this.files = null
+
+        this.burnViewsOption = [
+            { view: '1' },
+            { view: '10' },
+            { view: '50' },
+            { view: '100' },
+            { view: '256' },
+        ]
 
         // Instanciating a new encryptor will generate new key by default
         this.encryptor = new E2EEncryptor()
@@ -404,6 +411,7 @@ class UserInput extends React.Component {
                     text: this.state.isPrivate ? encrypted[0] : nonencrypted,
                     private: this.state.isPrivate,
                     burn: this.state.burnChecked,
+                    burn_view: parseInt(this.state.burnView),
                     encParams: this.state.isPrivate ? encrypted[1] : '',
                     ipfs: this.state.isIpfs,
                 },
@@ -476,41 +484,6 @@ class UserInput extends React.Component {
                             ''
                         )}
 
-                        {/* Removed from now, will be migrated to the header, next to the "New paste link" and will redirect to Texts.js
-                        <Box
-                            sx={{
-                                gap: 4,
-                                width: 'auto',
-                                justifyContent: 'left',
-                            }}
-                        >
-                            <TextField
-                                placeholder="Enter the URL ID"
-                                variant="outlined"
-                                startDecorator={<ScreenSearchDesktopIcon />}
-                                onChange={(event) =>
-                                    this.setState({
-                                        urlIdGet: event.target.value,
-                                    })
-                                }
-                                endDecorator={
-                                    <Button
-                                        size="sm"
-                                        loading={this.state.buttonGetClick}
-                                        disabled={
-                                            this.state.self_address
-                                                ? false
-                                                : true
-                                        }
-                                        onClick={this.getPaste}
-                                    >
-                                        <SendIcon size="sm" />
-                                    </Button>
-                                }
-                            />
-                        </Box>
-                        */}
-
                         {this.state.textReceived ? (
                             <ShowText data={this.state.textReceived} />
                         ) : (
@@ -556,6 +529,38 @@ class UserInput extends React.Component {
                                     checked={this.state.burnChecked}
                                 />
                             </Tooltip>
+                            {this.state.burnChecked ? (
+                                <Autocomplete
+                                    disablePortal
+                                    onChange={(event, newValue) => {
+                                        this.setState({ burnView: newValue })
+                                    }}
+                                    onInputChange={(event, newInputValue) => {
+                                        this.setState({
+                                            burnView: newInputValue,
+                                        })
+                                    }}
+                                    options={this.burnViewsOption.map(
+                                        (option) => option.view
+                                    )}
+                                    freeSolo
+                                    sx={{
+                                        position: 'relative',
+                                        top: '-13px',
+                                        width: 100,
+                                        fontSize: '12px',
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Views before delete"
+                                        />
+                                    )}
+                                    size="small"
+                                />
+                            ) : (
+                                ''
+                            )}
 
                             <Tooltip
                                 title="Your message will not be encrypted"
@@ -649,8 +654,15 @@ class UserInput extends React.Component {
                             </Tabs>
                         </Box>
                         {this.state.mdPreview ? (
-                            <Box  sx={{ p:1 ,border: '1px solid #d3d3d3',borderRadius: '10px'}} >
-                                
+                            <Box
+                                sx={{
+                                    p: 1,
+                                    border: '1px solid #d3d3d3',
+                                    borderRadius: '10px',
+                                    whiteSpace: 'pre-wrap',
+                                    overflowWrap: 'anywhere',
+                                }}
+                            >
                                 <MarkdownViewer text={this.state.text} />
                             </Box>
                         ) : (
