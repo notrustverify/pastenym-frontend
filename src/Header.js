@@ -1,13 +1,8 @@
 import * as React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import Breadcrumbs from '@mui/joy/Breadcrumbs'
 import Link from '@mui/joy/Link'
-import Box from '@mui/joy/Box'
-import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
 import Button from '@mui/material/Button'
 import { deepmerge } from '@mui/utils'
 import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles'
@@ -17,7 +12,6 @@ import {
     CssVarsProvider,
     useColorScheme,
 } from '@mui/joy/styles'
-import Image from 'mui-image'
 import Logo from '../public/logo-header.png'
 import Disclaimer from './components/Disclaimer'
 import Avatar from '@mui/joy/Avatar'
