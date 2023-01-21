@@ -437,20 +437,18 @@ class UserInput extends React.Component {
     render() {
         return (
             <CssVarsProvider theme={theme}>
-                <header>
-                    <Header />
-                </header>
-                <main>
+                <Header/>
+                <main style={{marginRight: '10px', marginLeft:'10px'}}>
                     <Sheet
                         sx={{
-                            width: 'auto',
+                            maxWidth: '950px',
                             height: '100%',
                             borderRadius: '10px',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
                             boxShadow: 3,
-                            mx: 4,
+                            mx: 'auto',
                             px: 3,
                             my: 1, // margin top & botom
                             py: 3, // padding top & bottom

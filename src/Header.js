@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+
 import Link from '@mui/joy/Link'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -7,14 +8,15 @@ import Button from '@mui/material/Button'
 import { deepmerge } from '@mui/utils'
 import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles'
 import colors from '@mui/joy/colors'
+import Avatar from '@mui/joy/Avatar'
 import {
     extendTheme as extendJoyTheme,
     CssVarsProvider,
     useColorScheme,
 } from '@mui/joy/styles'
+
 import Logo from '../public/logo-header.png'
 import Disclaimer from './components/Disclaimer'
-import Avatar from '@mui/joy/Avatar'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -84,10 +86,19 @@ const muiTheme = extendMuiTheme({
 const joyTheme = extendJoyTheme()
 const theme = deepmerge(muiTheme, joyTheme)
 
+const headerStyle = {
+    maxWidth: '1000px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingLeft: '10px',
+    paddingRight: '10px'
+}
+
 class Header extends React.Component {
     render() {
         return (
             <CssVarsProvider theme={theme}>
+                <header style={headerStyle}>
                 <Toolbar
                     sx={{
                         display: 'flex',
@@ -163,6 +174,7 @@ class Header extends React.Component {
                 </Toolbar>
 
                 <Disclaimer />
+                </header>
             </CssVarsProvider>
         )
     }
