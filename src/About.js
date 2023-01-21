@@ -96,33 +96,25 @@ class About extends React.Component {
     constructor(props) {
         super(props)
         this.width = 'auto'
-        this.maxWidth = 1000
+        this.maxWidth = '950px'
     }
-
-    componentDidMount() {}
-
-    componentDidUpdate() {}
-
-    componentWillUnmount() {}
 
     render() {
         return (
             <CssVarsProvider theme={theme}>
-                <header>
-                    <Header />
-                </header>
-                <main>
+                <Header/>
+                <main style={{marginRight: '10px', marginLeft:'10px'}}>
                     <Sheet
                         color="neutral"
                         sx={{
-                            width: 'auto',
+                            maxWidth: '950px',
                             height: '100%',
                             borderRadius: '10px',
                             display: 'flex',
                             flexDirection: 'column',
                             gap: 2,
                             boxShadow: 'md',
-                            mx: 4,
+                            mx: 'auto',
                             px: 3,
                             my: 4, // margin top & botom
                             py: 3, // padding top & bottom
