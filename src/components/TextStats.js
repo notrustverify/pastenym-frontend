@@ -49,14 +49,7 @@ class TextStats extends React.Component {
                 >
                     {this.props.expiration_time
                         ? '- Expire on: ' +
-                          new Date(this.props.expiration_time).toLocaleString(
-                              navigator.language,
-                              {
-                                  timeZone:
-                                      Intl.DateTimeFormat().resolvedOptions()
-                                          .timeZone,
-                              }
-                          )
+                          new Date(this.props.expiration_time).toLocaleString(navigator.language,{timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone})
                         : ''}
                 </Typography>
 

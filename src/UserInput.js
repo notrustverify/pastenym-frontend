@@ -718,6 +718,7 @@ class UserInput extends React.Component {
                                                 !event.target.checked,
                                             burnChecked: false,
                                             isPrivate: true,
+                                            expirationChecked: false
                                         })
                                     }}
                                     size="sm"
