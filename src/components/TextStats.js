@@ -7,6 +7,8 @@ import CloudQueueIcon from '@mui/icons-material/CloudQueue'
 import Box from '@mui/joy/Box'
 
 class TextStats extends React.Component {
+
+
     render() {
         return (
             <Box sx={{ display: 'inline-block' }}>
@@ -68,7 +70,7 @@ class TextStats extends React.Component {
                     {this.props.expiration_height
                         ? '- Expire block height: ' +
                           new Date(this.props.expiration_height).toLocaleString(
-                              navigator.language
+                              navigator.language,{timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}
                           )
                         : ''}
                 </Typography>
