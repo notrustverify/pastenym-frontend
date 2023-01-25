@@ -33,6 +33,10 @@ import Tab from '@mui/joy/Tab'
 import MarkdownViewer from './components/MarkdownViewer'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
+import { Thermostat } from '@mui/icons-material'
+
+const EXPIRATION_BITCOIN_HEIGHT = process.env.EXPIRATION_BITCOIN_HEIGHT || 'false'
+
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
@@ -136,6 +140,9 @@ class UserInput extends React.Component {
             limitSize: 120_0000,
             mdPreview: false,
             burnView: 0,
+            expirationChecked: false,
+            expirationTimeRelative: '',
+            expirationHeightRelative: null,
         }
 
         this.files = null
@@ -146,6 +153,27 @@ class UserInput extends React.Component {
             { view: '50' },
             { view: '100' },
             { view: '256' },
+        ]
+
+        this.expirationRelativeTimeOption = [
+            { time: '5 minutes' },
+            { time: '10 minutes' },
+            { time: '30 minutes' },
+            { time: '1 hour' },
+            { time: '12 hours' },
+            { time: '1 week' },
+            { time: '1 month' },
+            { time: '6 months' },
+        ]
+
+        this.expirationRelativeHeightOption = [
+            { height: '1 block', value: 1 },
+            { height: '5 blocks', value: 5 },
+            { height: '10 blocks', value: 10 },
+            { height: '50 blocks', value: 50 },
+            { height: '100 blocks', value: 100 },
+            { height: '256 blocks', value: 256 },
+            { height: '500 blocks', value: 500 },
         ]
 
         // Instanciating a new encryptor will generate new key by default
@@ -414,6 +442,12 @@ class UserInput extends React.Component {
                     burn_view: parseInt(this.state.burnView),
                     encParams: this.state.isPrivate ? encrypted[1] : '',
                     ipfs: this.state.isIpfs,
+                    expiration_time: this.state.expirationTimeRelative,
+                    expiration_height: this.state.expirationHeightRelative
+                        ? parseInt(
+                              this.state.expirationHeightRelative.split(' ')[0]
+                          )
+                        : null,
                 },
             }
 
@@ -437,8 +471,8 @@ class UserInput extends React.Component {
     render() {
         return (
             <CssVarsProvider theme={theme}>
-                <Header/>
-                <main style={{marginRight: '10px', marginLeft:'10px'}}>
+                <Header />
+                <main style={{ marginRight: '10px', marginLeft: '10px' }}>
                     <Sheet
                         sx={{
                             maxWidth: '950px',
@@ -552,6 +586,96 @@ class UserInput extends React.Component {
                                         <TextField
                                             {...params}
                                             label="Views before delete"
+                                        />
+                                    )}
+                                    size="small"
+                                />
+                            ) : (
+                                ''
+                            )}
+
+                            <Tooltip
+                                title="Your message will be deleted after a time. Not compatible with IPFS upload."
+                                size="sm"
+                                placement="bottom"
+                            >
+                                <Checkbox
+                                    onChange={(event) =>
+                                        this.setState({
+                                            expirationChecked:
+                                                event.target.checked,
+                                        })
+                                    }
+                                    disabled={this.state.isIpfs}
+                                    size="sm"
+                                    label="Expire in"
+                                    checked={this.state.expirationChecked}
+                                />
+                            </Tooltip>
+
+                            {this.state.expirationChecked  ? (
+                                <Autocomplete
+                                    disablePortal
+                                    onChange={(event, newValue) => {
+                                        this.setState({
+                                            expirationTimeRelative: newValue,
+                                        })
+                                    }}
+                                    onInputChange={(event, newInputValue) => {
+                                        this.setState({
+                                            expirationTimeRelative:
+                                                newInputValue,
+                                        })
+                                    }}
+                                    options={this.expirationRelativeTimeOption.map(
+                                        (option) => option.time
+                                    )}
+                                    freeSolo
+                                    sx={{
+                                        position: 'relative',
+                                        top: '-13px',
+                                        width: 150,
+                                        fontSize: '12px',
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField {...params} label="Time" />
+                                    )}
+                                    size="small"
+                                />
+                            ) : (
+                                ''
+                            )}
+
+                            {this.state.expirationChecked &&
+                            EXPIRATION_BITCOIN_HEIGHT ===
+                                'true' ? (
+                                <Autocomplete
+                                    disablePortal
+                                    onChange={(event, newValue) => {
+                                        this.setState({
+                                            expirationHeightRelative: newValue,
+                                        })
+                                    }}
+                                    onInputChange={(event, newInputValue) => {
+                                        this.setState({
+                                            expirationHeightRelative:
+                                                newInputValue,
+                                        })
+                                    }}
+                                    options={this.expirationRelativeHeightOption.map(
+                                        (option) => option.height
+                                    )}
+                                    freeSolo
+                                    sx={{
+                                        position: 'relative',
+                                        top: '-13px',
+                                        width: 150,
+                                        fontSize: '12px',
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Block height"
                                         />
                                     )}
                                     size="small"

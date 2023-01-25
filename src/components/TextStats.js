@@ -25,19 +25,56 @@ class TextStats extends React.Component {
                     }}
                 >
                     {this.props.num_view
-                        ? `Views: ` + this.props.num_view + ` - `
+                        ? `Views: ` + this.props.num_view + ' - '
                         : ''}
                     {'Created on: ' +
-                        new Date(this.props.created_on).toLocaleString(navigator.language,{
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "2-digit",
-                        })
-                    }
+                        new Date(this.props.created_on).toLocaleString(
+                            navigator.language,
+                            {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: '2-digit',
+                            }
+                        )}
                 </Typography>
-                    
-                {this.props.is_ipfs ? ' -  ' : ''}    
-                {this.props.is_ipfs ?  (
+
+                {this.props.expiration_time ? <>&nbsp;</> : ''}
+                <Typography
+                    level="body2"
+                    sx={{
+                        display: 'inline-block',
+                        alignItems: 'flex-start',
+                        wordBreak: 'break-all',
+                    }}
+                >
+                    {this.props.expiration_time
+                        ? '- Expire on: ' +
+                          new Date(this.props.expiration_time).toLocaleString(
+                              navigator.language
+                          )
+                        : ''}
+                </Typography>
+
+
+                {this.props.expiration_height ? <>&nbsp;</> : ''}
+                <Typography
+                    level="body2"
+                    sx={{
+                        display: 'inline-block',
+                        alignItems: 'flex-start',
+                        wordBreak: 'break-all',
+                    }}
+                >
+                    {this.props.expiration_height
+                        ? '- Expire block height: ' +
+                          new Date(this.props.expiration_height).toLocaleString(
+                              navigator.language
+                          )
+                        : ''}
+                </Typography>
+
+                {this.props.is_ipfs ? ' -  ' : ''}
+                {this.props.is_ipfs ? (
                     <Chip
                         color={this.props.is_ipfs ? 'success' : 'neutral'}
                         variant="soft"
@@ -51,7 +88,7 @@ class TextStats extends React.Component {
                         }
                         style={{ position: 'relative', top: '-2px' }}
                     >
-                       IPFS
+                        IPFS
                     </Chip>
                 ) : (
                     ''
