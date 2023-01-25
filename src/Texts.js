@@ -258,6 +258,8 @@ class Texts extends React.Component {
                 is_burn: data['is_burn'],
                 is_ipfs: data['is_ipfs'],
                 burn_view: data['burn_view'],
+                expiration_time: data['expiration_time'],
+                expiration_height: data['expiration_height']
             })
 
             // Display text if any
@@ -439,6 +441,8 @@ class Texts extends React.Component {
                                         num_view={this.state.num_view}
                                         created_on={this.state.created_on}
                                         is_ipfs={this.state.is_ipfs}
+                                        expiration_time={this.state.expiration_time}
+                                        expiration_height={this.state.expiration_height}
                                     />
                                 ) : (
                                     ''
