@@ -1,6 +1,6 @@
 {
   "name": "pastenym",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "homepage": "http://pastenym.ch/",
   "private": true,
   "main": "index.js",
