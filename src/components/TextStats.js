@@ -7,6 +7,8 @@ import CloudQueueIcon from '@mui/icons-material/CloudQueue'
 import Box from '@mui/joy/Box'
 
 class TextStats extends React.Component {
+
+
     render() {
         return (
             <Box sx={{ display: 'inline-block' }}>
