@@ -51,12 +51,9 @@ class TextStats extends React.Component {
                 >
                     {this.props.expiration_time
                         ? '- Expire on: ' +
-                          new Date(this.props.expiration_time).toLocaleString(
-                              navigator.language
-                          )
+                          new Date(this.props.expiration_time).toLocaleString(navigator.language,{timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone})
                         : ''}
                 </Typography>
-
 
                 {this.props.expiration_height ? <>&nbsp;</> : ''}
                 <Typography
@@ -69,9 +66,7 @@ class TextStats extends React.Component {
                 >
                     {this.props.expiration_height
                         ? '- Expire block height: ' +
-                          new Date(this.props.expiration_height).toLocaleString(
-                              navigator.language,{timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone}
-                          )
+                          this.props.expiration_height
                         : ''}
                 </Typography>
 
