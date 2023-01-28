@@ -24,7 +24,7 @@ import Footer from './Footer'
 import E2EEncryptor from './e2e'
 import TextStats from './components/TextStats'
 import CopyToClipBoard from './components/CopyToClipboard'
-import { connectMixnet } from './context/createConnection'
+import { connectMixnet, pingMessage } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import { Buffer } from 'buffer'
 import MarkdownViewer from './components/MarkdownViewer'
@@ -174,7 +174,8 @@ class Texts extends React.Component {
     }
 
     async componentDidMount() {
-        this.nym = await connectMixnet()
+        if (this.nym === undefined || this.nym === null)
+            this.nym = await connectMixnet()
 
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
             this.displayReceived(e.args.payload)
@@ -184,8 +185,8 @@ class Texts extends React.Component {
             if (e.args.address) {
                 this.setState({
                     self_address: e.args.address,
-                    ready: true,
                 })
+                this.sendMessageTo(pingMessage(e.args.address))
             }
         })
     }
@@ -196,7 +197,8 @@ class Texts extends React.Component {
         const data = JSON.parse(message)
         //const replySurb = message.replySurb
 
-        if (!data.hasOwnProperty('error')) {
+        if (!data.hasOwnProperty('error') || !data.hasOwnProperty('version')) {
+            
             let userData = he.decode(data['text'])
             let textToDisplay = ''
             const isPasteEncrypted =
@@ -259,7 +261,7 @@ class Texts extends React.Component {
                 is_ipfs: data['is_ipfs'],
                 burn_view: data['burn_view'],
                 expiration_time: data['expiration_time'],
-                expiration_height: data['expiration_height']
+                expiration_height: data['expiration_height'],
             })
 
             // Display text if any
@@ -310,6 +312,11 @@ class Texts extends React.Component {
 
             // Global state to stop sending message when text or file is fetched
             this.setState({ isDataRetrieved: true })
+        } else if (data.hasOwnProperty('version')) {
+            this.setState({
+                pingData: data,
+                ready: true,
+            })
         } else {
             this.setState({
                 text: he.decode(data['error']),
@@ -370,8 +377,8 @@ class Texts extends React.Component {
 
         return (
             <CssVarsProvider theme={theme}>
-                <Header/>
-                <main style={{marginRight: '10px', marginLeft:'10px'}}>
+                <Header />
+                <main style={{ marginRight: '10px', marginLeft: '10px' }}>
                     <Sheet
                         sx={{
                             maxWidth: '950px',
@@ -427,7 +434,6 @@ class Texts extends React.Component {
                                                 ${
                                                     this.state.burn_view -
                                                     this.state.num_view
-                                                   
                                                 }
                                                  views`}
                                         </>
@@ -441,8 +447,12 @@ class Texts extends React.Component {
                                         num_view={this.state.num_view}
                                         created_on={this.state.created_on}
                                         is_ipfs={this.state.is_ipfs}
-                                        expiration_time={this.state.expiration_time}
-                                        expiration_height={this.state.expiration_height}
+                                        expiration_time={
+                                            this.state.expiration_time
+                                        }
+                                        expiration_height={
+                                            this.state.expiration_height
+                                        }
                                     />
                                 ) : (
                                     ''
