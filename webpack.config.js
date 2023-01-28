@@ -71,7 +71,7 @@ module.exports = () => {
       // and not allow any straggling "old" SWs to hang around
       clientsClaim: true,
       skipWaiting: true,
-      maximumFileSizeToCacheInBytes: 6000000,
+      maximumFileSizeToCacheInBytes: 7000000,
     }),
   ]
   

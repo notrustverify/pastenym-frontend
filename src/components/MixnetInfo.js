@@ -1,6 +1,10 @@
 import * as React from 'react'
 import Typography from '@mui/joy/Typography'
 import CircularProgress from '@mui/joy/CircularProgress'
+import Chip from '@mui/joy/Chip'
+import CheckCircle from '@mui/icons-material/CheckCircle'
+import Unpublished from '@mui/icons-material/Unpublished'
+
 
 class MixnetInfo extends React.Component {
     render() {
@@ -14,7 +18,20 @@ class MixnetInfo extends React.Component {
                         textOverflow: 'ellipsis',
                     }}
                 >
-                    <b>Anon text sharing service</b>
+                    <b>Anon text sharing service</b> - {' '}
+                    <Chip
+                        color={this.props.pingData ? 'success' : 'neutral'}
+                        variant="soft"
+                        size="md"
+                        startDecorator={
+                            this.props.pingData ?  <CheckCircle /> : <Unpublished />
+                        }
+                        style={{
+                            maxWidth: '20%',
+                        }}
+                    >
+                        {this.props.pingData ? 'Connected' : 'Connected'}
+                    </Chip>
                 </Typography>
                 <Typography
                     fontSize="13px"
@@ -37,8 +54,7 @@ class MixnetInfo extends React.Component {
                             }}
                         />
                     )}
-                <br/>
-             
+                    <br />
                     <b>Connected Gateway</b>{' '}
                     {this.props.self_address ? (
                         this.props.self_address.split('@')[1]

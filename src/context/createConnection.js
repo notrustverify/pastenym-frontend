@@ -27,3 +27,13 @@ export async function connectMixnet() {
 
     return nym
 }
+
+export function pingMessage(sender) {
+    const data = {
+        event: 'ping',
+        sender: sender,
+        data: 'empty',
+    }
+
+    return JSON.stringify(data)
+}

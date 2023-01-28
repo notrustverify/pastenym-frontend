@@ -16,7 +16,7 @@ import ShowText from './components/ShowText'
 import { withRouter } from './components/withRouter'
 import ErrorModal from './components/ErrorModal'
 import SuccessUrlId from './components/SuccessUrlId'
-import { connectMixnet } from './context/createConnection'
+import { connectMixnet, pingMessage } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import {
     extendTheme as extendJoyTheme,
@@ -33,9 +33,6 @@ import Tab from '@mui/joy/Tab'
 import MarkdownViewer from './components/MarkdownViewer'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
-import { Thermostat } from '@mui/icons-material'
-
-const EXPIRATION_BITCOIN_HEIGHT = process.env.EXPIRATION_BITCOIN_HEIGHT || 'false'
 
 
 const muiTheme = extendMuiTheme({
@@ -143,6 +140,9 @@ class UserInput extends React.Component {
             expirationChecked: false,
             expirationTimeRelative: '',
             expirationHeightRelative: null,
+            expirationRelativeHeightEnabled: false,
+            pingData: null,
+            ipfsHostEnabled: false
         }
 
         this.files = null
@@ -199,6 +199,7 @@ class UserInput extends React.Component {
                     self_address: e.args.address,
                 })
             }
+            this.sendMessageTo(pingMessage(e.args.address))
         })
     }
 
@@ -237,9 +238,10 @@ class UserInput extends React.Component {
         })
     }
 
+    
+
     displayReceived(message) {
         const content = message
-
         if (content.length > 0) {
             if (content.toLowerCase().includes('error')) {
                 this.setState({
@@ -259,15 +261,24 @@ class UserInput extends React.Component {
                     buttonGetClick: false,
                 })
             } else {
-                this.setState({
-                    urlId: JSON.parse(content),
-                    buttonSendClick: false,
-                })
+                const data = JSON.parse(content)
+                if (!Object.hasOwn(data, 'version')) {
+                    this.setState({
+                        urlId: data,
+                        buttonSendClick: false,
+                    })
 
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                })
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                    })
+                } else {
+                    this.setState({
+                        pingData: data.version,
+                        expirationRelativeHeightEnabled: data.capabilities.expiration_bitcoin_height,
+                        ipfsHostEnabled: data.capabilities.ipfs_hosting
+                    })
+                }
             }
         }
     }
@@ -489,8 +500,9 @@ class UserInput extends React.Component {
                         }}
                         variant="outlined"
                     >
-                        <MixnetInfo self_address={this.state.self_address} />
+                        <MixnetInfo self_address={this.state.self_address} pingData={this.state.pingData} />
 
+                        
                         {
                             // use buttonClick to reload the message
                             this.state.urlId && !this.state.buttonSendClick ? (
@@ -613,7 +625,7 @@ class UserInput extends React.Component {
                                 />
                             </Tooltip>
 
-                            {this.state.expirationChecked  ? (
+                            {this.state.expirationChecked ? (
                                 <Autocomplete
                                     disablePortal
                                     onChange={(event, newValue) => {
@@ -647,8 +659,7 @@ class UserInput extends React.Component {
                             )}
 
                             {this.state.expirationChecked &&
-                            EXPIRATION_BITCOIN_HEIGHT ===
-                                'true' ? (
+                            this.state.expirationRelativeHeightEnabled ? (
                                 <Autocomplete
                                     disablePortal
                                     onChange={(event, newValue) => {
@@ -718,9 +729,10 @@ class UserInput extends React.Component {
                                                 !event.target.checked,
                                             burnChecked: false,
                                             isPrivate: true,
-                                            expirationChecked: false
+                                            expirationChecked: false,
                                         })
                                     }}
+                                    disabled={!this.state.ipfsHostEnabled}
                                     size="sm"
                                     label="Store on IPFS (experimental)"
                                 />
@@ -878,7 +890,7 @@ class UserInput extends React.Component {
                         </Button>
 
                         <Button
-                            disabled={this.state.self_address ? false : true}
+                            disabled={this.state.self_address && this.state.pingData ? false : true}
                             loading={this.state.buttonSendClick}
                             onClick={this.sendText}
                             endDecorator={<SendIcon />}

@@ -41,6 +41,7 @@ class TextStats extends React.Component {
                 </Typography>
 
                 {this.props.expiration_time ? <>&nbsp;</> : ''}
+
                 <Typography
                     level="body2"
                     sx={{
