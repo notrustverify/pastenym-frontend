@@ -34,8 +34,6 @@ import MarkdownViewer from './components/MarkdownViewer'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
-const EXPIRATION_BITCOIN_HEIGHT =
-    process.env.EXPIRATION_BITCOIN_HEIGHT || 'false'
 
 const muiTheme = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
