@@ -142,7 +142,9 @@ class UserInput extends React.Component {
             expirationChecked: false,
             expirationTimeRelative: '',
             expirationHeightRelative: null,
+            expirationRelativeHeightEnabled: false,
             pingData: null,
+            ipfsHostEnabled: false
         }
 
         this.files = null
@@ -274,7 +276,9 @@ class UserInput extends React.Component {
                     })
                 } else {
                     this.setState({
-                        pingData: data,
+                        pingData: data.version,
+                        expirationRelativeHeightEnabled: data.capabilities.expiration_bitcoin_height,
+                        ipfsHostEnabled: data.capabilities.ipfs_hosting
                     })
                 }
             }
@@ -657,7 +661,7 @@ class UserInput extends React.Component {
                             )}
 
                             {this.state.expirationChecked &&
-                            EXPIRATION_BITCOIN_HEIGHT === 'true' ? (
+                            this.state.expirationRelativeHeightEnabled ? (
                                 <Autocomplete
                                     disablePortal
                                     onChange={(event, newValue) => {
@@ -730,6 +734,7 @@ class UserInput extends React.Component {
                                             expirationChecked: false,
                                         })
                                     }}
+                                    disabled={!this.state.ipfsHostEnabled}
                                     size="sm"
                                     label="Store on IPFS (experimental)"
                                 />

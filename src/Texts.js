@@ -197,7 +197,7 @@ class Texts extends React.Component {
         const data = JSON.parse(message)
         //const replySurb = message.replySurb
 
-        if (!data.hasOwnProperty('error') || !data.hasOwnProperty('version')) {
+        if (!data.hasOwnProperty('error') && !data.hasOwnProperty('version')) {
             
             let userData = he.decode(data['text'])
             let textToDisplay = ''
@@ -314,7 +314,7 @@ class Texts extends React.Component {
             this.setState({ isDataRetrieved: true })
         } else if (data.hasOwnProperty('version')) {
             this.setState({
-                pingData: data,
+                pingData: data.version,
                 ready: true,
             })
         } else {
@@ -395,7 +395,7 @@ class Texts extends React.Component {
                         }}
                         variant="outlined"
                     >
-                        <MixnetInfo self_address={this.state.self_address} />
+                        <MixnetInfo self_address={this.state.self_address} pingData={this.state.pingData} />
 
                         <Divider />
                         {this.state.is_burn ? (
