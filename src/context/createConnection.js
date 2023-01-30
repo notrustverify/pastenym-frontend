@@ -1,4 +1,4 @@
-import { createNymMixnetClient } from 'ntv-sdk'
+import { createNymMixnetClient } from '@nymproject/sdk'
 
 export async function connectMixnet() {
     const nym = await createNymMixnetClient()
