@@ -53,6 +53,7 @@ jobs:
         run: |
           cat <<EOF > .env
           REACT_APP_NYM_CLIENT_SERVER="$REACT_APP_NYM_CLIENT_SERVER"
+          GENERATE_INFO_FILE_ABOUT_INSTANCE="true"
           SERVER_NAME="$SERVER_NAME"
           HOSTED_BY="$HOSTED_BY"
           HOSTED_BY_NAME="$HOSTED_BY_NAME"

@@ -7,40 +7,19 @@ const WorkboxPlugin = require('workbox-webpack-plugin')
 const generate = require('generate-file-webpack-plugin')
 const fs = require('fs')
 
-function getInfos(envFile) {
+function getInfos(envValues) {
   const appPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')).toString());
   const info = {
-    hosted_by: envFile.HOSTED_BY || "",
-    hosted_by_name: envFile.HOSTED_BY_NAME || "",
+    hosted_by: envValues.HOSTED_BY || "",
+    hosted_by_name: envValues.HOSTED_BY_NAME || "",
     version: appPackage.version,
-    country: envFile.COUNTRY || "",
-    backend_addr: envFile.REACT_APP_NYM_CLIENT_SERVER || ""
+    country: envValues.COUNTRY || "",
+    backend_addr: envValues.REACT_APP_NYM_CLIENT_SERVER || ""
   }
   return JSON.stringify(info)
 }
 
 module.exports = () => {
-
-  // Parse .env file locally
-  let localEnv = {}
-  if (fs.existsSync(path.resolve(__dirname, '.env'))) {
-    const readlines = require('n-readlines');
-    const lines = new readlines(path.resolve(__dirname, '.env'))
-    let next;
-    // eslint-disable-next-line no-cond-assign
-    while (next = lines.next()) {
-      const line = String(next)
-      if (line.length <= 1 || line.startsWith("#") || line.indexOf("=") < 0) continue
-      const elems = line.split('=')
-      const key = elems[0].trim()
-      let value = elems[1].trim()
-      if (value.startsWith('"') || value.startsWith('\'')) value = value.substring(1)
-      if (value.endsWith('"') || value.endsWith('\'')) value = value.slice(0, -1)
-      if (value.toLowerCase() === 'true') value = true
-      else if (value.toLowerCase() === 'false') value = false
-      localEnv[key] = value
-    }
-  }
 
   let pluginList = [
     new HtmlWebpackPlugin({
@@ -74,14 +53,19 @@ module.exports = () => {
       maximumFileSizeToCacheInBytes: 7000000,
     }),
   ]
-  
+
+  // process.env contains the env variables from upstream (OS, docker, you-name-it,…)
+  // Parse the .env file and add variables to the process.env
+  var _ = require('dotenv').config({path: __dirname + '/.env'})
+
   // If instance owner does not want to expose the info.json file, we do not generate it
-  if (0 < localEnv.length && !localEnv.DO_NOT_GENERATE_INFO_FILE_ABOUT_INSTANCE) {
+  if (process.env.hasOwnProperty("GENERATE_INFO_FILE_ABOUT_INSTANCE") && process.env.GENERATE_INFO_FILE_ABOUT_INSTANCE.toLowerCase() === "true") {
+    console.log("Will generate info.json file as allowed.")
     // Using generate-file-webpack-plugin: works but old!
     pluginList.push(
       generate({
         file: 'info.json',
-        content: getInfos(localEnv)
+        content: getInfos(process.env)
     }))
   }
 
