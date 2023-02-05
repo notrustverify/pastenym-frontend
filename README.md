@@ -58,12 +58,8 @@ If you want to host it publicly here's some steps that can help you
 
 To run it:
 
-1. Create a `.env` file with the following content
-```
-REACT_APP_NYM_CLIENT_SERVER=HWm3757chNdBq9FzKEY9j9VJ5siRxH8ukrNqYwFp9Unp.D34iYLRd5vzpCU4nZRcFVmoZpTQQMa6mws4Q65LdRosi@Fo4f4SQLdoyoGkFae5TpVhRVoXCF8UiypLVGtGjujVPf
-SERVER_NAME="https://<FQDN>"
-```
-The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend. You can use the one displayed up, it's a working backend
+1. Copy the `.env.example` to `.env` and edit the variables in it.
+The `REACT_APP_NYM_CLIENT_SERVER` value should match the address displayed by the backend. You can use the one written in the example file, it's a working backend.
 
 2. Copy and paste the content displayed [here](https://github.com/notrustverify/pastenym-frontend/main/README.md#docker-composeyml) in a `docker-compose.yml` file
 
@@ -124,6 +120,17 @@ This section list the options for personnal branding and optionnal config
 | `REACT_APP_NYM_CLIENT_SERVER` | `HWm3757chNdBq9FzKEY9j9VJ5siRxH8ukrNqYwFp9Unp.D34iYLRd5vzpCU4nZRcFVmoZpTQQMa6mws4Q65LdRosi@Fo4f4SQLdoyoGkFae5TpVhRVoXCF8UiypLVGtGjujVPf` | Configure the backend server that the frontend will use to send and retrieve pastes |
 | `SERVER_NAME` | `https://pastenym.ch` | Links displayed when paste URL ID are generated |
 
+### Instance info exposition
+Setting the env variable `GENERATE_INFO_FILE_ABOUT_INSTANCE` to `"true"` will generate a _info.json_ file at the root of your instance (so at the `<SERVER_NAME>/info.json` according the server name value above). If the env variable is undefined or has any other value, it will not be generated. It allows you to expose the following parameters of your instance, in a static json file (without loading the whole webpack):
+| Key | Example | Condition |
+|-------|---------|-----------|
+| hosted_by | "https://notrustverify.ch" | If provided in the _.env_ file |
+| hosted_by_name | "No Trust Verify" | If provided in the _.env_ file |
+| version | "1.4.2" | From the _package.json_ file |
+| country | "NZ" | If provided in the _.env_ file |
+| backend_addr | "HrXyP...yBAdEp" | |
+
+If you list your instance in our directory service ([here](directory.pastenym.ch)), this file will be queried recently to ensure the liveness of your instance as well as to allow users to choose or compare instances. The backend address will be used to query the backend you are using directly for the list of supported operations. For more information about the directory, [check our repo](https://github.com/notrustverify/pastenym-directory)!
 
 ### Personnal branding
 To change logo, create a new `logo-header.png` in the `/public` folder. The size should be 25px
