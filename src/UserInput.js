@@ -189,14 +189,14 @@ class UserInput extends React.Component {
     async componentDidMount() {
         this.nym = await connectMixnet()
 
-        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(e.args.payload)
-        })
-
         this.nym.events.subscribeToConnected((e) => {
             if (e.args.address) {
                 this.setState({
                     self_address: e.args.address,
+                })
+
+                this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+                    this.displayReceived(e.args.payload)
                 })
             }
             this.sendMessageTo(pingMessage(e.args.address))

@@ -3,6 +3,7 @@ import { createNymMixnetClient } from '@nymproject/sdk'
 export async function connectMixnet() {
     const nym = await createNymMixnetClient()
 
+
     const validatorApiUrl = 'https://validator.nymtech.net/api'
 
     let preferredGatewayIdentityKey =
