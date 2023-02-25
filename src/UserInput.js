@@ -195,11 +195,13 @@ class UserInput extends React.Component {
                     self_address: e.args.address,
                 })
 
-                this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-                    this.displayReceived(e.args.payload)
-                })
+                
             }
             this.sendMessageTo(pingMessage(e.args.address))
+        })
+
+        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+            this.displayReceived(e.args.payload)
         })
     }
 
@@ -348,7 +350,7 @@ class UserInput extends React.Component {
             return
         }
 
-        await this.nym.client.sendMessage({ payload, recipient })
+        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 2})
     }
 
     // Should remove this method and switch to Texts instead...
@@ -445,7 +447,6 @@ class UserInput extends React.Component {
             // As soon SURB will be implemented in wasm client, we will use it
             const data = {
                 event: 'newText',
-                sender: this.state.self_address,
                 data: {
                     text: this.state.isPrivate ? encrypted[0] : nonencrypted,
                     private: this.state.isPrivate,

@@ -4,7 +4,7 @@ export async function connectMixnet() {
     const nym = await createNymMixnetClient()
 
 
-    const validatorApiUrl = 'https://validator.nymtech.net/api'
+    const nymApiUrl = 'https://validator.nymtech.net/api'
 
     let preferredGatewayIdentityKey =
         'E3mvZTHQCdBvhfr178Swx9g4QG3kkRUun7YnToLMcMbM'
@@ -21,7 +21,7 @@ export async function connectMixnet() {
     // start the client and connect to a gateway
     await nym.client.start({
         clientId: 'pastenymClient',
-        validatorApiUrl,
+        nymApiUrl,
         preferredGatewayIdentityKey: preferredGatewayIdentityKey,
         gatewayListener: gatewayListener,
     })
@@ -32,7 +32,6 @@ export async function connectMixnet() {
 export function pingMessage(sender) {
     const data = {
         event: 'ping',
-        sender: sender,
         data: 'empty',
     }
 
