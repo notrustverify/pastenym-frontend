@@ -335,7 +335,7 @@ class Texts extends React.Component {
             return
         }
         
-        this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 1})
+        this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 20})
 
     }
 
