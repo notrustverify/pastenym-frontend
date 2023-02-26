@@ -189,17 +189,19 @@ class UserInput extends React.Component {
     async componentDidMount() {
         this.nym = await connectMixnet()
 
-        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(e.args.payload)
-        })
-
         this.nym.events.subscribeToConnected((e) => {
             if (e.args.address) {
                 this.setState({
                     self_address: e.args.address,
                 })
+
+                
             }
             this.sendMessageTo(pingMessage(e.args.address))
+        })
+
+        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+            this.displayReceived(e.args.payload)
         })
     }
 
@@ -348,50 +350,10 @@ class UserInput extends React.Component {
             return
         }
 
-        await this.nym.client.sendMessage({ payload, recipient })
+        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 20})
+
     }
 
-    // Should remove this method and switch to Texts instead...
-    /*
-    getPaste() {
-        if (!this.nym) {
-            console.error('Could not send message because worker does not exist')
-            return
-        }
-
-        this.setState({
-            textReceived: null,
-            buttonGetClick: true,
-        })
-
-        let urlId = null == this.state.urlIdGet ? "" : this.state.urlIdGet
-
-        // Keep only urlid part, remove http...
-        if (this.state.urlIdGet.split('/#/').length > 1) {
-            urlId = this.state.urlIdGet.split('/').reverse()[0]
-        }
-
-        const items = urlId.split('&')
-
-        // Remove key
-        if (items.length > 1) {
-            urlId = items[0]
-            key = items[1]
-        }
-
-        const data = {
-            event: 'getText',
-            sender: this.state.self_address,
-            data: { urlId: urlId },
-        }
-        const message = JSON.stringify(data)
-
-        this.nym.client.sendMessage({
-            payload: message,
-            recipient,
-        })
-    }
-    */
 
     async sendText() {
         if (
@@ -445,7 +407,6 @@ class UserInput extends React.Component {
             // As soon SURB will be implemented in wasm client, we will use it
             const data = {
                 event: 'newText',
-                sender: this.state.self_address,
                 data: {
                     text: this.state.isPrivate ? encrypted[0] : nonencrypted,
                     private: this.state.isPrivate,

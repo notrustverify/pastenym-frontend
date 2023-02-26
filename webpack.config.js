@@ -50,7 +50,7 @@ module.exports = () => {
       // and not allow any straggling "old" SWs to hang around
       clientsClaim: true,
       skipWaiting: true,
-      maximumFileSizeToCacheInBytes: 7000000,
+      maximumFileSizeToCacheInBytes: 9000000,
     }),
   ]
 
@@ -135,8 +135,8 @@ module.exports = () => {
       topLevelAwait: true
     },
     performance: {
-      maxEntrypointSize: 1012000,
-      maxAssetSize: 100212000,
+      maxEntrypointSize: 2012000,
+      maxAssetSize: 200212000,
     },
     optimization: {
       splitChunks: {

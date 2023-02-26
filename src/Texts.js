@@ -163,7 +163,6 @@ class Texts extends React.Component {
 
         const data = {
             event: 'getText',
-            sender: this.state.self_address,
             data: {
                 urlId: this.state.urlId,
             },
@@ -335,11 +334,9 @@ class Texts extends React.Component {
             )
             return
         }
+        
+        this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 20})
 
-        await this.nym.client.sendMessage({
-            payload,
-            recipient,
-        })
     }
 
     isMarkdown() {
