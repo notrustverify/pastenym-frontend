@@ -51,7 +51,7 @@
     "@capacitor/cli": "^4.4.0",
     "@capacitor/core": "^4.6.1",
     "autoprefixer": "10.4.13",
-    "babel-loader": "^9.0.1",
+    "babel-loader": "^9.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
