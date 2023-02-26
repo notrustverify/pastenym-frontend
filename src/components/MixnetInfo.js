@@ -27,10 +27,17 @@ class MixnetInfo extends React.Component {
                             this.props.pingData ?  <CheckCircle /> : <Unpublished />
                         }
                         style={{
-                            maxWidth: '20%',
+                            maxWidth: '20%'
                         }}
                     >
-                        {this.props.pingData ? 'Connected' : 'Connected'}
+                         
+                         
+                         <Typography
+                         
+                         style={{ position: 'relative', top: '2px' }}
+                         >
+                         Connected
+                         </Typography>
                     </Chip>
                 </Typography>
                 <Typography

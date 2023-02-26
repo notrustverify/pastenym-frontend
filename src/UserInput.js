@@ -197,7 +197,7 @@ class UserInput extends React.Component {
 
                 
             }
-            this.sendMessageTo(pingMessage(e.args.address))
+            this.sendMessageTo(pingMessage(e.args.address),1)
         })
 
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
@@ -342,7 +342,7 @@ class UserInput extends React.Component {
     }
     */
 
-    async sendMessageTo(payload) {
+    async sendMessageTo(payload, numberOfSurbs) {
         if (!this.nym) {
             console.error(
                 'Could not send message because worker does not exist'
@@ -350,7 +350,10 @@ class UserInput extends React.Component {
             return
         }
 
-        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 20})
+        if (numberOfSurbs === undefined)
+            numberOfSurbs = 20
+
+        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 

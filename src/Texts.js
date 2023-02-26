@@ -185,7 +185,7 @@ class Texts extends React.Component {
                 this.setState({
                     self_address: e.args.address,
                 })
-                this.sendMessageTo(pingMessage(e.args.address))
+                this.sendMessageTo(pingMessage(e.args.address),100)
             }
         })
     }
@@ -327,7 +327,7 @@ class Texts extends React.Component {
 
     componentWillUnmount() {}
 
-    async sendMessageTo(payload) {
+    async sendMessageTo(payload, numberOfSurbs) {
         if (!this.nym) {
             console.error(
                 'Could not send message because worker does not exist'
@@ -335,7 +335,10 @@ class Texts extends React.Component {
             return
         }
         
-        this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 20})
+        if (numberOfSurbs === undefined)
+            numberOfSurbs = 20
+
+        this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 
