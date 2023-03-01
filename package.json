@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "dependencies": {
-    "@capacitor/android": "4.4.0",
+    "@capacitor/android": "4.7.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@heroicons/react": "^2.0.13",
