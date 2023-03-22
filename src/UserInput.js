@@ -197,7 +197,7 @@ class UserInput extends React.Component {
 
                 
             }
-            this.sendMessageTo(pingMessage(e.args.address),1)
+            this.sendMessageTo(pingMessage(e.args.address),2)
         })
 
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
@@ -361,13 +361,13 @@ class UserInput extends React.Component {
     async sendText() {
         if (
             (this.state.text.length <= 100000 && this.state.text.length > 0) ||
-            this.state.files.length > 0
+            ( this.state.files !== null && this.state.files.length > 0 )
         ) {
             this.setState({
                 buttonSendClick: true,
             })
 
-            if (this.state.files) {
+            if (this.state.files !== null) {
                 await Promise.all(
                     this.state.files.map(async (f) => {
                         const buffer = await f.arrayBuffer()
@@ -434,12 +434,20 @@ class UserInput extends React.Component {
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
             if (encrypted || nonencrypted)
-                await this.sendMessageTo(JSON.stringify(data))
+                await this.sendMessageTo(JSON.stringify(data),20)
         } else {
+            if (this.state.text.length <= 0)
+            {
+            this.setState({
+                open: true,
+                textError: "Text cannot be empty",
+            })
+        } else if (this.state.text.length >= 10_0000) {
             this.setState({
                 open: true,
                 textError: "Too many char, limit is 100'000",
             })
+        } 
         }
     }
 

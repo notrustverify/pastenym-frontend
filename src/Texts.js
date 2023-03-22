@@ -169,7 +169,7 @@ class Texts extends React.Component {
         }
         const message = JSON.stringify(data)
 
-        this.sendMessageTo(message)
+        this.sendMessageTo(message,20)
     }
 
     async componentDidMount() {
@@ -185,7 +185,7 @@ class Texts extends React.Component {
                 this.setState({
                     self_address: e.args.address,
                 })
-                this.sendMessageTo(pingMessage(e.args.address),100)
+                this.sendMessageTo(pingMessage(e.args.address),2)
             }
         })
     }
