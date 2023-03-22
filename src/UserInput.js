@@ -21,8 +21,7 @@ import MixnetInfo from './components/MixnetInfo'
 import {
     extendTheme as extendJoyTheme,
     CssVarsProvider,
-    useColorScheme,
-} from '@mui/joy/styles'
+  } from '@mui/joy/styles'
 import { experimental_extendTheme as extendMuiTheme } from '@mui/material/styles'
 import colors from '@mui/joy/colors'
 import { deepmerge } from '@mui/utils'
@@ -35,80 +34,99 @@ import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 
 
-const muiTheme = extendMuiTheme({
-    // This is required to point to `var(--joy-*)` because we are using `CssVarsProvider` from Joy UI.
+
+const { unstable_sxConfig: muiSxConfig, ...muiTheme } = extendMuiTheme({
+    // This is required to point to `var(--joy-*)` because we are using
+    // `CssVarsProvider` from Joy UI.
     cssVarPrefix: 'joy',
     colorSchemes: {
-        light: {
-            palette: {
-                primary: {
-                    main: colors.blue[500],
-                },
-                grey: colors.grey,
-                error: {
-                    main: colors.red[500],
-                },
-                info: {
-                    main: colors.purple[500],
-                },
-                success: {
-                    main: colors.green[500],
-                },
-                warning: {
-                    main: colors.yellow[200],
-                },
-                common: {
-                    white: '#FFF',
-                    black: '#09090D',
-                },
-                divider: colors.grey[200],
-                text: {
-                    primary: colors.grey[800],
-                    secondary: colors.grey[600],
-                },
-            },
+      light: {
+        palette: {
+          primary: {
+            main: colors.blue[500],
+          },
+          grey: colors.grey,
+          error: {
+            main: colors.red[500],
+          },
+          info: {
+            main: colors.purple[500],
+          },
+          success: {
+            main: colors.green[500],
+          },
+          warning: {
+            main: colors.yellow[200],
+          },
+          common: {
+            white: '#FFF',
+            black: '#09090D',
+          },
+          divider: colors.grey[200],
+          text: {
+            primary: colors.grey[800],
+            secondary: colors.grey[600],
+          },
         },
-        dark: {
-            palette: {
-                primary: {
-                    main: colors.blue[600],
-                },
-                grey: colors.grey,
-                error: {
-                    main: colors.red[600],
-                },
-                info: {
-                    main: colors.purple[600],
-                },
-                success: {
-                    main: colors.green[600],
-                },
-                warning: {
-                    main: colors.yellow[300],
-                },
-                common: {
-                    white: '#FFF',
-                    black: '#09090D',
-                },
-                divider: colors.grey[800],
-                text: {
-                    primary: colors.grey[100],
-                    secondary: colors.grey[300],
-                },
-            },
+      },
+      dark: {
+        palette: {
+          primary: {
+            main: colors.blue[600],
+          },
+          grey: colors.grey,
+          error: {
+            main: colors.red[600],
+          },
+          info: {
+            main: colors.purple[600],
+          },
+          success: {
+            main: colors.green[600],
+          },
+          warning: {
+            main: colors.yellow[300],
+          },
+          common: {
+            white: '#FFF',
+            black: '#09090D',
+          },
+          divider: colors.grey[800],
+          text: {
+            primary: colors.grey[100],
+            secondary: colors.grey[300],
+          },
         },
+      },
     },
-})
-
-const joyTheme = extendJoyTheme()
-
-// You can use your own `deepmerge` function.
-// joyTheme will deeply merge to muiTheme.
-const theme = deepmerge(muiTheme, joyTheme)
-
-function withParams(Component) {
-    return (props) => <Component {...props} params={useParams()} />
-}
+  });
+  
+  const { unstable_sxConfig: joySxConfig, ...joyTheme } = extendJoyTheme();
+  
+  const mergedTheme = ({
+    ...muiTheme,
+    ...joyTheme,
+    colorSchemes: deepmerge(muiTheme.colorSchemes, joyTheme.colorSchemes),
+    typography: {
+      ...muiTheme.typography,
+      ...joyTheme.typography
+    }})
+  
+  mergedTheme.generateCssVars = (colorScheme) => ({
+    css: {
+      ...muiTheme.generateCssVars(colorScheme).css,
+      ...joyTheme.generateCssVars(colorScheme).css
+    },
+    vars: deepmerge(
+      muiTheme.generateCssVars(colorScheme).vars,
+      joyTheme.generateCssVars(colorScheme).vars
+    )
+  });
+  
+  mergedTheme.unstable_sxConfig = {
+    ...muiSxConfig,
+    ...joySxConfig
+  };
 
 const recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 
@@ -197,7 +215,7 @@ class UserInput extends React.Component {
 
                 
             }
-            this.sendMessageTo(pingMessage(e.args.address))
+            this.sendMessageTo(pingMessage(e.args.address),20)
         })
 
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
@@ -342,7 +360,7 @@ class UserInput extends React.Component {
     }
     */
 
-    async sendMessageTo(payload) {
+    async sendMessageTo(payload, numberOfSurbs) {
         if (!this.nym) {
             console.error(
                 'Could not send message because worker does not exist'
@@ -350,7 +368,10 @@ class UserInput extends React.Component {
             return
         }
 
-        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: 20})
+        if (numberOfSurbs === undefined)
+            numberOfSurbs = 20
+
+        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 
@@ -358,13 +379,13 @@ class UserInput extends React.Component {
     async sendText() {
         if (
             (this.state.text.length <= 100000 && this.state.text.length > 0) ||
-            this.state.files.length > 0
+            ( this.state.files !== null && this.state.files.length > 0 )
         ) {
             this.setState({
                 buttonSendClick: true,
             })
 
-            if (this.state.files) {
+            if (this.state.files !== null) {
                 await Promise.all(
                     this.state.files.map(async (f) => {
                         const buffer = await f.arrayBuffer()
@@ -431,18 +452,26 @@ class UserInput extends React.Component {
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
             if (encrypted || nonencrypted)
-                await this.sendMessageTo(JSON.stringify(data))
+                await this.sendMessageTo(JSON.stringify(data),20)
         } else {
+            if (this.state.text.length <= 0)
+            {
+            this.setState({
+                open: true,
+                textError: "Text cannot be empty",
+            })
+        } else if (this.state.text.length >= 10_0000) {
             this.setState({
                 open: true,
                 textError: "Too many char, limit is 100'000",
             })
+        } 
         }
     }
 
     render() {
         return (
-            <CssVarsProvider theme={theme}>
+            <CssVarsProvider theme={mergedTheme}>
                 <Header />
                 <main style={{ marginRight: '10px', marginLeft: '10px' }}>
                     <Sheet

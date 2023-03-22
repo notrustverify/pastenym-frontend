@@ -27,10 +27,17 @@ class MixnetInfo extends React.Component {
                             this.props.pingData ?  <CheckCircle /> : <Unpublished />
                         }
                         style={{
-                            maxWidth: '20%',
+                            maxWidth: '20%'
                         }}
                     >
-                        {this.props.pingData ? 'Connected' : 'Connected'}
+                         
+                         
+                         <Typography
+                         
+                         style={{ position: 'relative', top: '2px' }}
+                         >
+                         Connected
+                         </Typography>
                     </Chip>
                 </Typography>
                 <Typography
@@ -49,8 +56,8 @@ class MixnetInfo extends React.Component {
                         <CircularProgress
                             sx={{
                                 '--CircularProgress-size': '17px',
-                                '--CircularProgress-track-thickness': '3px',
-                                '--CircularProgress-progress-thickness': '3px',
+                                '--CircularProgress-trackThickness': '3px',
+                                '--CircularProgress-progressThickness': '3px'
                             }}
                         />
                     )}
@@ -62,8 +69,8 @@ class MixnetInfo extends React.Component {
                         <CircularProgress
                             sx={{
                                 '--CircularProgress-size': '17px',
-                                '--CircularProgress-track-thickness': '3px',
-                                '--CircularProgress-progress-thickness': '3px',
+                                '--CircularProgress-trackThickness': '3px',
+                                '--CircularProgress-progressThickness': '3px',
                             }}
                         />
                     )}
