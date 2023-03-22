@@ -56,8 +56,8 @@ class MixnetInfo extends React.Component {
                         <CircularProgress
                             sx={{
                                 '--CircularProgress-size': '17px',
-                                '--CircularProgress-track-thickness': '3px',
-                                '--CircularProgress-progress-thickness': '3px',
+                                '--CircularProgress-trackThickness': '3px',
+                                '--CircularProgress-progressThickness': '3px'
                             }}
                         />
                     )}
@@ -69,8 +69,8 @@ class MixnetInfo extends React.Component {
                         <CircularProgress
                             sx={{
                                 '--CircularProgress-size': '17px',
-                                '--CircularProgress-track-thickness': '3px',
-                                '--CircularProgress-progress-thickness': '3px',
+                                '--CircularProgress-trackThickness': '3px',
+                                '--CircularProgress-progressThickness': '3px',
                             }}
                         />
                     )}
