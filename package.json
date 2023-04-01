@@ -7,7 +7,7 @@
   "dependencies": {
     "@capacitor/android": "4.7.0",
     "@heroicons/react": "^2.0.13",
-    "@iconify-icons/bi": "^1.2.11",
+    "@iconify-icons/bi": "^1.2.16",
     "@iconify-icons/fa-regular": "^1.2.4",
     "@iconify/icons-simple-icons": "^1.2.39",
     "@iconify/react": "^4.1.0",
