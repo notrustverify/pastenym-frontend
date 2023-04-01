@@ -55,7 +55,7 @@
     "css-loader": "^6.7.1",
     "eslint": "^8.29.0",
     "eslint-plugin-react": "^7.31.11",
-    "favicons": "^7.0.2",
+    "favicons": "^7.1.1",
     "favicons-webpack-plugin": "6.0.0",
     "file-loader": "^6.2.0",
     "hello-wasm-pack": "^0.1.0",
