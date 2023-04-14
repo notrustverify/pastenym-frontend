@@ -390,7 +390,6 @@ class Texts extends React.Component {
         if (regImageFile.test(this.state.text)) likelihood += 1
         if (regTable.test(this.state.text)) likelihood += 3
         
-        console.log(likelihood)
         return likelihood >= 3
     }
 
