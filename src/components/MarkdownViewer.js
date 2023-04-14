@@ -5,11 +5,19 @@ import remarkBreaks from 'remark-breaks'
 import stringWidth from 'string-width'
 import rehypeExternalLinks from 'rehype-external-links'
 
+
 class MarkdownViewer extends React.Component {
+
+
     render() {
+        
         return (
-            <ReactMarkdown remarkPlugins={[[gfm,  {stringLength: stringWidth}], remarkBreaks]} rehypePlugins={[[rehypeExternalLinks,{rel: ['nofollow','noopener','noreferer']}]]} linkTarget="_blank">
-                {this.props.text}
+            <ReactMarkdown
+            remarkPlugins={[[gfm,  {stringLength: stringWidth}], remarkBreaks]} rehypePlugins={[[rehypeExternalLinks,{rel: ['nofollow','noopener','noreferer']}]]}
+            linkTarget="_blank">
+
+                {this.props.text.replace("    ","")}
+
             </ReactMarkdown>
         )
     }

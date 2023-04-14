@@ -34,7 +34,7 @@ class MixnetInfo extends React.Component {
                          
                          <Typography
                          
-                         style={{ position: 'relative', top: '2px' }}
+                         style={{ position: 'relative', top: '3px' }}
                          >
                          Connected
                          </Typography>

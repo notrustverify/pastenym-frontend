@@ -389,7 +389,8 @@ class Texts extends React.Component {
         if (regCodeBlock.test(this.state.text)) likelihood += 1
         if (regImageFile.test(this.state.text)) likelihood += 1
         if (regTable.test(this.state.text)) likelihood += 3
-
+        
+        console.log(likelihood)
         return likelihood >= 3
     }
 
@@ -530,12 +531,14 @@ class Texts extends React.Component {
                                     }}
                                 >
                                     {this.state.text ? (
+                                        
                                         this.isMarkdown() ? (
                                             <div>
                                                 <MarkdownViewer
                                                     text={this.state.text}
                                                 />
-                                            </div>
+                                                </div>
+                                       
                                         ) : (
                                             <Linkify
                                                 as="div"
