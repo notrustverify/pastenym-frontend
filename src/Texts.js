@@ -132,6 +132,8 @@ class Texts extends React.Component {
     constructor(props) {
         super(props)
         this.nym = null
+        this.encoder = new TextEncoder()
+        this.decoder = new TextDecoder()
 
         const items = this.props.params.urlId
             .replace('#/', '')
@@ -191,7 +193,7 @@ class Texts extends React.Component {
         }
         const message = JSON.stringify(data)
 
-        this.sendMessageTo(message,20)
+        this.sendMessageTo(message,100)
     }
 
     async componentDidMount() {
@@ -199,7 +201,11 @@ class Texts extends React.Component {
             this.nym = await connectMixnet()
 
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(e.args.payload)
+            this.displayReceived(this.decoder.decode(e.args.payload))
+        })
+
+        this.nym.events.subscribeToRawMessageReceivedEvent((e) => {
+            this.displayReceived(this.decoder.decode(e.args.payload))
         })
 
         this.nym.events.subscribeToConnected((e) => {
@@ -207,7 +213,7 @@ class Texts extends React.Component {
                 this.setState({
                     self_address: e.args.address,
                 })
-                this.sendMessageTo(pingMessage(e.args.address),2)
+                this.sendMessageTo(pingMessage(e.args.address), 20)
             }
         })
     }
@@ -216,11 +222,10 @@ class Texts extends React.Component {
 
     displayReceived(message) {
         const data = JSON.parse(message)
-        //const replySurb = message.replySurb
 
         if (!data.hasOwnProperty('error') && !data.hasOwnProperty('version')) {
             
-            let userData = he.decode(data['text'])
+            let userData = data['text']
             let textToDisplay = ''
             const isPasteEncrypted =
                 data.hasOwnProperty('encParams') &&
@@ -261,7 +266,7 @@ class Texts extends React.Component {
                     userData = JSON.parse(
                         this.encryptor.decrypt(userData, encParams)
                     )
-                    textToDisplay = he.decode(userData['text'])
+                    textToDisplay = userData['text']
                 }
                 // We do not decrypt, only display message as is.
                 else {
@@ -270,8 +275,9 @@ class Texts extends React.Component {
 
                 // Message is not encrypted
             } else {
+
                 userData = JSON.parse(userData)
-                textToDisplay = he.decode(userData['text'])
+                textToDisplay = userData['text']
             }
 
             // Stats
@@ -360,7 +366,7 @@ class Texts extends React.Component {
         if (numberOfSurbs === undefined)
             numberOfSurbs = 20
 
-        this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: numberOfSurbs})
+            await this.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 
