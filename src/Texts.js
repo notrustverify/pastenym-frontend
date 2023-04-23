@@ -225,7 +225,7 @@ class Texts extends React.Component {
 
         if (!data.hasOwnProperty('error') && !data.hasOwnProperty('version')) {
             
-            let userData = data['text']
+            let userData = he.decode(data['text'])
             let textToDisplay = ''
             const isPasteEncrypted =
                 data.hasOwnProperty('encParams') &&
@@ -266,7 +266,7 @@ class Texts extends React.Component {
                     userData = JSON.parse(
                         this.encryptor.decrypt(userData, encParams)
                     )
-                    textToDisplay = userData['text']
+                    textToDisplay = he.decode(userData['text'])
                 }
                 // We do not decrypt, only display message as is.
                 else {
