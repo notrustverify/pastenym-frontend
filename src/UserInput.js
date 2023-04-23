@@ -135,6 +135,8 @@ class UserInput extends React.Component {
         super(props)
 
         this.nym = null
+        this.encoder = new TextEncoder()
+        this.decoder = new TextDecoder()
 
         this.state = {
             self_address: null,
@@ -215,11 +217,15 @@ class UserInput extends React.Component {
 
                 
             }
-            this.sendMessageTo(pingMessage(e.args.address),20)
+            this.sendMessageTo(pingMessage(e.args.address),100)
         })
 
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(e.args.payload)
+            this.displayReceived(this.decoder.decode(e.args.payload))
+        })
+
+        this.nym.events.subscribeToRawMessageReceivedEvent((e) => {
+            this.displayReceived(this.decoder.decode(e.args.payload))
         })
     }
 
@@ -315,51 +321,6 @@ class UserInput extends React.Component {
         return typeof item === 'object' && item !== null
     }
 
-    mergeUInt8Arrays(a1, a2) {
-        // sum of individual array lengths
-        var mergedArray = new Uint8Array(a1.length + a2.length)
-        mergedArray.set(a1)
-        mergedArray.set(a2, a1.length)
-        return mergedArray
-    }
-
-    /*
-    // do not use this
-    async sendBinaryMessageTo(data, payload) {
-        if (!this.nym) {
-            console.error(
-                'Could not send message because worker does not exist'
-            )
-            return
-        }
-        let fileArray = undefined
-        let headers = undefined
-
-        const dataArray = Uint8Array.from(
-            '####'.split('').map((x) => x.charCodeAt())
-        )
-        console.log(payload)
-        await Promise.all(
-            payload.map(async (f) => {
-                const buffer = await f.arrayBuffer()
-                fileArray = new Uint8Array(buffer)
-                headers = { filename: f.name, mimeType: f.type, data: data }
-            })
-        )
-
-        try {
-            await this.nym.client.sendBinaryMessage({
-                payload: this.mergeUInt8Arrays(dataArray, fileArray),
-                recipient: recipient,
-                headers: JSON.stringify(headers),
-            })
-        } catch (e) {
-            console.log('Failed to send file', e)
-        }
-        return undefined
-    }
-    */
-
     async sendMessageTo(payload, numberOfSurbs) {
         if (!this.nym) {
             console.error(
@@ -371,7 +332,7 @@ class UserInput extends React.Component {
         if (numberOfSurbs === undefined)
             numberOfSurbs = 20
 
-        await this.nym.client.send( { payload: { message: payload, mimeType: "application/json" }, recipient: recipient,replySurbs: numberOfSurbs})
+        await this.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 
