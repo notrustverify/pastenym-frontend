@@ -28,6 +28,8 @@ import { connectMixnet, pingMessage } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import { Buffer } from 'buffer'
 import MarkdownViewer from './components/MarkdownViewer'
+import LinearProgress from '@mui/material/LinearProgress'
+import Stack from '@mui/material/Stack'
 
 const { unstable_sxConfig: muiSxConfig, ...muiTheme } = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using
@@ -200,6 +202,19 @@ class Texts extends React.Component {
         if (this.nym === undefined || this.nym === null)
             this.nym = await connectMixnet()
 
+
+
+        this.nym.events.subscribeToConnected((e) => {
+            if (e.args.address) {
+                this.setState({
+                    self_address: e.args.address,
+                })
+
+                // send 2 messages first one to get the ping back fast and the other one to generate in advance the SURBs (since it take time to generate them)
+                this.sendMessageTo(pingMessage(), 3)
+                this.sendMessageTo(pingMessage(), 200)
+        }})
+
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })
@@ -208,14 +223,6 @@ class Texts extends React.Component {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })
 
-        this.nym.events.subscribeToConnected((e) => {
-            if (e.args.address) {
-                this.setState({
-                    self_address: e.args.address,
-                })
-                this.sendMessageTo(pingMessage(e.args.address), 200)
-            }
-        })
     }
 
     componentDidUpdate() {}
@@ -340,10 +347,11 @@ class Texts extends React.Component {
             // Global state to stop sending message when text or file is fetched
             this.setState({ isDataRetrieved: true })
         } else if (data.hasOwnProperty('version')) {
-            this.setState({
-                pingData: data.version,
-                ready: true,
-            })
+            if (!this.state.ready)
+                this.setState({
+                    pingData: data.version,
+                    ready: true,
+                })
         } else {
             this.setState({
                 text: he.decode(data['error']),
@@ -488,7 +496,19 @@ class Texts extends React.Component {
                             </div>
                         )}
                         <b>
-                            Paste{' '}
+                            { !this.state.text ? (
+                                 
+                                 <Stack sx={{ 
+                                    overflow: 'hidden',
+                                    whiteSpace: 'nowrap',
+                                    textOverflow: 'ellipsis',
+                                    color: 'grey.500' 
+                                    }}
+                                    spacing={1}
+                                    >
+                                    Paste is being loaded
+                                 </Stack>
+                                ): ("Paste")}
                             {this.state.isText && this.state.text ? (
                                 <CopyToClipBoard textToCopy={this.state.text} />
                             ) : (
@@ -556,6 +576,7 @@ class Texts extends React.Component {
                                             </Linkify>
                                         )
                                     ) : (
+                                        
                                         <Skeleton
                                             variant="rounded"
                                             width="100%"
