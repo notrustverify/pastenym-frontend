@@ -19,6 +19,7 @@ export async function connectMixnet() {
     }
 
     // start the client and connect to a gateway
+    
     await nym.client.start({
         clientId: 'pastenymClient',
         nymApiUrl,
@@ -29,7 +30,7 @@ export async function connectMixnet() {
     return nym
 }
 
-export function pingMessage(sender) {
+export function pingMessage() {
     const data = {
         event: 'ping',
         data: 'empty',

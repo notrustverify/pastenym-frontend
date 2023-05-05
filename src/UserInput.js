@@ -217,9 +217,11 @@ class UserInput extends React.Component {
 
                 
             }
-            this.sendMessageTo(pingMessage(e.args.address),100)
+            // send 2 messages first one to get the ping back fast and the other one to generate in advance the SURBs (since it take time to generate them)
+            this.sendMessageTo(pingMessage(e.args.address),3)
+            this.sendMessageTo(pingMessage(e.args.address),200)
+            
         })
-
         this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })

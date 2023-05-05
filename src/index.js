@@ -8,7 +8,9 @@ import Texts from './Texts'
 import About from './About'
 import './index.css'
 
+
 if (module.hot) module.hot.accept()
+
 
 export default function App() {
 
@@ -16,6 +18,8 @@ export default function App() {
     if (!window.location.hash) {
        window.history.replaceState({}, null, "/#/"+window.location.pathname.split('/')[1])
     }
+
+    
 
     return (
         <HashRouter>
