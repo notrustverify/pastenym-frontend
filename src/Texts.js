@@ -24,12 +24,13 @@ import Footer from './Footer'
 import E2EEncryptor from './e2e'
 import TextStats from './components/TextStats'
 import CopyToClipBoard from './components/CopyToClipboard'
-import { connectMixnet, pingMessage } from './context/createConnection'
+import { connectMixnet, pingMessage, checkNymReady, sendMessageTo } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import { Buffer } from 'buffer'
 import MarkdownViewer from './components/MarkdownViewer'
 import LinearProgress from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
+import { Html } from '@mui/icons-material'
 
 const { unstable_sxConfig: muiSxConfig, ...muiTheme } = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using
@@ -133,7 +134,7 @@ let recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 class Texts extends React.Component {
     constructor(props) {
         super(props)
-        this.nym = null
+        //window.nym = null
         this.encoder = new TextEncoder()
         this.decoder = new TextDecoder()
 
@@ -177,10 +178,11 @@ class Texts extends React.Component {
 
         this.getPaste = this.getPaste.bind(this)
         this.isMarkdown = this.isMarkdown.bind(this)
+
     }
 
     getPaste() {
-        if (!this.nym) {
+        if (!window.nym) {
             console.error(
                 'Could not send message because worker does not exist'
             )
@@ -194,43 +196,42 @@ class Texts extends React.Component {
             },
         }
         const message = JSON.stringify(data)
+        
+        sendMessageTo(message, 20)
 
-        this.sendMessageTo(message,20)
+    }
+    
+    initNym(){
+        
+            window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+                this.displayReceived(this.decoder.decode(e.args.payload))
+            })
+
+            window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
+                this.displayReceived(this.decoder.decode(e.args.payload))
+            })
+
+        sendMessageTo(pingMessage(), 3)
+
     }
 
-    async componentDidMount() {
-        if (this.nym === undefined || this.nym === null)
-            this.nym = await connectMixnet()
+     componentDidMount() {
+        
+            checkNymReady().then(() => this.initNym()).then(() => (
 
-
-
-        this.nym.events.subscribeToConnected((e) => {
-            if (e.args.address) {
                 this.setState({
-                    self_address: e.args.address,
-                })
-
-                // send 2 messages first one to get the ping back fast and the other one to generate in advance the SURBs (since it take time to generate them)
-                this.sendMessageTo(pingMessage(), 3)
-                this.sendMessageTo(pingMessage(), 200)
-        }})
-
-        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(this.decoder.decode(e.args.payload))
-        })
-
-        this.nym.events.subscribeToRawMessageReceivedEvent((e) => {
-            this.displayReceived(this.decoder.decode(e.args.payload))
-        })
-
+                    self_address: window.self_address,
+                })))
     }
 
-    componentDidUpdate() {}
+    componentWillUnmount(){
+        console.log("unmount")
+
+    }
 
     displayReceived(message) {
-        const data = JSON.parse(message)
-
-        if (!data.hasOwnProperty('error') && !data.hasOwnProperty('version')) {
+        const data = JSON.parse(message)   
+        if (!data.hasOwnProperty('error') && !data.hasOwnProperty('version') ) {
             
             let userData = he.decode(data['text'])
             let textToDisplay = ''
@@ -347,7 +348,6 @@ class Texts extends React.Component {
             // Global state to stop sending message when text or file is fetched
             this.setState({ isDataRetrieved: true })
         } else if (data.hasOwnProperty('version')) {
-            if (!this.state.ready)
                 this.setState({
                     pingData: data.version,
                     ready: true,
@@ -361,10 +361,8 @@ class Texts extends React.Component {
         }
     }
 
-    componentWillUnmount() {}
-
     async sendMessageTo(payload, numberOfSurbs) {
-        if (!this.nym) {
+        if (!window.nym) {
             console.error(
                 'Could not send message because worker does not exist'
             )
@@ -374,7 +372,7 @@ class Texts extends React.Component {
         if (numberOfSurbs === undefined)
             numberOfSurbs = 20
 
-            await this.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
+            await window.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 

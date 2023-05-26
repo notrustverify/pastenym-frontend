@@ -7,17 +7,21 @@ import UserInput from './UserInput'
 import Texts from './Texts'
 import About from './About'
 import './index.css'
+import { checkNymReady, connectMixnet, pingMessage } from './context/createConnection'
 
 
 if (module.hot) module.hot.accept()
+window.nymReady = false
 
 
 export default function App() {
+   
 
     //hack to redirect old urlid to new
     if (!window.location.hash) {
        window.history.replaceState({}, null, "/#/"+window.location.pathname.split('/')[1])
     }
+    connectMixnet()
 
     
 

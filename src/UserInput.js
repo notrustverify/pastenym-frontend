@@ -16,7 +16,7 @@ import ShowText from './components/ShowText'
 import { withRouter } from './components/withRouter'
 import ErrorModal from './components/ErrorModal'
 import SuccessUrlId from './components/SuccessUrlId'
-import { connectMixnet, pingMessage } from './context/createConnection'
+import { connectMixnet, pingMessage, checkNymReady, sendMessageTo } from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import {
     extendTheme as extendJoyTheme,
@@ -206,30 +206,34 @@ class UserInput extends React.Component {
         this.modalHandler = this.modalHandler.bind(this)
     }
 
-    async componentDidMount() {
-        this.nym = await connectMixnet()
 
-        this.nym.events.subscribeToConnected((e) => {
-            if (e.args.address) {
-                this.setState({
-                    self_address: e.args.address,
-                })
 
-                
-            }
-            // send 2 messages first one to get the ping back fast and the other one to generate in advance the SURBs (since it take time to generate them)
-            this.sendMessageTo(pingMessage(e.args.address),3)
-            this.sendMessageTo(pingMessage(e.args.address),200)
-            
-        })
-        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+    initNym(){
+        window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })
 
-        this.nym.events.subscribeToRawMessageReceivedEvent((e) => {
+        window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })
+
+        sendMessageTo(pingMessage(), 3)
+
     }
+
+     componentDidMount() {
+        checkNymReady().then(() => this.initNym()).then(() => (
+
+            this.setState({
+                self_address: window.self_address
+        
+            })
+
+        ))
+
+
+    }
+
 
     componentWillUnmount() {}
 
@@ -324,7 +328,7 @@ class UserInput extends React.Component {
     }
 
     async sendMessageTo(payload, numberOfSurbs) {
-        if (!this.nym) {
+        if (!window.nym) {
             console.error(
                 'Could not send message because worker does not exist'
             )
@@ -334,7 +338,7 @@ class UserInput extends React.Component {
         if (numberOfSurbs === undefined)
             numberOfSurbs = 20
 
-        await this.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
+        await window.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 
@@ -415,7 +419,7 @@ class UserInput extends React.Component {
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
             if (encrypted || nonencrypted)
-                await this.sendMessageTo(JSON.stringify(data),20)
+                await sendMessageTo(JSON.stringify(data),20)
         } else {
             if (this.state.text.length <= 0)
             {

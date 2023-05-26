@@ -19,6 +19,7 @@ function getInfos(envValues) {
   return JSON.stringify(info)
 }
 
+
 module.exports = () => {
 
   let pluginList = [
@@ -53,6 +54,7 @@ module.exports = () => {
       maximumFileSizeToCacheInBytes: 9000000,
     }),
   ]
+
 
   // process.env contains the env variables from upstream (OS, docker, you-name-it,…)
   // Parse the .env file and add variables to the process.env

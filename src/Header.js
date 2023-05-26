@@ -119,7 +119,11 @@ const headerStyle = {
     paddingRight: '10px'
 }
 
+
 class Header extends React.Component {
+
+
+  
     render() {
         return (
             <CssVarsProvider theme={mergedTheme}>
@@ -132,7 +136,7 @@ class Header extends React.Component {
                         borderColor: 'divider',
                     }}
                 >
-                    <Link component={RouterLink} to="/">
+                    <Link component={RouterLink}  to={"/"}>
                         <Avatar
                             alt="PN"
                             src={Logo}
