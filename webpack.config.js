@@ -131,6 +131,7 @@ module.exports = () => {
       open: false,
       compress: false,
       port: 8081,
+      hot: false
     },
     experiments: {
       syncWebAssembly: true,

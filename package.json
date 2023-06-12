@@ -31,6 +31,7 @@
     "mui-image": "^1.0.7",
     "n-readlines": "^1.0.1",
     "npm": "^9.6.4",
+    "ntv-sdk": "file:../../../../Downloads/nym/dist/sdk/esm",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.7",

@@ -203,14 +203,14 @@ class Texts extends React.Component {
     
     initNym(){
         
-            window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-                this.displayReceived(this.decoder.decode(e.args.payload))
-            })
+        const messageProcessor = (e) => {
+            this.displayReceived(this.decoder.decode(e.args.payload))
+        }
 
-            window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
-                this.displayReceived(this.decoder.decode(e.args.payload))
-            })
-
+        const subTextMessage =  window.nym.events.subscribeToTextMessageReceivedEvent(messageProcessor)
+        console.log(window.nym)
+        this.subRawMessage = window.nym.events.subscribeToRawMessageReceivedEvent(messageProcessor)
+                
         sendMessageTo(pingMessage(), 3)
 
     }
@@ -226,7 +226,7 @@ class Texts extends React.Component {
 
     componentWillUnmount(){
         console.log("unmount")
-
+        this.subRawMessage()
     }
 
     displayReceived(message) {
