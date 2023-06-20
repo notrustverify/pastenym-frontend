@@ -1,9 +1,9 @@
-import { createNymMixnetClient } from 'ntv-sdk'
+import { createNymMixnetClient } from '@nymproject/sdk'
 
 
 export async function connectMixnet() {
-    window.nym = await createNymMixnetClient()
-
+   window.nym = await createNymMixnetClient()
+    
 
     const nymApiUrl = 'https://validator.nymtech.net/api'
 
