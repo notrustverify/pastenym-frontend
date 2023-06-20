@@ -42,12 +42,12 @@ BTC: `bc1q5j4tq0yr75j90xwegwtfpaccdx3xdaxxzjtzt8`
 NodeJS (`v18.2.0`) and NPM (`v9.20.0`) are used for the frontend.
 
 1. Copy the `.env.example` to `.env`. Detailled values are explained in `.env details` section at the bottom
-2. Run `npm install` and grab a cup of coffee
-3. Run `npm run start` and go to [http://localhost:8080](http://localhost:8080) in your favorite browser.
+2. Run `npm install -g yarn && yarn` and grab a cup of coffee
+3. Run `yarn dev` and go to [http://localhost:8080](http://localhost:8080) in your favorite browser.
 
 or
 
-Run `npm run build` to build the project, everything will be in the `dist` folder. Just copy it to host it with a webserver
+Run `yarn build` to build the project, everything will be in the `dist` folder. Just copy it to host it with a webserver
 
 
 If you don't have a backend you can use this one, just set the `REACT_APP_NYM_CLIENT_SERVER=` to this value: `HWm3757chNdBq9FzKEY9j9VJ5siRxH8ukrNqYwFp9Unp.D34iYLRd5vzpCU4nZRcFVmoZpTQQMa6mws4Q65LdRosi@Fo4f4SQLdoyoGkFae5TpVhRVoXCF8UiypLVGtGjujVPf` 
