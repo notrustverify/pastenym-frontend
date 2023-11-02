@@ -222,20 +222,18 @@ class UserInput extends React.Component {
     }
 
      componentDidMount() {
+        console.log(window.nym)
+
         checkNymReady().then(() => this.initNym()).then(() => (
 
             this.setState({
-                self_address: window.self_address
-        
-            })
-
-        ))
-
-
+                self_address: window.self_address,
+            })))
     }
 
 
-    componentWillUnmount() {}
+    componentWillUnmount() {
+    }
 
     handleFileUploadError = (error) => {
         // Do something...

@@ -226,7 +226,6 @@ class Texts extends React.Component {
 
     componentWillUnmount(){
         console.log("unmount")
-        this.subRawMessage()
     }
 
     displayReceived(message) {
