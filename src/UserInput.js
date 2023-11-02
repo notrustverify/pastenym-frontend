@@ -137,6 +137,8 @@ class UserInput extends React.Component {
         this.nym = null
         this.encoder = new TextEncoder()
         this.decoder = new TextDecoder()
+        this.unsubscribe = null
+        this.unsubscribeRaw = null
 
         this.state = {
             self_address: null,
@@ -162,7 +164,8 @@ class UserInput extends React.Component {
             expirationHeightRelative: null,
             expirationRelativeHeightEnabled: false,
             pingData: null,
-            ipfsHostEnabled: false
+            ipfsHostEnabled: false,
+            
         }
 
         this.files = null
@@ -209,11 +212,11 @@ class UserInput extends React.Component {
 
 
     initNym(){
-        window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+        this.unsubscribe = window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })
 
-        window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
+        this.unsubscribeRaw = window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
             this.displayReceived(this.decoder.decode(e.args.payload))
         })
 
@@ -222,17 +225,19 @@ class UserInput extends React.Component {
     }
 
      componentDidMount() {
-        console.log(window.nym)
 
         checkNymReady().then(() => this.initNym()).then(() => (
 
             this.setState({
                 self_address: window.self_address,
             })))
+        
     }
 
 
-    componentWillUnmount() {
+     componentWillUnmount() {
+        this.unsubscribe()
+        this.unsubscribeRaw()
     }
 
     handleFileUploadError = (error) => {
@@ -335,8 +340,8 @@ class UserInput extends React.Component {
 
         if (numberOfSurbs === undefined)
             numberOfSurbs = 20
-
-        await window.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
+        console.log(window.nym?.client)
+        await window.nym?.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
 
     }
 

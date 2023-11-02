@@ -3,7 +3,6 @@ import { createNymMixnetClient, NymMixnetClient, Payload } from "@nymproject/sdk
 export async function connectMixnet() {
    window.nym = await createNymMixnetClient()
     
-
     const nymApiUrl = 'https://validator.nymtech.net/api'
 
     let preferredGatewayIdentityKey =
@@ -44,13 +43,14 @@ export async function connectMixnet() {
 export async function checkNymReady(){
     return new Promise(resolve => {
         var start_time = Date.now();
-        function checkFlag() {
+        async function checkFlag() {
           if (window.nymReady) {
             resolve();
           } else if (Date.now() > start_time + 3000000) { //set long time before timeout, will have to work on it, TODO
             console.log('not met, time out');
             resolve();
           } else {
+            console.log(window.nymReady)
             window.setTimeout(checkFlag, 1000); 
           }
         }
@@ -72,8 +72,11 @@ export async function checkNymReady(){
     if (recipient === undefined)
         recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 
+        if(window.nym?.client === undefined)
+            await connectMixnet()
 
         await window.nym.client.rawSend( { payload: new TextEncoder().encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
+
 
 }
 
