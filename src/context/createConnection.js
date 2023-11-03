@@ -1,5 +1,6 @@
 import { createNymMixnetClient, NymMixnetClient, Payload } from "@nymproject/sdk-full-fat";
 
+
 export async function connectMixnet() {
    window.nym = await createNymMixnetClient()
     
@@ -22,8 +23,7 @@ export async function connectMixnet() {
     await window.nym.client.start({
         clientId: crypto.randomUUID(),
         nymApiUrl,
-        preferredGatewayIdentityKey: preferredGatewayIdentityKey,
-        gatewayListener: gatewayListener,
+        preferredGatewayIdentityKey,
     })
 
     window.nym.events.subscribeToConnected((e) => {

@@ -165,7 +165,6 @@ class UserInput extends React.Component {
             expirationRelativeHeightEnabled: false,
             pingData: null,
             ipfsHostEnabled: false,
-            
         }
 
         this.files = null
@@ -209,33 +208,33 @@ class UserInput extends React.Component {
         this.modalHandler = this.modalHandler.bind(this)
     }
 
+    initNym() {
+        this.unsubscribe =
+            window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
+                this.displayReceived(this.decoder.decode(e.args.payload))
+            })
 
-
-    initNym(){
-        this.unsubscribe = window.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(this.decoder.decode(e.args.payload))
-        })
-
-        this.unsubscribeRaw = window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
-            this.displayReceived(this.decoder.decode(e.args.payload))
-        })
+        this.unsubscribeRaw =
+            window.nym.events.subscribeToRawMessageReceivedEvent((e) => {
+                this.displayReceived(this.decoder.decode(e.args.payload))
+            })
 
         sendMessageTo(pingMessage(), 3)
-
     }
 
-     componentDidMount() {
-
-        checkNymReady().then(() => this.initNym()).then(() => (
-
-            this.setState({
-                self_address: window.self_address,
-            })))
-        
+    componentDidMount() {
+        checkNymReady()
+            .then(() => this.initNym())
+            .then(() => {
+                this.setState({
+                    self_address: window.self_address,
+                })
+                sendMessageTo(pingMessage(), 3)
+            }
+            )
     }
 
-
-     componentWillUnmount() {
+    componentWillUnmount() {
         this.unsubscribe()
         this.unsubscribeRaw()
     }
@@ -273,8 +272,6 @@ class UserInput extends React.Component {
         })
     }
 
-    
-
     displayReceived(message) {
         const content = message
         if (content.length > 0) {
@@ -310,8 +307,9 @@ class UserInput extends React.Component {
                 } else {
                     this.setState({
                         pingData: data.version,
-                        expirationRelativeHeightEnabled: data.capabilities.expiration_bitcoin_height,
-                        ipfsHostEnabled: data.capabilities.ipfs_hosting
+                        expirationRelativeHeightEnabled:
+                            data.capabilities.expiration_bitcoin_height,
+                        ipfsHostEnabled: data.capabilities.ipfs_hosting,
                     })
                 }
             }
@@ -338,18 +336,19 @@ class UserInput extends React.Component {
             return
         }
 
-        if (numberOfSurbs === undefined)
-            numberOfSurbs = 20
+        if (numberOfSurbs === undefined) numberOfSurbs = 20
         console.log(window.nym?.client)
-        await window.nym?.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
-
+        await window.nym?.client.rawSend({
+            payload: this.encoder.encode(payload),
+            recipient: recipient,
+            replySurbs: numberOfSurbs,
+        })
     }
-
 
     async sendText() {
         if (
             (this.state.text.length <= 100000 && this.state.text.length > 0) ||
-            ( this.state.files !== null && this.state.files.length > 0 )
+            (this.state.files !== null && this.state.files.length > 0)
         ) {
             this.setState({
                 buttonSendClick: true,
@@ -422,20 +421,19 @@ class UserInput extends React.Component {
             /*if (this.state.text.length > 0)
                 this.sendMessageTo(JSON.stringify(data))*/
             if (encrypted || nonencrypted)
-                await sendMessageTo(JSON.stringify(data),20)
+                await sendMessageTo(JSON.stringify(data), 20)
         } else {
-            if (this.state.text.length <= 0)
-            {
-            this.setState({
-                open: true,
-                textError: "Text cannot be empty",
-            })
-        } else if (this.state.text.length >= 10_0000) {
-            this.setState({
-                open: true,
-                textError: "Too many char, limit is 100'000",
-            })
-        } 
+            if (this.state.text.length <= 0) {
+                this.setState({
+                    open: true,
+                    textError: 'Text cannot be empty',
+                })
+            } else if (this.state.text.length >= 10_0000) {
+                this.setState({
+                    open: true,
+                    textError: "Too many char, limit is 100'000",
+                })
+            }
         }
     }
 
@@ -460,9 +458,11 @@ class UserInput extends React.Component {
                         }}
                         variant="outlined"
                     >
-                        <MixnetInfo self_address={this.state.self_address} pingData={this.state.pingData} />
+                        <MixnetInfo
+                            self_address={this.state.self_address}
+                            pingData={this.state.pingData}
+                        />
 
-                        
                         {
                             // use buttonClick to reload the message
                             this.state.urlId && !this.state.buttonSendClick ? (
@@ -850,7 +850,11 @@ class UserInput extends React.Component {
                         </Button>
 
                         <Button
-                            disabled={this.state.self_address && this.state.pingData ? false : true}
+                            disabled={
+                                this.state.self_address && this.state.pingData
+                                    ? false
+                                    : true
+                            }
                             loading={this.state.buttonSendClick}
                             onClick={this.sendText}
                             endDecorator={<SendIcon />}

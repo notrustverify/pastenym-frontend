@@ -222,10 +222,12 @@ class Texts extends React.Component {
     componentDidMount() {
         checkNymReady()
             .then(() => this.initNym())
-            .then(() =>
+            .then(() => {
                 this.setState({
                     self_address: window.self_address,
                 })
+                sendMessageTo(pingMessage(), 3)
+            }
             )
     }
 
