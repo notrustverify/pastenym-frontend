@@ -6,6 +6,7 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const generate = require('generate-file-webpack-plugin')
 const fs = require('fs')
+const TerserPlugin = require("terser-webpack-plugin");
 
 function getInfos(envValues) {
   const appPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')).toString());
@@ -18,6 +19,7 @@ function getInfos(envValues) {
   }
   return JSON.stringify(info)
 }
+
 
 module.exports = () => {
 
@@ -44,15 +46,22 @@ module.exports = () => {
     }}),
     new CleanWebpackPlugin(),
     new Dotenv(),
-    
-    new WorkboxPlugin.GenerateSW({
-      // these options encourage the ServiceWorkers to get in there fast
-      // and not allow any straggling "old" SWs to hang around
-      clientsClaim: true,
-      skipWaiting: true,
-      maximumFileSizeToCacheInBytes: 9000000,
-    }),
+
+   
   ]
+
+  if (process.env.NODE_ENV === "production"){
+    module.exports.plugins.push(
+      new WorkboxPlugin.GenerateSW({
+        // these options encourage the ServiceWorkers to get in there fast
+        // and not allow any straggling "old" SWs to hang around
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 90000000,
+      }),
+
+    )
+  }
 
   // process.env contains the env variables from upstream (OS, docker, you-name-it,…)
   // Parse the .env file and add variables to the process.env
@@ -73,6 +82,7 @@ module.exports = () => {
     entry: {
       main: path.resolve(__dirname, './src/index.js'),
       app: path.resolve(__dirname, './src/UserInput.js'),
+      app: path.resolve(__dirname, './src/Texts.js'),
       //worker: path.resolve(__dirname, './src/worker.js'),
       //bootstrap: path.resolve(__dirname, './src/bootstrap.js')
     },
@@ -129,17 +139,24 @@ module.exports = () => {
       open: false,
       compress: false,
       port: 8081,
+      hot: false,
+      liveReload: true,
     },
     experiments: {
       syncWebAssembly: true,
       topLevelAwait: true
     },
     performance: {
-      maxEntrypointSize: 2012000,
+      maxEntrypointSize: 20012000,
       maxAssetSize: 200212000,
     },
     optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
       splitChunks: {
+        chunks: 'all',
+        minSize: 10000,
+        maxSize: 100000,
         cacheGroups: {
           commons: {
             test: /[\\/]node_modules[\\/]/,

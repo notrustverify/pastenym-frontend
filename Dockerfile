@@ -1,16 +1,13 @@
 FROM node:16-alpine AS builder
 
 # Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package.json package-lock.json /app/
+COPY package.json yarn.lock /app/
 WORKDIR /app
-
-RUN npm install
+RUN yarn
 
 # Bundle app source
 COPY . /app
-RUN npm run-script build
+RUN yarn build
 
 
 FROM nginx:alpine

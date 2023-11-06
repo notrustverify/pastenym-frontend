@@ -24,105 +24,112 @@ import Footer from './Footer'
 import E2EEncryptor from './e2e'
 import TextStats from './components/TextStats'
 import CopyToClipBoard from './components/CopyToClipboard'
-import { connectMixnet, pingMessage } from './context/createConnection'
+import {
+    connectMixnet,
+    pingMessage,
+    checkNymReady,
+    sendMessageTo,
+} from './context/createConnection'
 import MixnetInfo from './components/MixnetInfo'
 import { Buffer } from 'buffer'
 import MarkdownViewer from './components/MarkdownViewer'
 import LinearProgress from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
+import { Html } from '@mui/icons-material'
 
 const { unstable_sxConfig: muiSxConfig, ...muiTheme } = extendMuiTheme({
     // This is required to point to `var(--joy-*)` because we are using
     // `CssVarsProvider` from Joy UI.
     cssVarPrefix: 'joy',
     colorSchemes: {
-      light: {
-        palette: {
-          primary: {
-            main: colors.blue[500],
-          },
-          grey: colors.grey,
-          error: {
-            main: colors.red[500],
-          },
-          info: {
-            main: colors.purple[500],
-          },
-          success: {
-            main: colors.green[500],
-          },
-          warning: {
-            main: colors.yellow[200],
-          },
-          common: {
-            white: '#FFF',
-            black: '#09090D',
-          },
-          divider: colors.grey[200],
-          text: {
-            primary: colors.grey[800],
-            secondary: colors.grey[600],
-          },
+        light: {
+            palette: {
+                primary: {
+                    main: colors.blue[500],
+                },
+                grey: colors.grey,
+                error: {
+                    main: colors.red[500],
+                },
+                info: {
+                    main: colors.purple[500],
+                },
+                success: {
+                    main: colors.green[500],
+                },
+                warning: {
+                    main: colors.yellow[200],
+                },
+                common: {
+                    white: '#FFF',
+                    black: '#09090D',
+                },
+                divider: colors.grey[200],
+                text: {
+                    primary: colors.grey[800],
+                    secondary: colors.grey[600],
+                },
+            },
         },
-      },
-      dark: {
-        palette: {
-          primary: {
-            main: colors.blue[600],
-          },
-          grey: colors.grey,
-          error: {
-            main: colors.red[600],
-          },
-          info: {
-            main: colors.purple[600],
-          },
-          success: {
-            main: colors.green[600],
-          },
-          warning: {
-            main: colors.yellow[300],
-          },
-          common: {
-            white: '#FFF',
-            black: '#09090D',
-          },
-          divider: colors.grey[800],
-          text: {
-            primary: colors.grey[100],
-            secondary: colors.grey[300],
-          },
+        dark: {
+            palette: {
+                primary: {
+                    main: colors.blue[600],
+                },
+                grey: colors.grey,
+                error: {
+                    main: colors.red[600],
+                },
+                info: {
+                    main: colors.purple[600],
+                },
+                success: {
+                    main: colors.green[600],
+                },
+                warning: {
+                    main: colors.yellow[300],
+                },
+                common: {
+                    white: '#FFF',
+                    black: '#09090D',
+                },
+                divider: colors.grey[800],
+                text: {
+                    primary: colors.grey[100],
+                    secondary: colors.grey[300],
+                },
+            },
         },
-      },
     },
-  });
-  
-  const { unstable_sxConfig: joySxConfig, ...joyTheme } = extendJoyTheme();
-  
-  const mergedTheme = ({
+})
+
+const { unstable_sxConfig: joySxConfig, ...joyTheme } = extendJoyTheme()
+
+const mergedTheme = {
     ...muiTheme,
     ...joyTheme,
     colorSchemes: deepmerge(muiTheme.colorSchemes, joyTheme.colorSchemes),
     typography: {
-      ...muiTheme.typography,
-      ...joyTheme.typography
-    }})
-  
-  mergedTheme.generateCssVars = (colorScheme) => ({
+        ...muiTheme.typography,
+        ...joyTheme.typography,
+    },
+}
+
+mergedTheme.generateCssVars = (colorScheme) => ({
     css: {
-      ...muiTheme.generateCssVars(colorScheme).css,
-      ...joyTheme.generateCssVars(colorScheme).css
+        ...muiTheme.generateCssVars(colorScheme).css,
+        ...joyTheme.generateCssVars(colorScheme).css,
     },
     vars: deepmerge(
-      muiTheme.generateCssVars(colorScheme).vars,
-      joyTheme.generateCssVars(colorScheme).vars
-    )
-  });
-  
-  mergedTheme.unstable_sxConfig = {
+        muiTheme.generateCssVars(colorScheme).vars,
+        joyTheme.generateCssVars(colorScheme).vars
+    ),
+})
+
+mergedTheme.unstable_sxConfig = {
     ...muiSxConfig,
-    ...joySxConfig
-  };
+    ...joySxConfig,
+}
 
 function withParams(Component) {
     return (props) => <Component {...props} params={useParams()} />
@@ -133,9 +140,10 @@ let recipient = process.env.REACT_APP_NYM_CLIENT_SERVER
 class Texts extends React.Component {
     constructor(props) {
         super(props)
-        this.nym = null
+        //window.nym = null
         this.encoder = new TextEncoder()
         this.decoder = new TextDecoder()
+        this.unsubscribeRaw = null
 
         const items = this.props.params.urlId
             .replace('#/', '')
@@ -180,7 +188,7 @@ class Texts extends React.Component {
     }
 
     getPaste() {
-        if (!this.nym) {
+        if (!window.nym) {
             console.error(
                 'Could not send message because worker does not exist'
             )
@@ -195,43 +203,42 @@ class Texts extends React.Component {
         }
         const message = JSON.stringify(data)
 
-        this.sendMessageTo(message,20)
+        sendMessageTo(message, 20)
     }
 
-    async componentDidMount() {
-        if (this.nym === undefined || this.nym === null)
-            this.nym = await connectMixnet()
+    initNym() {
+        const messageProcessor = (e) => {
+            this.displayReceived(this.decoder.decode(e.args.payload))
+        }
 
+        this.unsubscribeRaw =
+            window.nym.events.subscribeToRawMessageReceivedEvent(
+                messageProcessor
+            )
 
+        sendMessageTo(pingMessage(), 3)
+    }
 
-        this.nym.events.subscribeToConnected((e) => {
-            if (e.args.address) {
+    componentDidMount() {
+        checkNymReady()
+            .then(() => this.initNym())
+            .then(() => {
                 this.setState({
-                    self_address: e.args.address,
+                    self_address: window.self_address,
                 })
-
-                // send 2 messages first one to get the ping back fast and the other one to generate in advance the SURBs (since it take time to generate them)
-                this.sendMessageTo(pingMessage(), 3)
-                this.sendMessageTo(pingMessage(), 200)
-        }})
-
-        this.nym.events.subscribeToTextMessageReceivedEvent((e) => {
-            this.displayReceived(this.decoder.decode(e.args.payload))
-        })
-
-        this.nym.events.subscribeToRawMessageReceivedEvent((e) => {
-            this.displayReceived(this.decoder.decode(e.args.payload))
-        })
-
+                sendMessageTo(pingMessage(), 3)
+            }
+            )
     }
 
-    componentDidUpdate() {}
+    componentWillUnmount() {
+        console.log('unmount')
+        this.unsubscribeRaw()
+    }
 
     displayReceived(message) {
         const data = JSON.parse(message)
-
         if (!data.hasOwnProperty('error') && !data.hasOwnProperty('version')) {
-            
             let userData = he.decode(data['text'])
             let textToDisplay = ''
             const isPasteEncrypted =
@@ -282,7 +289,6 @@ class Texts extends React.Component {
 
                 // Message is not encrypted
             } else {
-
                 userData = JSON.parse(userData)
                 textToDisplay = userData['text']
             }
@@ -347,11 +353,10 @@ class Texts extends React.Component {
             // Global state to stop sending message when text or file is fetched
             this.setState({ isDataRetrieved: true })
         } else if (data.hasOwnProperty('version')) {
-            if (!this.state.ready)
-                this.setState({
-                    pingData: data.version,
-                    ready: true,
-                })
+            this.setState({
+                pingData: data.version,
+                ready: true,
+            })
         } else {
             this.setState({
                 text: he.decode(data['error']),
@@ -361,21 +366,21 @@ class Texts extends React.Component {
         }
     }
 
-    componentWillUnmount() {}
-
     async sendMessageTo(payload, numberOfSurbs) {
-        if (!this.nym) {
+        if (!window.nym) {
             console.error(
                 'Could not send message because worker does not exist'
             )
             return
         }
-        
-        if (numberOfSurbs === undefined)
-            numberOfSurbs = 20
 
-            await this.nym.client.rawSend( { payload: this.encoder.encode(payload), recipient: recipient,replySurbs: numberOfSurbs})
+        if (numberOfSurbs === undefined) numberOfSurbs = 20
 
+        await window.nym.client.rawSend({
+            payload: this.encoder.encode(payload),
+            recipient: recipient,
+            replySurbs: numberOfSurbs,
+        })
     }
 
     isMarkdown() {
@@ -403,7 +408,7 @@ class Texts extends React.Component {
         if (regCodeBlock.test(this.state.text)) likelihood += 1
         if (regImageFile.test(this.state.text)) likelihood += 1
         if (regTable.test(this.state.text)) likelihood += 3
-        
+
         return likelihood >= 3
     }
 
@@ -431,7 +436,10 @@ class Texts extends React.Component {
                         }}
                         variant="outlined"
                     >
-                        <MixnetInfo self_address={this.state.self_address} pingData={this.state.pingData} />
+                        <MixnetInfo
+                            self_address={this.state.self_address}
+                            pingData={this.state.pingData}
+                        />
 
                         <Divider />
                         {this.state.is_burn ? (
@@ -496,19 +504,21 @@ class Texts extends React.Component {
                             </div>
                         )}
                         <b>
-                            { !this.state.text ? (
-                                 
-                                 <Stack sx={{ 
-                                    overflow: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                    color: 'grey.500' 
+                            {!this.state.text ? (
+                                <Stack
+                                    sx={{
+                                        overflow: 'hidden',
+                                        whiteSpace: 'nowrap',
+                                        textOverflow: 'ellipsis',
+                                        color: 'grey.500',
                                     }}
                                     spacing={1}
-                                    >
+                                >
                                     Paste is being loaded
-                                 </Stack>
-                                ): ("Paste")}
+                                </Stack>
+                            ) : (
+                                'Paste'
+                            )}
                             {this.state.isText && this.state.text ? (
                                 <CopyToClipBoard textToCopy={this.state.text} />
                             ) : (
@@ -556,14 +566,12 @@ class Texts extends React.Component {
                                     }}
                                 >
                                     {this.state.text ? (
-                                        
                                         this.isMarkdown() ? (
                                             <div>
                                                 <MarkdownViewer
                                                     text={this.state.text}
                                                 />
-                                                </div>
-                                       
+                                            </div>
                                         ) : (
                                             <Linkify
                                                 as="div"
@@ -576,7 +584,6 @@ class Texts extends React.Component {
                                             </Linkify>
                                         )
                                     ) : (
-                                        
                                         <Skeleton
                                             variant="rounded"
                                             width="100%"
