@@ -1,30 +1,23 @@
-import { createNymMixnetClient, NymMixnetClient, Payload } from "@nymproject/sdk-full-fat";
+import { createNymMixnetClient, NymMixnetClient, Payload, ClientOpts } from "@nymproject/sdk-full-fat";
 
 
 export async function connectMixnet() {
    window.nym = await createNymMixnetClient()
     
-    const nymApiUrl = 'https://validator.nymtech.net/api'
-
-    let preferredGatewayIdentityKey =
-        'E3mvZTHQCdBvhfr178Swx9g4QG3kkRUun7YnToLMcMbM'
-
-    // WSS is mandatory for HTTPS website
-    let gatewayListener = 'wss://gateway1.nymtech.net:443'
-
     // give the possibility to not force the gateway to use. Can be useful for tor hidden service.
     if (process.env.WS_CONNECTION) {
         preferredGatewayIdentityKey = ''
         gatewayListener = ''
     }
 
-    // start the client and connect to a gateway
-    
+
     await window.nym.client.start({
         clientId: crypto.randomUUID(),
-        nymApiUrl,
-        preferredGatewayIdentityKey,
+        preferredGateway: "EBT8jTD8o4tKng2NXrrcrzVhJiBnKpT1bJy5CMeArt2w",
+        forceTls: true
     })
+
+
 
     window.nym.events.subscribeToConnected((e) => {
         

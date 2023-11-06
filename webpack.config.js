@@ -6,6 +6,7 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const generate = require('generate-file-webpack-plugin')
 const fs = require('fs')
+const TerserPlugin = require("terser-webpack-plugin");
 
 function getInfos(envValues) {
   const appPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')).toString());
@@ -56,7 +57,7 @@ module.exports = () => {
         // and not allow any straggling "old" SWs to hang around
         clientsClaim: true,
         skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 9000000,
+        maximumFileSizeToCacheInBytes: 90000000,
       }),
 
     )
@@ -81,6 +82,7 @@ module.exports = () => {
     entry: {
       main: path.resolve(__dirname, './src/index.js'),
       app: path.resolve(__dirname, './src/UserInput.js'),
+      app: path.resolve(__dirname, './src/Texts.js'),
       //worker: path.resolve(__dirname, './src/worker.js'),
       //bootstrap: path.resolve(__dirname, './src/bootstrap.js')
     },
@@ -145,11 +147,16 @@ module.exports = () => {
       topLevelAwait: true
     },
     performance: {
-      maxEntrypointSize: 2012000,
+      maxEntrypointSize: 20012000,
       maxAssetSize: 200212000,
     },
     optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
       splitChunks: {
+        chunks: 'all',
+        minSize: 10000,
+        maxSize: 100000,
         cacheGroups: {
           commons: {
             test: /[\\/]node_modules[\\/]/,
