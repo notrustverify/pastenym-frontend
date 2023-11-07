@@ -1,6 +1,6 @@
 {
   "name": "pastenym",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "homepage": "http://pastenym.ch/",
   "private": true,
   "main": "index.js",
@@ -14,7 +14,7 @@
     "@mui/joy": "5.0.0-alpha.72",
     "@mui/material": "^5.11.14",
     "@mui/utils": "5.10.9",
-    "@nymproject/sdk-full-fat": "^1.2.3",
+    "@nymproject/sdk-full-fat": "^1.2.4-rc.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.2.13",

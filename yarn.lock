@@ -1818,10 +1818,10 @@
     read-package-json-fast "^3.0.0"
     which "^3.0.0"
 
-"@nymproject/sdk-full-fat@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.npmjs.org/@nymproject/sdk-full-fat/-/sdk-full-fat-1.2.3.tgz"
-  integrity sha512-lheA1Zk020o2t95FPVZfdUR0aSI52aD0aJQs074fjH16QkoNNEMotzhJGAnsnnczVg3bpddKghNpCLyDOWvg9A==
+"@nymproject/sdk-full-fat@^1.2.4-rc.0":
+  version "1.2.4-rc.0"
+  resolved "https://registry.npmjs.org/@nymproject/sdk-full-fat/-/sdk-full-fat-1.2.4-rc.0.tgz"
+  integrity sha512-S4XwCYABeGKITkEXufdxaS7M2tTmiQNibgDssM6rp3qbvuHI7p02RJC6NKvfTKugqKkRXhvTLxp84pordWcGQQ==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
