@@ -8,6 +8,8 @@ const generate = require('generate-file-webpack-plugin')
 const fs = require('fs')
 const TerserPlugin = require("terser-webpack-plugin");
 
+const isProduction = process.argv[process.argv.indexOf('--mode') + 1] === 'production';
+
 function getInfos(envValues) {
   const appPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')).toString());
   const info = {
@@ -46,19 +48,19 @@ module.exports = (env) => {
     }}),
     new CleanWebpackPlugin(),
     new Dotenv(),
-    new WorkboxPlugin.GenerateSW({
-      // these options encourage the ServiceWorkers to get in there fast
-      // and not allow any straggling "old" SWs to hang around
-      clientsClaim: true,
-      skipWaiting: true,
-      maximumFileSizeToCacheInBytes: 90000000,
-    })
-
-   
   ]
 
-  
-    
+  if(isProduction){
+  pluginList.push(
+  new WorkboxPlugin.GenerateSW({
+    // these options encourage the ServiceWorkers to get in there fast
+    // and not allow any straggling "old" SWs to hang around
+    clientsClaim: true,
+    skipWaiting: true,
+    maximumFileSizeToCacheInBytes: 90000000,
+  })
+  )
+}
 
   
   
