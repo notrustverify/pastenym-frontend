@@ -9,6 +9,7 @@ import About from './About'
 import './index.css'
 import { checkNymReady, connectMixnet, pingMessage } from './context/createConnection'
 
+console.log()
 
 if (module.hot) module.hot.accept()
 window.nymReady = false
@@ -37,8 +38,7 @@ export default function App() {
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(<App />)
 
-
-
+if(process.env.NODE_ENV !== "development" || ! process.env.NODE_ENV){
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker
@@ -51,4 +51,5 @@ root.render(<App />)
                 })
         })
     }
+}
 

@@ -61,6 +61,7 @@
     "start": "webpack serve",
     "build": "webpack && cd dist && cp index.html 404.html",
     "dev": "webpack serve --mode development",
+    "prod": "webpack serve --mode production",
     "stats": "webpack --json > stats.json"
   },
   "eslintConfig": {

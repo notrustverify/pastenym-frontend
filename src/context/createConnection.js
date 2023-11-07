@@ -1,4 +1,4 @@
-import { createNymMixnetClient, NymMixnetClient, Payload, ClientOpts } from "@nymproject/sdk-full-fat";
+import { createNymMixnetClient } from "@nymproject/sdk-full-fat";
 
 
 export async function connectMixnet() {
@@ -43,7 +43,6 @@ export async function checkNymReady(){
             console.log('not met, time out');
             resolve();
           } else {
-            console.log(window.nymReady)
             window.setTimeout(checkFlag, 1000); 
           }
         }
