@@ -37,7 +37,7 @@ export default function App() {
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(<App />)
 
-if (process.env.NODE_ENV === "production") {
+
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -51,4 +51,4 @@ if (process.env.NODE_ENV === "production") {
                 })
         })
     }
-}
+
