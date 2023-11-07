@@ -21,7 +21,7 @@ function getInfos(envValues) {
 }
 
 
-module.exports = () => {
+module.exports = (env) => {
 
   let pluginList = [
     new HtmlWebpackPlugin({
@@ -46,22 +46,22 @@ module.exports = () => {
     }}),
     new CleanWebpackPlugin(),
     new Dotenv(),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 90000000,
+    })
 
    
   ]
 
-  if (process.env.NODE_ENV === "production"){
-    module.exports.plugins.push(
-      new WorkboxPlugin.GenerateSW({
-        // these options encourage the ServiceWorkers to get in there fast
-        // and not allow any straggling "old" SWs to hang around
-        clientsClaim: true,
-        skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 90000000,
-      }),
+  
+    
 
-    )
-  }
+  
+  
 
   // process.env contains the env variables from upstream (OS, docker, you-name-it,…)
   // Parse the .env file and add variables to the process.env
