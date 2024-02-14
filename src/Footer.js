@@ -26,6 +26,8 @@ function Copyright() {
                 Powered by{' '}
                 <Link href="https://nymtech.net" underline="none">
                     Nym
+                </Link> | <Link href=" https://nymvpn.com/" underline="none">
+                    NymVPN
                 </Link>
                 <br />
                 {!process.env.DISABLE_DEVELOPPEDBY ? 'Developed by ' : ''}
